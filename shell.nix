@@ -18,7 +18,7 @@ mkShell rec {
   ];
 
 #  QT_PLUGIN_PATH = qt5.qtwayland;
-#  QT_QPA_PLATFORM_PLUGIN_PATH = "${qt5.qtbase}/lib/qt-5.15.8/plugins/";
+  QT_QPA_PLATFORM_PLUGIN_PATH = "${qt5.qtbase}/lib/qt-5.15.8/plugins/";
   
   NIX_LD = lib.fileContents "${stdenv.cc}/nix-support/dynamic-linker";
 
