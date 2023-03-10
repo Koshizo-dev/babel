@@ -16,9 +16,6 @@ mkShell rec {
   NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
     stdenv.cc.cc
   ];
-
-#  QT_PLUGIN_PATH = qt5.qtwayland;
-  QT_QPA_PLATFORM_PLUGIN_PATH = "${qt5.qtbase}/lib/qt-5.15.8/plugins/";
   
   NIX_LD = lib.fileContents "${stdenv.cc}/nix-support/dynamic-linker";
 
@@ -26,6 +23,7 @@ mkShell rec {
   JACK_LIBRARY="${jack2}/lib/libjack.so";
 
   buildInputs = [
+    fontconfig
     xorg.libxcb.dev
     qt5.qtwayland
     asio
@@ -48,6 +46,7 @@ mkShell rec {
     xorg.libXvMC.dev
     xorg.libXv.dev
     xorg.libXtst.out
+    xorg.xinput
     xorg.libXScrnSaver.out xorg.libXres.dev xorg.libXpm.dev xorg.libxkbfile.dev xorg.libXinerama.dev xorg.libXdmcp.dev xorg.libXdamage.dev xorg.libXcomposite.dev xorg.libXaw.dev xorg.libSM.dev xorg.libICE.dev xorg.libfontenc xorg.libXcursor xorg.libXrandr xorg.libXi # To use x11 feature
     libxkbcommon
     libGL
@@ -63,6 +62,7 @@ mkShell rec {
 
     qt5.full
     boost
+
   ];
 
   shellHook = ''
