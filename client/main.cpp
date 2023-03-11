@@ -1,7 +1,7 @@
+#include <iostream>
 #include <QApplication>
 #include <QPushButton>
 #include <QFontDatabase>
-#include <iostream>
 
 #include <QtPlugin>
 

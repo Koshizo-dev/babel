@@ -20,4 +20,4 @@ add_executable(babel_client ${CL_FILES})
 
 # Link your project against asio
 target_link_libraries(babel_server PRIVATE CONAN_PKG::asio CONAN_PKG::opus)
-target_link_libraries(babel_client PRIVATE CONAN_PKG::qt -lxcb-xinput CONAN_PKG::portaudio CONAN_PKG::opus)
+target_link_libraries(babel_client PRIVATE CONAN_PKG::qt -lxcb-xinput -lpthread CONAN_PKG::portaudio CONAN_PKG::opus)
