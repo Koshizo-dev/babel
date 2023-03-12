@@ -1,18 +1,12 @@
 let
   nixpkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/1e21c5807c4010c84c4628aab2af38a45c46c575.tar.gz") { };
-
+  xorg_wrappers = import ./xorg_wrappers.nix { pkgs = nixpkgs; };
 in
 with nixpkgs;
 
 mkShell rec {
 
-  nativeBuildInputs = [
-    pkgconfig
-    clang
-    ccls
-    cmake
-    lld # To use lld linker
-  ];
+  stdenv = clangStdenv;
 
   NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -23,9 +17,24 @@ mkShell rec {
   JACK_INCLUDE_DIR = "${jack2}/include";
   JACK_LIBRARY = "${jack2}/lib/libjack.so";
 
-  buildInputs = [
+  shellHook = ''
+  '';
+
+  LD_LIBRARY_PATH = builtins.concatStringsSep ":" (map (x: toString x + "/lib") packages);
+
+  PKG_CONFIG_PATH = pkgconfig;
+
+  WINIT_UNIX_BACKEND = "wayland";
+
+  packages = [
+    pkgconfig
+    clang-tools
+    clang
+    cmake
+    lld # To use lld linker
+
+    xorg_wrappers.xorg_wrappers
     fontconfig
-    xorg.libxcb.dev
     qt5.qtwayland
     asio
     jack2
@@ -34,37 +43,10 @@ mkShell rec {
     udev
     systemd
     alsaLib
-    stdenv.cc.cc.lib
-    libcxxStdenv
-    gcc
+    #stdenv.cc.cc.lib
     xkeyboard_config
     libffi
     libuuid.dev
-    xorg.xcbutil.dev
-    xorg.xcbutilrenderutil.dev
-    xorg.xcbutilkeysyms.dev
-    xorg.xcbutilimage.dev
-    xorg.xcbutilwm.dev
-    xorg.libXxf86vm.dev
-    xorg.libXvMC.dev
-    xorg.libXv.dev
-    xorg.libXtst.out
-    xorg.xinput
-    xorg.libXScrnSaver.out
-    xorg.libXres.dev
-    xorg.libXpm.dev
-    xorg.libxkbfile.dev
-    xorg.libXinerama.dev
-    xorg.libXdmcp.dev
-    xorg.libXdamage.dev
-    xorg.libXcomposite.dev
-    xorg.libXaw.dev
-    xorg.libSM.dev
-    xorg.libICE.dev
-    xorg.libfontenc
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi # To use x11 feature
     libxkbcommon
     libGL
     (pkgs.conan.overrideAttrs (oldAttrs: {
@@ -78,18 +60,6 @@ mkShell rec {
     }))
 
     qt5.full
-    boost
-
   ];
 
-  shellHook = ''
-  '';
-
-  LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
-
-  PKG_CONFIG_PATH = pkgconfig;
-
-  RUST_BACKTRACE = 1;
-
-  WINIT_UNIX_BACKEND = "wayland";
 }

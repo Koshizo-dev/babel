@@ -1,11 +1,10 @@
-#include <iostream>
 #include <QApplication>
 #include <QPushButton>
 #include <QFontDatabase>
 
 #include <QtPlugin>
 
-Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
+Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
