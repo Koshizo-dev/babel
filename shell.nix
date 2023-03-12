@@ -6,7 +6,7 @@ with nixpkgs;
 
 mkShell rec {
 
-  stdenv = clangStdenv;
+  #stdenv = clangStdenv;
 
   NIX_LD_LIBRARY_PATH = lib.makeLibraryPath [
     stdenv.cc.cc
@@ -18,6 +18,7 @@ mkShell rec {
   JACK_LIBRARY = "${jack2}/lib/libjack.so";
 
   shellHook = ''
+    unset "QMAKEPATH"
   '';
 
   LD_LIBRARY_PATH = builtins.concatStringsSep ":" (map (x: toString x + "/lib") packages);
@@ -43,8 +44,9 @@ mkShell rec {
     udev
     systemd
     alsaLib
-    #stdenv.cc.cc.lib
-    xkeyboard_config
+    stdenv.cc.cc.lib
+    libcxxStdenv
+    gcc
     libffi
     libuuid.dev
     libxkbcommon

@@ -1,0 +1,77 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+          sudo apt-get update
+          DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
+            clang-tools \
+            clang \
+            cmake \
+            lld \
+            fontconfig \
+            qtwayland5 \
+            libasio-dev \
+            libicu-dev \
+            libssl-dev \
+            libudev-dev \
+            libsystemd-dev \
+            libasound2-dev \
+            libxkbcommon-dev \
+            libgl-dev \
+            xkb-data \
+            libffi-dev \
+            uuid-dev \
+            pkg-config \
+            libxcb-util* \
+            xinput \
+            libxss-dev \
+            libxres-dev \
+            libxpm-dev \
+            libxkbfile-dev \
+            libxinerama-dev \
+            libxdmcp-dev \
+            libxdamage-dev \
+            libxcomposite-dev \
+            libxaw7-dev \
+            libsm-dev \
+            libice-dev \
+            libfontenc1 \
+            libxcursor-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libxcb-xinput-dev
+
+          wget https://github.com/conan-io/conan/releases/download/1.57.0/conan-ubuntu-64.deb
+          sudo dpkg -i conan-ubuntu-64.deb
+
+    - name: Update conan settings
+      run: |
+        conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
+        conan config set general.revisions_enabled=1
+
+    - name: Clear build folder
+      run: rm -rf build
+
+    - name: Create build folder
+      run: mkdir build
+
+    - name: Install dependencies
+      run: conan install . -if build --build missing -c tools.system.package_manager:mode=install
+
+    - name: Build with CMake
+      run: cmake . -B build
+
+    - name: Build with Make
+      run: make -C build

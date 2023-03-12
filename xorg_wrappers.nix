@@ -1,9 +1,10 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
 with pkgs;
 
 {
   xorg_wrappers = [
+    xkeyboard_config
     xorg.xcbutil.dev
     xorg.xcbutilrenderutil.dev
     xorg.xcbutilkeysyms.dev
