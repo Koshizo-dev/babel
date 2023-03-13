@@ -58,8 +58,8 @@ jobs:
 
     - name: Update conan settings
       run: |
-        conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
-        conan config set general.revisions_enabled=1
+        sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
+        sudo conan config set general.revisions_enabled=1
 
     - name: Clear build folder
       run: rm -rf build
