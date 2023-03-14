@@ -5,9 +5,9 @@
 #include <QPushButton>
 
 namespace babel {
-    class MainScene : public Scene {
+    class LoggingScene : public Scene {
         public:
-            ~MainScene() override;
+            ~LoggingScene() override;
     
             std::string getName() override;
             void load(std::shared_ptr<QWidget> parent) override;
@@ -16,8 +16,11 @@ namespace babel {
             void refresh() override;
 
         private:
+            void _loggingButtonClicked();
+    
             std::shared_ptr<QWidget> _parent = nullptr;
-            std::unique_ptr<QPushButton> _button = nullptr;
+            std::unique_ptr<QPushButton> _loggingButton = nullptr;
+            bool _loggingAction = false;
     };
 
 }

@@ -1,9 +1,11 @@
 #include "MainScene.hpp"
 #include "../ClientError.hpp"
 
-#include <QPushButton>
-
 using namespace babel;
+
+MainScene::~MainScene() {
+    this->_button.reset();
+}
 
 std::string MainScene::getName() {
     return "Main menu";

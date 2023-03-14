@@ -1,6 +1,8 @@
 #include "QDisplay.hpp"
 #include "../scenes/MainScene.hpp"
+#include "../scenes/LoggingScene.hpp"
 #include "../scenes/Scene.hpp"
+
 #include <QPushButton>
 #include <QFontDatabase>
 
@@ -14,20 +16,12 @@ QDisplay::QDisplay(int argc, char **argv, std::string name, int width, int heigh
     this->_window->setGeometry(0, 0, 1280, 720);
     this->_loadFont();
 
-    Scene *scene = new MainScene();
+    Scene *scene = new LoggingScene();
     scene->load(std::shared_ptr<QWidget>(this->_window));
     scene->display();
     
     _window->show();
 }
-
-// int Display::centerX(int widgetWidth) {
-//     return ((this->_window->width() - widgetWidth) / 2);
-// }
-
-// int Display::centerY(int widgetHeight) {
-//     return ((this->_window->height() - widgetHeight) / 2);
-// }
 
 QDisplay::~QDisplay() {
     if (this->_window) 
@@ -46,6 +40,6 @@ void QDisplay::_loadFont() {
     QFontDatabase::addApplicationFont("assets/Vesta-Pro-Regular.ttf");
 
     // Set the loaded font as the default font for the application
-    QFont font("Vesta-Pro-Regular", 12);
+    QFont font("Vesta-Pro-Regular", 18);
     this->_app->setFont(font);
 }

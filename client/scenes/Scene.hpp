@@ -6,6 +6,8 @@
 namespace babel {
     class Scene {
         public:
+            virtual ~Scene() {}
+    
             virtual std::string getName() = 0;
             virtual void load(std::shared_ptr<QWidget> parent) = 0;
             virtual void display() = 0;
