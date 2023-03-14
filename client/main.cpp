@@ -1,4 +1,4 @@
-#include "Display.hpp"
+#include "displays/QDisplay.hpp"
 #include <QApplication>
 #include <QPushButton>
 #include <QFontDatabase>
@@ -7,9 +7,13 @@
 
 Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 
+using namespace babel;
+
 int main(int argc, char **argv) {
+    Display *display = new QDisplay(argc, argv, "Sample title", 1280, 720);
 
-    babel::Display display(argc, argv, "Sample title", 1280, 720);
+    int code = display->run();
 
-    return display.run();
+    delete display;
+    return (code);
 }

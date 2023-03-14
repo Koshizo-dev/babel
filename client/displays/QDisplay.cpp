@@ -1,12 +1,12 @@
-#include "Display.hpp"
-#include "scenes/MainScene.hpp"
-#include "scenes/Scene.hpp"
+#include "QDisplay.hpp"
+#include "../scenes/MainScene.hpp"
+#include "../scenes/Scene.hpp"
 #include <QPushButton>
 #include <QFontDatabase>
 
 using namespace babel;
 
-Display::Display(int argc, char **argv, std::string name, int width, int height) {
+QDisplay::QDisplay(int argc, char **argv, std::string name, int width, int height) {
     this->_name = name;
     this->_app = new QApplication(argc, argv);
     this->_app->setApplicationDisplayName(name.c_str());
@@ -21,15 +21,15 @@ Display::Display(int argc, char **argv, std::string name, int width, int height)
     _window->show();
 }
 
-int Display::centerX(int widgetWidth) {
-    return ((this->_window->width() - widgetWidth) / 2);
-}
+// int Display::centerX(int widgetWidth) {
+//     return ((this->_window->width() - widgetWidth) / 2);
+// }
 
-int Display::centerY(int widgetHeight) {
-    return ((this->_window->height() - widgetHeight) / 2);
-}
+// int Display::centerY(int widgetHeight) {
+//     return ((this->_window->height() - widgetHeight) / 2);
+// }
 
-Display::~Display() {
+QDisplay::~QDisplay() {
     if (this->_window) 
         delete this->_window;
     
@@ -37,11 +37,11 @@ Display::~Display() {
         delete this->_app;
 }
 
-int Display::run() {
+int QDisplay::run() {
     return this->_app->exec();
 }
 
-void Display::_loadFont() {
+void QDisplay::_loadFont() {
     // Load the font file
     QFontDatabase::addApplicationFont("assets/Vesta-Pro-Regular.ttf");
 
