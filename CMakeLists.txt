@@ -11,7 +11,7 @@ conan_basic_setup(TARGETS)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Add files to server and client side
-file(GLOB CL_FILES "client/*.cpp")
+file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp")
 file(GLOB SV_FILES "server/*.cpp")
 
 # Add your project source files here
