@@ -3,6 +3,9 @@
 #include "Scene.hpp"
 
 #include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
+#include <QHBoxLayout>
 
 namespace babel {
     class LoggingScene : public Scene {
@@ -20,6 +23,9 @@ namespace babel {
     
             std::shared_ptr<QWidget> _parent = nullptr;
             std::unique_ptr<QPushButton> _loggingButton = nullptr;
+            std::unique_ptr<QLineEdit> _usernameInput = nullptr;
+            std::unique_ptr<QLabel> _usernameLabel = nullptr;
+            std::unique_ptr<QHBoxLayout> _usernameLayout = nullptr;
             bool _loggingAction = false;
     };
 
