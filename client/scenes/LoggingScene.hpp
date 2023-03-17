@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Scene.hpp"
+#include "../entities/NamedTextField.hpp"
 
 #include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
-#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QWidget>
 
 namespace babel {
     class LoggingScene : public Scene {
@@ -20,12 +20,18 @@ namespace babel {
 
         private:
             void _loggingButtonClicked();
-    
+            void _initLayouts();
+            void _initWidgets();
+            void _placeWidgets();
+
             std::shared_ptr<QWidget> _parent = nullptr;
+            std::shared_ptr<QWidget> _widget = nullptr;
             std::unique_ptr<QPushButton> _loggingButton = nullptr;
-            std::unique_ptr<QLineEdit> _usernameInput = nullptr;
-            std::unique_ptr<QLabel> _usernameLabel = nullptr;
-            std::unique_ptr<QHBoxLayout> _usernameLayout = nullptr;
+            std::unique_ptr<NamedTextField> _usernameField = nullptr;
+            std::unique_ptr<NamedTextField> _serverField = nullptr;
+            std::unique_ptr<NamedTextField> _portField = nullptr;
+            std::unique_ptr<QBoxLayout> _topLayout = nullptr;
+            std::unique_ptr<QBoxLayout> _layout = nullptr;
             bool _loggingAction = false;
     };
 
