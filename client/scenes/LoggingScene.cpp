@@ -1,6 +1,7 @@
 #include "LoggingScene.hpp"
 #include "../ClientError.hpp"
 #include "../utils.hpp"
+#include "MainScene.hpp"
 
 #include <qnamespace.h>
 #include <qobject.h>
@@ -11,7 +12,17 @@
 
 using namespace babel;
 
+LoggingScene::LoggingScene(std::shared_ptr<SceneManager> sceneManager) {
+    if (sceneManager == nullptr)
+        throw ClientError("Whilst initializing LoggingScene: SceneManager cannot be null !");
+    this->_sceneManager = sceneManager;
+    this->_initLayouts();
+    this->_initWidgets();
+    this->_placeWidgets();
+}
+
 LoggingScene::~LoggingScene() {
+    printf("in logging scene destructor!\n");
     this->_loggingButton.reset();
     this->_usernameField.reset();
     this->_serverField.reset();
@@ -24,30 +35,12 @@ std::string LoggingScene::getName() {
     return "Logging menu";
 }
 
-// Load the Scene with the parent passed as parameter
-// If function already loaded
-//     Will call the Scene::clear.
-//     Will override the current parent.
-void LoggingScene::load(std::shared_ptr<QWidget> parent) {
-    if (this->_parent)
-        this->clear();
-    this->_parent = parent;
-    this->_initLayouts();
-    this->_initWidgets();
-    this->_placeWidgets();
-}
-
 void LoggingScene::display() {
-    if (this->_parent == nullptr)
-        throw ClientError("LoggingScene needs to be loaded first!");
-
-    this->_widget->setParent(this->_parent.get());
+    this->_widget->setParent(this->_sceneManager->getWidget().get());
 }
 
 void LoggingScene::clear() {
-    if (this->_parent == nullptr)
-        throw ClientError("LoggingScene needs to be loaded first!");
-
+    printf("in logging scene clear!\n");
     this->_widget->setParent(nullptr);
 }
 
@@ -55,8 +48,6 @@ void LoggingScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void LoggingScene::refresh() {
-    if (this->_parent == nullptr)
-        throw ClientError("LoggingScene needs to be loaded first!");
 }
 
 void LoggingScene::_loggingButtonClicked() {
@@ -65,6 +56,7 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
+    this->_sceneManager->setScene(new MainScene(this->_sceneManager));
     std::cerr << "[DEBUG] Sending request to connect to server" << std::endl;
     // TODO Connection packet to server
 }
@@ -96,7 +88,7 @@ void LoggingScene::_placeWidgets() {
     this->_widget->setLayout(this->_layout.get());
     // Set the size of the widget and move it to the center of the parent
     this->_widget->setFixedSize(this->_widget->sizeHint());
-    this->_widget->move((this->_parent->width() - this->_widget->width()) / 2, (this->_parent->height() - this->_widget->height()) / 2);
+    this->_widget->move((this->_sceneManager->getWidget()->width() - this->_widget->width()) / 2, (this->_sceneManager->getWidget()->height() - this->_widget->height()) / 2);
 
     QObject::connect(this->_loggingButton.get(), &QPushButton::clicked, [=]() {
        this->_loggingButtonClicked(); 

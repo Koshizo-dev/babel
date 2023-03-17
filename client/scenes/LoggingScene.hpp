@@ -2,6 +2,7 @@
 
 #include "Scene.hpp"
 #include "../entities/NamedTextField.hpp"
+#include "SceneManager.hpp"
 
 #include <QPushButton>
 #include <QBoxLayout>
@@ -10,10 +11,10 @@
 namespace babel {
     class LoggingScene : public Scene {
         public:
+            LoggingScene(std::shared_ptr<SceneManager> sceneManager);
             ~LoggingScene() override;
     
             std::string getName() override;
-            void load(std::shared_ptr<QWidget> parent) override;
             void display() override;
             void clear() override;
             void refresh() override;
@@ -24,7 +25,8 @@ namespace babel {
             void _initWidgets();
             void _placeWidgets();
 
-            std::shared_ptr<QWidget> _parent = nullptr;
+            std::shared_ptr<SceneManager> _sceneManager;
+
             std::shared_ptr<QWidget> _widget = nullptr;
             std::unique_ptr<QPushButton> _loggingButton = nullptr;
             std::unique_ptr<NamedTextField> _usernameField = nullptr;
@@ -32,6 +34,7 @@ namespace babel {
             std::unique_ptr<NamedTextField> _portField = nullptr;
             std::unique_ptr<QBoxLayout> _topLayout = nullptr;
             std::unique_ptr<QBoxLayout> _layout = nullptr;
+            std::unique_ptr<QLabel> _errorMessage = nullptr;
             bool _loggingAction = false;
     };
 

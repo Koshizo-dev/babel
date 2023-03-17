@@ -1,7 +1,27 @@
 #include "MainScene.hpp"
+#include "LoggingScene.hpp"
 #include "../ClientError.hpp"
+#include "../utils.hpp"
+#include <QObject>
+#include <iostream>
 
 using namespace babel;
+
+MainScene::MainScene(std::shared_ptr<SceneManager> sceneManager) {
+    if (sceneManager == nullptr)
+        throw ClientError("Whilst initializing LoggingScene: SceneManager cannot be null !");
+    this->_sceneManager = sceneManager;
+    this->_button = std::unique_ptr<QPushButton>(new QPushButton("Hello world !"));
+
+    int x = centerX(this->_sceneManager->getWidget().get(), this->_button->width());
+    int y = centerY(this->_sceneManager->getWidget().get(), this->_button->height());
+    this->_button->move(x, y);
+    
+    QObject::connect(this->_button.get(), &QPushButton::clicked, [=]() {
+        this->_sceneManager->setScene(new LoggingScene(this->_sceneManager));
+    });
+    printf("main scene created!\n");
+}
 
 MainScene::~MainScene() {
     this->_button.reset();
@@ -11,37 +31,17 @@ std::string MainScene::getName() {
     return "Main menu";
 }
 
-// Load the Scene with the parent passed as parameter
-// If function already loaded
-//     Will call the Scene::clear.
-//     Will override the current parent.
-void MainScene::load(std::shared_ptr<QWidget> parent) {
-    if (this->_parent)
-        this->clear();
-    this->_parent = parent;
-}
-
 void MainScene::display() {
-    if (this->_parent == nullptr)
-        throw ClientError("MainScene needs to be loaded first!");
-
-    QPushButton button("Hello world !", this->_parent.get());
-    button.setGeometry(0, 0, 200, 200);
-
-    //int x = this->centerX(button.width());
-    //int y = this->centerX(button.height());
-    //button.move(x, y);
+    this->_button->setParent(this->_sceneManager->getWidget().get());
+    this->_sceneManager->getWidget()->update();
+    this->_sceneManager->getWidget()->repaint();
 }
 
 void MainScene::clear() {
-    if (this->_parent == nullptr)
-        throw ClientError("MainScene needs to be loaded first!");
 }
 
 // Refresh the MainScene
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void MainScene::refresh() {
-    if (this->_parent == nullptr)
-        throw ClientError("MainScene needs to be loaded first!");
 }

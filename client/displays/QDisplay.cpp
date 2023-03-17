@@ -1,4 +1,5 @@
 #include "QDisplay.hpp"
+#include "../scenes/SceneManager.hpp"
 #include "../scenes/MainScene.hpp"
 #include "../scenes/LoggingScene.hpp"
 #include "../scenes/Scene.hpp"
@@ -10,25 +11,22 @@ using namespace babel;
 
 QDisplay::QDisplay(int argc, char **argv, std::string name, int width, int height) {
     this->_name = name;
-    this->_app = new QApplication(argc, argv);
+    this->_app = std::unique_ptr<QApplication>(new QApplication(argc, argv));
     this->_app->setApplicationDisplayName(name.c_str());
-    this->_window = new QWidget;
+    this->_window = std::shared_ptr<QWidget>(new QWidget);
     this->_window->setGeometry(0, 0, 1280, 720);
     this->_loadFont();
 
-    Scene *scene = new LoggingScene();
-    scene->load(std::shared_ptr<QWidget>(this->_window));
-    scene->display();
-    
+    this->_sceneManager = std::shared_ptr<SceneManager>(new SceneManager(this->_window));
+
+    this->_sceneManager->setScene(new LoggingScene(this->_sceneManager));
+    // this->_sceneManager->setScene(new MainScene(this->_sceneManager));
+
     _window->show();
 }
 
 QDisplay::~QDisplay() {
-    if (this->_window) 
-        delete this->_window;
-    
-    if (this->_app)
-        delete this->_app;
+    this->_app.reset();
 }
 
 int QDisplay::run() {

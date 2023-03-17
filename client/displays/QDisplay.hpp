@@ -5,6 +5,7 @@
 #include <string>
 #include <QApplication>
 #include "../scenes/Scene.hpp"
+#include "../scenes/SceneManager.hpp"
 
 namespace babel {
     class QDisplay : public Display {
@@ -17,8 +18,8 @@ namespace babel {
         void _loadFont();
     
         std::string _name;
-        QWidget *_window = nullptr;
-        QApplication *_app = nullptr;
-        Scene *_currentScene = nullptr;
+        std::shared_ptr<QWidget> _window = nullptr;
+        std::unique_ptr<QApplication> _app = nullptr;
+        std::shared_ptr<SceneManager> _sceneManager = nullptr;
     };
 } // namespace babel
