@@ -49,10 +49,13 @@ void MainScene::_initWidgets() {
 }
 
 void MainScene::_placeWidgets() {
-    int x = centerX(this->getSceneManager()->getWidget().get(), this->_button->width());
-    int y = centerY(this->getSceneManager()->getWidget().get(), this->_button->height());
-    this->_button->move(x, y);
-    
+    std::shared_ptr<Icon> icon = this->_clientManager->self->getIcon();
+    icon->setParent(this->_parent.get());
+
+    int x = centerX(this->getSceneManager()->getWidget().get(), this->_parent->width());
+    int y = centerY(this->getSceneManager()->getWidget().get(), this->_parent->height());
+    this->_parent->move(x, y);
+
     QObject::connect(this->_button.get(), &QPushButton::clicked, [=]() {
         this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
     });
