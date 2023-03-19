@@ -18,6 +18,7 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
 
 MainScene::~MainScene() {
     this->_button.reset();
+    this->_contacts.reset();
 }
 
 std::string MainScene::getName() {
@@ -25,10 +26,12 @@ std::string MainScene::getName() {
 }
 
 void MainScene::display() {
+    this->_contacts->display();
     this->_parent->show();
 }
 
 void MainScene::clear() {
+    this->_contacts->clear();
     this->_parent->hide();
 }
 
@@ -36,6 +39,7 @@ void MainScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void MainScene::refresh() {
+    this->_contacts->refresh();
     this->_parent->repaint();
 }
 
@@ -46,6 +50,7 @@ std::shared_ptr<SceneManager> MainScene::getSceneManager() {
 void MainScene::_initWidgets() {
     this->_parent = std::shared_ptr<QWidget>(new QWidget(this->getSceneManager()->getWidget().get()));
     this->_button = std::unique_ptr<QPushButton>(new QPushButton("Hello world !", this->_parent.get()));
+    this->_contacts = std::unique_ptr<ContactScene>(new ContactScene(this->_clientManager, this->getSceneManager()->getWidget()));
 }
 
 void MainScene::_placeWidgets() {

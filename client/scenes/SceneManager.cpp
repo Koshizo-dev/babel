@@ -15,7 +15,7 @@ void SceneManager::setScene(Scene *scene) {
     if (this->_scene) {
         this->_scene.reset();
     }
-    this->_scene = std::unique_ptr<Scene>(scene);
+    this->_scene = std::shared_ptr<Scene>(scene);
     this->_scene->display();
 }
 

@@ -23,8 +23,8 @@ void Icon::paintEvent(QPaintEvent *event) {
         QColor(Qt::green),
         QColor(Qt::blue),
         QColor(Qt::cyan),
-        QColor(Qt::black),
-        QColor(Qt::gray)
+        QColor(Qt::yellow),
+        QColor(Qt::magenta)
     };
     const int numColors = sizeof(colors) / sizeof(QColor);
 

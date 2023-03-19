@@ -9,7 +9,7 @@ namespace babel {
     class SceneManager {
         public:
             SceneManager(std::shared_ptr<QWidget> widget);
-            
+
             std::shared_ptr<QWidget> getWidget(void);
 
             // will clear up the previous scene first.
@@ -19,7 +19,7 @@ namespace babel {
 
         private:
             std::shared_ptr<QWidget> _widget = nullptr;
-            std::unique_ptr<Scene> _scene = nullptr;
+            std::shared_ptr<Scene> _scene = nullptr;
     };
 
 }

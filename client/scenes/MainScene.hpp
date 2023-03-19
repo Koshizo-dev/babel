@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ClientManager.hpp"
+#include "ContactScene.hpp"
 #include "Scene.hpp"
 
 #include <QPushButton>
@@ -25,6 +26,7 @@ namespace babel {
     
             std::shared_ptr<QWidget> _parent = nullptr;
             std::unique_ptr<QPushButton> _button = nullptr;
+            std::unique_ptr<ContactScene> _contacts = nullptr;
     };
 
 }
