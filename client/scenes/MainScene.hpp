@@ -16,6 +16,9 @@ namespace babel {
             void refresh() override;
 
         private:
+            void _initWidgets();
+            void _placeWidgets();
+    
             std::shared_ptr<SceneManager> _sceneManager = nullptr;
     
             std::shared_ptr<QWidget> _parent = nullptr;

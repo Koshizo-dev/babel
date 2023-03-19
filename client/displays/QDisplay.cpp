@@ -20,7 +20,6 @@ QDisplay::QDisplay(int argc, char **argv, std::string name, int width, int heigh
     this->_sceneManager = std::shared_ptr<SceneManager>(new SceneManager(this->_window));
 
     this->_sceneManager->setScene(new LoggingScene(this->_sceneManager));
-    // this->_sceneManager->setScene(new MainScene(this->_sceneManager));
 
     _window->show();
 }

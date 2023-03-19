@@ -19,10 +19,10 @@ LoggingScene::LoggingScene(std::shared_ptr<SceneManager> sceneManager) {
     this->_initLayouts();
     this->_initWidgets();
     this->_placeWidgets();
+    this->clear();
 }
 
 LoggingScene::~LoggingScene() {
-    printf("in logging scene destructor!\n");
     this->_loggingButton.reset();
     this->_usernameField.reset();
     this->_serverField.reset();
@@ -36,12 +36,11 @@ std::string LoggingScene::getName() {
 }
 
 void LoggingScene::display() {
-    this->_widget->setParent(this->_sceneManager->getWidget().get());
+    this->_widget->show();
 }
 
 void LoggingScene::clear() {
-    printf("in logging scene clear!\n");
-    this->_widget->setParent(nullptr);
+    this->_widget->hide();
 }
 
 // Refresh the MainScene
@@ -67,7 +66,7 @@ void LoggingScene::_initLayouts() {
 }
 
 void LoggingScene::_initWidgets() {
-    this->_widget = std::shared_ptr<QWidget>(new QWidget());
+    this->_widget = std::shared_ptr<QWidget>(new QWidget(this->_sceneManager->getWidget().get()));
 
     this->_loggingButton = std::unique_ptr<QPushButton>(new QPushButton("Login"));
     this->_loggingButton->setGeometry(0, 0, 200, 100);
