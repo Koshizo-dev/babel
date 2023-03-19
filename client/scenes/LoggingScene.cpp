@@ -12,10 +12,10 @@
 
 using namespace babel;
 
-LoggingScene::LoggingScene(std::shared_ptr<SceneManager> sceneManager) {
-    if (sceneManager == nullptr)
-        throw ClientError("Whilst initializing LoggingScene: SceneManager cannot be null !");
-    this->_sceneManager = sceneManager;
+LoggingScene::LoggingScene(std::shared_ptr<ClientManager> clientManager) {
+    if (clientManager == nullptr)
+        throw ClientError("Whilst initializing LoggingScene: ClientManager cannot be null !");
+    this->_clientManager = clientManager;
     this->_initLayouts();
     this->_initWidgets();
     this->_placeWidgets();
@@ -49,13 +49,17 @@ void LoggingScene::clear() {
 void LoggingScene::refresh() {
 }
 
+std::shared_ptr<SceneManager> LoggingScene::getSceneManager() {
+    return (this->_clientManager->sceneManager);
+}
+
 void LoggingScene::_loggingButtonClicked() {
     if (this->_loggingAction) {
         return;
     }
 
     this->_loggingAction = true;
-    this->_sceneManager->setScene(new MainScene(this->_sceneManager));
+    this->getSceneManager()->setScene(new MainScene(this->_clientManager));
     std::cerr << "[DEBUG] Sending request to connect to server" << std::endl;
     // TODO Connection packet to server
 }
@@ -66,7 +70,7 @@ void LoggingScene::_initLayouts() {
 }
 
 void LoggingScene::_initWidgets() {
-    this->_widget = std::shared_ptr<QWidget>(new QWidget(this->_sceneManager->getWidget().get()));
+    this->_widget = std::shared_ptr<QWidget>(new QWidget(this->getSceneManager()->getWidget().get()));
 
     this->_loggingButton = std::unique_ptr<QPushButton>(new QPushButton("Login"));
     this->_loggingButton->setGeometry(0, 0, 200, 100);
@@ -87,7 +91,7 @@ void LoggingScene::_placeWidgets() {
     this->_widget->setLayout(this->_layout.get());
     // Set the size of the widget and move it to the center of the parent
     this->_widget->setFixedSize(this->_widget->sizeHint());
-    this->_widget->move((this->_sceneManager->getWidget()->width() - this->_widget->width()) / 2, (this->_sceneManager->getWidget()->height() - this->_widget->height()) / 2);
+    this->_widget->move((this->getSceneManager()->getWidget()->width() - this->_widget->width()) / 2, (this->getSceneManager()->getWidget()->height() - this->_widget->height()) / 2);
 
     QObject::connect(this->_loggingButton.get(), &QPushButton::clicked, [=]() {
        this->_loggingButtonClicked(); 

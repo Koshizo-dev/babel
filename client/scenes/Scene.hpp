@@ -14,6 +14,7 @@ namespace babel {
             virtual void display() = 0;
             virtual void clear() = 0;
             virtual void refresh() = 0;
+            virtual std::shared_ptr<SceneManager> getSceneManager() = 0;
     };
 
 }

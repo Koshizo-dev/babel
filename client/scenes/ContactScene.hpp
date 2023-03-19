@@ -6,16 +6,15 @@
 #include <QPushButton>
 
 namespace babel {
-    class MainScene : public Scene {
+    class ContactScene : public Scene {
         public:
-            MainScene(std::shared_ptr<ClientManager> clientManager);
-            ~MainScene() override;
+            ContactScene(std::shared_ptr<ClientManager>);
+            ~ContactScene() override;
     
             std::string getName() override;
             void display() override;
             void clear() override;
             void refresh() override;
-            std::shared_ptr<SceneManager> getSceneManager() override;
 
         private:
             void _initWidgets();

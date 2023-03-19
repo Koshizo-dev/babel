@@ -1,3 +1,4 @@
+#include "ClientManager.hpp"
 #include "displays/QDisplay.hpp"
 #include <QApplication>
 #include <QPushButton>
@@ -10,7 +11,9 @@ Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 using namespace babel;
 
 int main(int argc, char **argv) {
-    Display *display = new QDisplay(argc, argv, "Babel | New Gen", 1280, 720);
+    std::shared_ptr<ClientManager> clientManager = std::shared_ptr<ClientManager>(new ClientManager());
+    DisplaySettings settings(argc, argv, "Babel | New Gen", 1280, 720);
+    Display *display = new QDisplay(settings, clientManager);
 
     int code = display->run();
 

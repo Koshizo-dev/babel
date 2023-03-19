@@ -2,24 +2,26 @@
 
 #include "Display.hpp"
 
+#include "../scenes/Scene.hpp"
+#include "../ClientManager.hpp"
+#include "DisplaySettings.hpp"
+
 #include <string>
 #include <QApplication>
-#include "../scenes/Scene.hpp"
-#include "../scenes/SceneManager.hpp"
 
 namespace babel {
     class QDisplay : public Display {
         public:
-            QDisplay(int argc, char **argv, std::string name, int width, int height);
+            QDisplay(DisplaySettings settings, std::shared_ptr<ClientManager> clientManager);
             ~QDisplay();
             
             int run() override;
     private:
         void _loadFont();
-    
-        std::string _name;
+
+        DisplaySettings _settings;
         std::shared_ptr<QWidget> _window = nullptr;
         std::unique_ptr<QApplication> _app = nullptr;
-        std::shared_ptr<SceneManager> _sceneManager = nullptr;
+        std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 } // namespace babel
