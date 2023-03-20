@@ -96,7 +96,7 @@ void ContactScene::_placeWidgets() {
     this->_scrollArea->setFixedHeight(555);
 
     this->_contactsLayout->setMargin(0);
-    this->_contactsLayout->setSpacing(0);
+    this->_contactsLayout->setSpacing(5);
 
     for (std::shared_ptr<Contact> contact: this->_contacts) {
         this->_contactsLayout->addWidget(contact->getButton().get(), 0, Qt::AlignTop);
