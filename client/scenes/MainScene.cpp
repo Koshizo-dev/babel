@@ -1,4 +1,5 @@
 #include "MainScene.hpp"
+#include "ChatBoxScene.hpp"
 #include "LoggingScene.hpp"
 #include "../ClientError.hpp"
 #include "../utils.hpp"
@@ -21,17 +22,11 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 MainScene::~MainScene() {
-    printf("contacts!\n");
     this->_contacts.reset();
-    printf("search!\n");
     this->_search.reset();
-    printf("user!\n");
     this->_user.reset();
-    printf("left side!\n");
     this->_leftSideLayout.reset();
-    printf("right side!\n");
     this->_rightSideLayout.reset();
-    printf("parent layout!\n");
     this->_parentLayout.reset();
 }
 
@@ -85,6 +80,8 @@ void MainScene::_initLeftLayout() {
 
 void MainScene::_initRightLayout() {
     this->_rightSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout());
+
+    this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
 }
 
 void MainScene::_placeLayouts() {
@@ -103,4 +100,5 @@ void MainScene::_placeLeftLayout() {
 }
 
 void MainScene::_placeRightLayout() {
+    this->_rightSideLayout->addLayout(this->_chatBox->getLayout().get(), 2);
 }

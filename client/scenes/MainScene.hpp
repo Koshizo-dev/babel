@@ -4,6 +4,7 @@
 #include "UserScene.hpp"
 #include "ContactScene.hpp"
 #include "SearchScene.hpp"
+#include "ChatBoxScene.hpp"
 #include "Scene.hpp"
 
 #include <QPushButton>
@@ -33,7 +34,10 @@ namespace babel {
             std::unique_ptr<ContactScene> _contacts = nullptr;
             std::unique_ptr<SearchScene> _search = nullptr;
             std::unique_ptr<QVBoxLayout> _leftSideLayout = nullptr;
+
+            std::unique_ptr<ChatBoxScene> _chatBox = nullptr;
             std::unique_ptr<QVBoxLayout> _rightSideLayout = nullptr;
+
             std::unique_ptr<QHBoxLayout> _parentLayout = nullptr;
             std::shared_ptr<QWidget> _parent = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
