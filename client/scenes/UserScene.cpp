@@ -1,5 +1,6 @@
 #include "UserScene.hpp"
 #include "../ClientError.hpp"
+#include "LoggingScene.hpp"
 #include <iostream>
 
 using namespace babel;
@@ -15,6 +16,9 @@ UserScene::UserScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 UserScene::~UserScene() {
+    this->_userLabel.reset();
+    this->_userLayout.reset();
+    this->_logoutButton.reset();
 }
 
 std::string UserScene::getName() {
@@ -52,9 +56,25 @@ void UserScene::_initLayouts() {
 void UserScene::_initWidgets() {
     this->_parent = std::shared_ptr<QWidget>(new QWidget());
     this->_userLabel = std::unique_ptr<QLabel>(new QLabel(this->_clientManager->self->getUsername().c_str()));
+
+    this->_logoutButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_logoutButton->setIcon(QIcon("assets/logout.png"));
+
+    QObject::connect(this->_logoutButton.get(), &QToolButton::clicked, [=]() {
+        // TODO disconnect user server side
+        this->_clientManager->disconnect();
+        printf("User disconnected!\n");
+        this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
+    });
+    
 }
 
 void UserScene::_placeWidgets() {
     this->_userLayout->addWidget(this->_clientManager->self->getIcon().get());
     this->_userLayout->addWidget(this->_userLabel.get());
+
+    this->_logoutButton->setIconSize(QSize(64, 64));
+    this->_logoutButton->setFixedSize(64, 64);
+    this->_logoutButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
+    this->_userLayout->addWidget(this->_logoutButton.get());
 }

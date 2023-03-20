@@ -12,5 +12,6 @@ namespace babel {
             std::shared_ptr<Client> self = nullptr;
 
             std::shared_ptr<Client> getChatting();
+            void disconnect();
     };
 }

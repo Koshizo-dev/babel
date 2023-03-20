@@ -8,3 +8,8 @@ std::shared_ptr<Client> ClientManager::getChatting() {
             return (client);
     return (nullptr);
 }
+
+void ClientManager::disconnect() {
+    this->clients.clear();
+    this->self.reset();
+}
