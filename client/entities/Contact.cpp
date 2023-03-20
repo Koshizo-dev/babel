@@ -8,6 +8,9 @@ Contact::Contact(std::shared_ptr<Client> client) {
     this->_joinElements();
 }
 
+Contact::~Contact() {
+}
+
 std::shared_ptr<Client> Contact::getClient() {
     return (this->_client);
 }
@@ -25,9 +28,10 @@ std::shared_ptr<QHBoxLayout> Contact::getButtonLayout() {
 }
 
 void Contact::_initElements() {
+    std::string name = this->_client->getUsername();
     this->_button = std::shared_ptr<QPushButton>(new QPushButton());
     this->_buttonLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout());
-    this->_buttonLabel = std::shared_ptr<QLabel>(new QLabel(this->_client->getUsername().c_str()));
+    this->_buttonLabel = std::shared_ptr<QLabel>(new QLabel(name.c_str()));
     if (this->_client->isChatting()) {
         this->_button->setStyleSheet("background-color: lightgray");
         this->_buttonLabel->setStyleSheet("background-color: lightgray");

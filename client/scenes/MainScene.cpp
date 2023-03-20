@@ -21,12 +21,18 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 MainScene::~MainScene() {
-    this->_parentLayout.reset();
-    this->_user.reset();
+    printf("contacts!\n");
     this->_contacts.reset();
+    printf("search!\n");
     this->_search.reset();
+    printf("user!\n");
+    this->_user.reset();
+    printf("left side!\n");
     this->_leftSideLayout.reset();
+    printf("right side!\n");
     this->_rightSideLayout.reset();
+    printf("parent layout!\n");
+    this->_parentLayout.reset();
 }
 
 std::string MainScene::getName() {

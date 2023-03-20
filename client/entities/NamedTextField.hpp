@@ -16,8 +16,8 @@ namespace babel {
 
         private:
             std::shared_ptr<QWidget> _parent = nullptr;
-            std::unique_ptr<QLineEdit> _input = nullptr;
-            std::unique_ptr<QLabel> _label = nullptr;
-            std::unique_ptr<QHBoxLayout> _layout = nullptr;
+            std::shared_ptr<QHBoxLayout> _layout = nullptr;
+            std::shared_ptr<QLineEdit> _input = nullptr;
+            std::shared_ptr<QLabel> _label = nullptr;
     };
 }

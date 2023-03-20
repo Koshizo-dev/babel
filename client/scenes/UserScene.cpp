@@ -17,8 +17,9 @@ UserScene::UserScene(std::shared_ptr<ClientManager> clientManager) {
 
 UserScene::~UserScene() {
     this->_userLabel.reset();
-    this->_userLayout.reset();
     this->_logoutButton.reset();
+    this->_userLayout.reset();
+    this->_parent.reset();
 }
 
 std::string UserScene::getName() {

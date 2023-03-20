@@ -15,6 +15,11 @@ ContactScene::ContactScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 ContactScene::~ContactScene() {
+    this->_contacts.clear();
+    this->_contactsLayout.reset();
+    this->_scrollArea.reset();
+    this->_parent->setParent(nullptr);
+    this->_parent.reset();
 }
 
 std::string ContactScene::getName() {
@@ -47,15 +52,14 @@ std::shared_ptr<QWidget> ContactScene::getWidget() {
 }
 
 void ContactScene::_initLayouts() {
-    this->_contactsLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout(this->_parent.get()));
+    this->_contactsLayout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this->_parent.get()));
 }
 
 void ContactScene::_initWidgets() {
     this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea());
-    this->_parent = std::shared_ptr<QWidget>(new QWidget(this->_scrollArea.get()));
+    this->_parent = std::shared_ptr<QWidget>(new QWidget());
 
     for (std::shared_ptr<Client> client: this->_clientManager->clients) {
-        std::cout << "initializing client [" << client->getUsername() << "] !" << std::endl;
         std::shared_ptr<Contact> contact = this->_generateContact(client);
         this->_contacts.push_back(contact);
     }
@@ -81,6 +85,5 @@ std::shared_ptr<Contact> ContactScene::_generateContact(std::shared_ptr<Client> 
         // TODO change the ChatScene
         std::cout << "Interacted with client " << contact->getClient()->getUsername() << "!" << std::endl;
     });
-
     return (contact);
 }

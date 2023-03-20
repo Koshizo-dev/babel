@@ -25,10 +25,9 @@ namespace babel {
             void _initWidgets();
             void _placeWidgets();
     
-            std::shared_ptr<ClientManager> _clientManager = nullptr;
-    
-            std::shared_ptr<QHBoxLayout> _searchLayout = nullptr;
             std::unique_ptr<QLineEdit> _searchInput = nullptr;
+            std::shared_ptr<QHBoxLayout> _searchLayout = nullptr;
+            std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 
 }

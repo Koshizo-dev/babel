@@ -16,6 +16,7 @@ SearchScene::SearchScene(std::shared_ptr<ClientManager> clientManager) {
 
 SearchScene::~SearchScene() {
     this->_searchInput.reset();
+    // this->_searchLayout.reset();
 }
 
 std::string SearchScene::getName() {

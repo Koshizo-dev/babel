@@ -27,8 +27,10 @@ LoggingScene::~LoggingScene() {
     this->_usernameField.reset();
     this->_serverField.reset();
     this->_portField.reset();
+    this->_errorMessage.reset();
     this->_topLayout.reset();
     this->_layout.reset();
+    this->_widget.reset();
 }
 
 std::string LoggingScene::getName() {

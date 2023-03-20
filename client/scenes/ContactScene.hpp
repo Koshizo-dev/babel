@@ -27,12 +27,10 @@ namespace babel {
             void _placeWidgets();
             std::shared_ptr<Contact> _generateContact(std::shared_ptr<Client> client);
     
-            std::shared_ptr<ClientManager> _clientManager = nullptr;
-    
-            std::shared_ptr<QWidget> _parent = nullptr;
-            std::unique_ptr<QVBoxLayout> _contactsLayout = nullptr;
             std::vector<std::shared_ptr<Contact>> _contacts = {};
+            std::shared_ptr<QVBoxLayout> _contactsLayout = nullptr;
             std::shared_ptr<QScrollArea> _scrollArea = nullptr;
+            std::shared_ptr<QWidget> _parent = nullptr;
+            std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
-
 }
