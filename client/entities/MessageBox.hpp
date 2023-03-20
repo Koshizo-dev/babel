@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <qlayout.h>
 #include <vector>
 
 namespace babel {
@@ -16,7 +17,7 @@ namespace babel {
             ~MessageBox();
     
             std::shared_ptr<Client> getClient();
-            std::shared_ptr<QHBoxLayout> getLayout();
+            std::shared_ptr<QLayout> getLayout();
 
         private:
             void _joinElements();

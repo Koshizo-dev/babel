@@ -5,7 +5,6 @@ using namespace babel;
 
 ChatBox::ChatBox(std::string placeHolder) {
     this->_chatInput = new QTextEdit(this);
-    // this->_chatInput->setLineWrapColumnOrWidth(300);
     
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->_chatInput->setPlaceholderText(placeHolder.c_str());

@@ -49,7 +49,7 @@ void ChatBoxScene::_initLayouts() {
 }
 
 void ChatBoxScene::_initWidgets() {
-    this->_chatBoxInput = std::unique_ptr<ChatBox>(new ChatBox((std::string("Message ") + this->_clientManager->getChatting()->getUsername())));
+    this->_chatBoxInput = std::unique_ptr<ChatBox>(new ChatBox((std::string("Message @") + this->_clientManager->getChatting()->getUsername())));
 }
 
 void ChatBoxScene::_placeWidgets() {

@@ -38,6 +38,10 @@ void MainScene::display() {
     this->_user->display();
     this->_contacts->display();
     this->_search->display();
+
+    this->_messages->display();
+    this->_chatBox->display();
+    
     this->_parent->show();
 }
 
@@ -45,6 +49,10 @@ void MainScene::clear() {
     this->_user->clear();
     this->_contacts->clear();
     this->_search->clear();
+
+    this->_messages->clear();
+    this->_chatBox->clear();
+    
     this->_parent->hide();
 }
 
@@ -55,6 +63,10 @@ void MainScene::refresh() {
     this->_user->refresh();
     this->_contacts->refresh();
     this->_search->refresh();
+
+    this->_messages->clear();
+    this->_chatBox->clear();
+    
     this->_parent->repaint();
 }
 

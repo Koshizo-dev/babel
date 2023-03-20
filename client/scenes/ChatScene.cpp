@@ -1,12 +1,15 @@
 #include "ChatScene.hpp"
 #include "../ClientError.hpp"
+
+#include <QScrollBar>
+#include <QTimer>
 #include <iostream>
 
 using namespace babel;
 
 ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
-        throw ClientError("Whilst initializing ContactScene: ClientManager cannot be null !");
+        throw ClientError("Whilst initializing ChatScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
     this->_initWidgets();
     this->_initLayouts();
@@ -33,6 +36,7 @@ void ChatScene::display() {
 
 void ChatScene::clear() {
     this->_parent->hide();
+    this->_scrollArea->hide();
 }
 
 // Refresh the MainScene
@@ -52,12 +56,12 @@ std::shared_ptr<QWidget> ChatScene::getWidget() {
 }
 
 void ChatScene::_initLayouts() {
-    this->_messagesLayout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout());
+    this->_messagesLayout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this->_parent.get()));
 }
 
 void ChatScene::_initWidgets() {
     this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea());
-    this->_parent = std::shared_ptr<QWidget>(new QWidget(this->_scrollArea.get()));
+    this->_parent = std::shared_ptr<QWidget>(new QWidget());
 
     auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->self, this->_clientManager->getChatting());
 
@@ -73,14 +77,16 @@ void ChatScene::_placeWidgets() {
     this->_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->_scrollArea->setWidget(this->_parent.get());
     this->_scrollArea->setWidgetResizable(true);
-    this->_parent->setFixedWidth(700);
+    // this->_parent->setFixedWidth(700);
     this->_scrollArea->setFixedHeight(555);
     this->_messagesLayout->setSpacing(10);
 
-    for (std::shared_ptr<MessageBox> message: this->_messages) {
+    for (std::shared_ptr<MessageBox> message: this->_messages)
         this->_messagesLayout->addLayout(message->getLayout().get());
-    }
-    this->_scrollArea->setLayout(this->_messagesLayout.get());
+    QTimer::singleShot(0, [this]() {
+        QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
+        vScrollBar->setValue(vScrollBar->maximum());
+    });
 }
 
 std::vector<std::vector<std::shared_ptr<Message>>> ChatScene::_groupMessagesByTime(std::shared_ptr<Client> client1, std::shared_ptr<Client> client2) {

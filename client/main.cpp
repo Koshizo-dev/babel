@@ -27,6 +27,11 @@ int main(int argc, char **argv) {
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Why not", 4)));
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Let's go bud", 7)));
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "It's been awesome", 8)));
+    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Stop flooding plz", 16)));
+    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 17)));
+    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 18)));
+    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 19)));
+    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 20)));
 
     hyside->setMessages(hysideMessages);
     clientManager->self->setMessages(selfMessages);
