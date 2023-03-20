@@ -17,7 +17,7 @@ NamedTextField::NamedTextField(std::string name, std::shared_ptr<QWidget> parent
     this->_layout = std::unique_ptr<QHBoxLayout>(new QHBoxLayout);
     this->_layout->addWidget(this->_label.get());
     this->_layout->addWidget(this->_input.get());
-    this->_layout->addStretch();   
+    this->_layout->addStretch();
 }
 
 NamedTextField::~NamedTextField() {

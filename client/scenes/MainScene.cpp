@@ -12,13 +12,15 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
         throw ClientError("Whilst initializing LoggingScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
     this->_initWidgets();
+    this->_initLayouts();
     this->_placeWidgets();
     this->clear();
 }
 
 MainScene::~MainScene() {
-    this->_button.reset();
+    this->_user.reset();
     this->_contacts.reset();
+    this->_search.reset();
 }
 
 std::string MainScene::getName() {
@@ -26,12 +28,16 @@ std::string MainScene::getName() {
 }
 
 void MainScene::display() {
+    this->_user->display();
     this->_contacts->display();
+    this->_search->display();
     this->_parent->show();
 }
 
 void MainScene::clear() {
+    this->_user->clear();
     this->_contacts->clear();
+    this->_search->clear();
     this->_parent->hide();
 }
 
@@ -39,7 +45,9 @@ void MainScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void MainScene::refresh() {
+    this->_user->refresh();
     this->_contacts->refresh();
+    this->_search->refresh();
     this->_parent->repaint();
 }
 
@@ -49,19 +57,23 @@ std::shared_ptr<SceneManager> MainScene::getSceneManager() {
 
 void MainScene::_initWidgets() {
     this->_parent = std::shared_ptr<QWidget>(new QWidget(this->getSceneManager()->getWidget().get()));
-    this->_button = std::unique_ptr<QPushButton>(new QPushButton("Hello world !", this->_parent.get()));
-    this->_contacts = std::unique_ptr<ContactScene>(new ContactScene(this->_clientManager, this->getSceneManager()->getWidget()));
+    this->_leftSide = std::shared_ptr<QWidget>(new QWidget(this->_parent.get()));
+    this->_parent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->_leftSide->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->_parent->setMinimumSize(1280, 720);
+
+    this->_user = std::unique_ptr<UserScene>(new UserScene(this->_clientManager));
+    this->_contacts = std::unique_ptr<ContactScene>(new ContactScene(this->_clientManager));
+    this->_search = std::unique_ptr<SearchScene>(new SearchScene(this->_clientManager));
+}
+
+void MainScene::_initLayouts() {
+    this->_leftSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout(this->_leftSide.get()));
 }
 
 void MainScene::_placeWidgets() {
-    std::shared_ptr<Icon> icon = this->_clientManager->self->getIcon();
-    icon->setParent(this->_parent.get());
-
-    int x = centerX(this->getSceneManager()->getWidget().get(), this->_parent->width());
-    int y = centerY(this->getSceneManager()->getWidget().get(), this->_parent->height());
-    this->_parent->move(x, y);
-
-    QObject::connect(this->_button.get(), &QPushButton::clicked, [=]() {
-        this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
-    });
+    this->_leftSideLayout->addWidget(this->_user->getWidget().get());
+    this->_leftSideLayout->addLayout(this->_search->getLayout().get());
+    this->_leftSideLayout->addWidget(this->_contacts->getWidget().get());
+    this->_leftSide->setLayout(this->_leftSideLayout.get());
 }

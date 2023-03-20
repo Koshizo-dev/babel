@@ -4,15 +4,13 @@
 #include "../entities/Contact.hpp"
 #include "Scene.hpp"
 
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QScrollArea>
+#include <QHBoxLayout>
 
 namespace babel {
-    class ContactScene : public Scene {
+    class UserScene : public Scene {
         public:
-            ContactScene(std::shared_ptr<ClientManager>);
-            ~ContactScene() override;
+            UserScene(std::shared_ptr<ClientManager>);
+            ~UserScene() override;
     
             std::string getName() override;
             void display() override;
@@ -25,14 +23,13 @@ namespace babel {
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
-            std::shared_ptr<Contact> _generateContact(std::shared_ptr<Client> client);
     
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     
+            std::shared_ptr<QWidget> _mainParent = nullptr;
             std::shared_ptr<QWidget> _parent = nullptr;
-            std::unique_ptr<QVBoxLayout> _contactsLayout = nullptr;
-            std::vector<std::shared_ptr<Contact>> _contacts = {};
-            std::shared_ptr<QScrollArea> _scrollArea = nullptr;
+            std::unique_ptr<QLabel> _userLabel = nullptr;
+            std::unique_ptr<QHBoxLayout> _userLayout = nullptr;
     };
 
 }

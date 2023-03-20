@@ -1,15 +1,13 @@
 #include "ContactScene.hpp"
 #include "../ClientError.hpp"
 #include <iostream>
-#include <qnamespace.h>
 
 using namespace babel;
 
-ContactScene::ContactScene(std::shared_ptr<ClientManager> clientManager, std::shared_ptr<QWidget> mainParent) {
+ContactScene::ContactScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing ContactScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
-    this->_mainParent = mainParent;
     this->_initWidgets();
     this->_initLayouts();
     this->_placeWidgets();
@@ -44,12 +42,16 @@ std::shared_ptr<SceneManager> ContactScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
+std::shared_ptr<QWidget> ContactScene::getWidget() {
+    return (this->_scrollArea);
+}
+
 void ContactScene::_initLayouts() {
     this->_contactsLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout(this->_parent.get()));
 }
 
 void ContactScene::_initWidgets() {
-    this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea(this->_mainParent.get()));
+    this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea());
     this->_parent = std::shared_ptr<QWidget>(new QWidget(this->_scrollArea.get()));
 
     for (std::shared_ptr<Client> client: this->_clientManager->clients) {
