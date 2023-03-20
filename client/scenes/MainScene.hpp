@@ -5,6 +5,7 @@
 #include "ContactScene.hpp"
 #include "SearchScene.hpp"
 #include "ChatBoxScene.hpp"
+#include "ChatInfoScene.hpp"
 #include "ChatScene.hpp"
 #include "Scene.hpp"
 
@@ -36,6 +37,7 @@ namespace babel {
             std::unique_ptr<SearchScene> _search = nullptr;
             std::unique_ptr<QVBoxLayout> _leftSideLayout = nullptr;
 
+            std::unique_ptr<ChatInfoScene> _chatInfo = nullptr;
             std::unique_ptr<ChatScene> _messages = nullptr;
             std::unique_ptr<ChatBoxScene> _chatBox = nullptr;
             std::unique_ptr<QVBoxLayout> _rightSideLayout = nullptr;

@@ -39,6 +39,7 @@ void MainScene::display() {
     this->_contacts->display();
     this->_search->display();
 
+    this->_chatInfo->display();
     this->_messages->display();
     this->_chatBox->display();
     
@@ -50,6 +51,7 @@ void MainScene::clear() {
     this->_contacts->clear();
     this->_search->clear();
 
+    this->_chatInfo->clear();
     this->_messages->clear();
     this->_chatBox->clear();
     
@@ -64,8 +66,9 @@ void MainScene::refresh() {
     this->_contacts->refresh();
     this->_search->refresh();
 
-    this->_messages->clear();
-    this->_chatBox->clear();
+    this->_chatInfo->refresh();
+    this->_messages->refresh();
+    this->_chatBox->refresh();
     
     this->_parent->repaint();
 }
@@ -93,12 +96,17 @@ void MainScene::_initLeftLayout() {
 void MainScene::_initRightLayout() {
     this->_rightSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout());
 
+    this->_chatInfo = std::unique_ptr<ChatInfoScene>(new ChatInfoScene(this->_clientManager));
     this->_messages = std::unique_ptr<ChatScene>(new ChatScene(this->_clientManager));
     this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
 }
 
 void MainScene::_placeLayouts() {
+    QFrame* line = new QFrame();
+    line->setFrameShape(QFrame::VLine);
+    line->setFrameShadow(QFrame::Sunken);
     this->_parentLayout->addLayout(this->_leftSideLayout.get(), 2);
+    this->_parentLayout->addWidget(line, 4);
     this->_parentLayout->addLayout(this->_rightSideLayout.get(), 5);
 
     this->_placeLeftLayout();
@@ -113,6 +121,7 @@ void MainScene::_placeLeftLayout() {
 }
 
 void MainScene::_placeRightLayout() {
-    this->_rightSideLayout->addWidget(this->_messages->getWidget().get(), 12);
-    this->_rightSideLayout->addLayout(this->_chatBox->getLayout().get(), 2);
+    this->_rightSideLayout->addWidget(this->_chatInfo->getWidget().get(), 1);
+    this->_rightSideLayout->addWidget(this->_messages->getWidget().get(), 10);
+    this->_rightSideLayout->addLayout(this->_chatBox->getLayout().get(), 3);
 }
