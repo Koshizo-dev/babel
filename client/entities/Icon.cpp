@@ -5,16 +5,17 @@
 
 using namespace babel;
 
-Icon::Icon(const std::string &input, QWidget *parent) : QWidget(parent) {
+Icon::Icon(const std::string &input, QWidget *parent, int size) : QWidget(parent) {
     this->_seed = Icon::_generateSeed(input);
-    setFixedSize(64, 64);
+    this->_size = size;
+    setFixedSize(this->_size, this->_size);
 }
 
 void Icon::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    const int squareSize = 16;
+    const int squareSize = this->_size/4;
     const int numSquares = width() / squareSize;
     const int seedSize = this->_seed.size();
     // Define an array of the colors you want to use

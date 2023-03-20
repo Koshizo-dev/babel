@@ -81,6 +81,7 @@ void MainScene::_initLeftLayout() {
 void MainScene::_initRightLayout() {
     this->_rightSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout());
 
+    this->_messages = std::unique_ptr<ChatScene>(new ChatScene(this->_clientManager));
     this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
 }
 
@@ -100,5 +101,6 @@ void MainScene::_placeLeftLayout() {
 }
 
 void MainScene::_placeRightLayout() {
+    this->_rightSideLayout->addWidget(this->_messages->getWidget().get(), 12);
     this->_rightSideLayout->addLayout(this->_chatBox->getLayout().get(), 2);
 }

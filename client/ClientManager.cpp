@@ -6,6 +6,7 @@ std::shared_ptr<Client> ClientManager::getChatting() {
     for (std::shared_ptr<Client> client: this->clients)
         if (client->isChatting())
             return (client);
+    printf("none found!\n");
     return (nullptr);
 }
 

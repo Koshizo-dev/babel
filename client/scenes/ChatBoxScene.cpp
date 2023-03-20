@@ -21,7 +21,7 @@ ChatBoxScene::~ChatBoxScene() {
 }
 
 std::string ChatBoxScene::getName() {
-    return "Search menu";
+    return "ChatBox menu";
 }
 
 void ChatBoxScene::display() {
