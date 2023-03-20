@@ -14,11 +14,13 @@ int main(int argc, char **argv) {
     std::shared_ptr<ClientManager> clientManager = std::shared_ptr<ClientManager>(new ClientManager());
     clientManager->self = std::shared_ptr<Client>(new Client("Koshizo"));
     std::shared_ptr<Client> hyside(new Client("hyside"));
+    std::shared_ptr<Client> rimost(new Client("rimost"));
     hyside->setChatting(true);
     hyside->setInCall(false);
     clientManager->self->setInCall(true);
     std::vector<std::shared_ptr<Message>> hysideMessages = {};
     std::vector<std::shared_ptr<Message>> selfMessages = {};
+    std::vector<std::shared_ptr<Message>> rimostMessages = {};
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "SomeMessage", 1)));
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "AnotherMessage", 2)));
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "What", 3)));
@@ -34,12 +36,14 @@ int main(int argc, char **argv) {
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 18)));
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 19)));
     selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 20)));
+    rimostMessages.push_back(std::shared_ptr<Message>(new Message(rimost, "tg", 4050013)));
 
     hyside->setMessages(hysideMessages);
+    rimost->setMessages(rimostMessages);
     clientManager->self->setMessages(selfMessages);
 
     clientManager->clients.push_back(hyside);
-    clientManager->clients.push_back(std::shared_ptr<Client>(new Client("rimost")));
+    clientManager->clients.push_back(rimost);
     clientManager->clients.push_back(std::shared_ptr<Client>(new Client("nagi")));
     clientManager->clients.push_back(std::shared_ptr<Client>(new Client("rqndomhax")));
     clientManager->clients.push_back(std::shared_ptr<Client>(new Client("jebug")));

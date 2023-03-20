@@ -73,6 +73,18 @@ void ContactScene::_initWidgets() {
         std::shared_ptr<Contact> contact = this->_generateContact(client);
         this->_contacts.push_back(contact);
     }
+
+    // sort the contacts by message timestamps
+    std::sort(this->_contacts.begin(), this->_contacts.end(),
+              [](const std::shared_ptr<Contact> a, const std::shared_ptr<Contact> b) { 
+            long aTimestamp = 0;
+            if (a->getClient()->getMessages().size() != 0)
+                aTimestamp = a->getClient()->getMessages()[a->getClient()->getMessages().size()-1]->getTimestamp();
+            long bTimestamp = 0;
+            if (b->getClient()->getMessages().size() != 0)
+                bTimestamp = b->getClient()->getMessages()[b->getClient()->getMessages().size()-1]->getTimestamp();
+            return aTimestamp > bTimestamp;
+        });
 }
 
 void ContactScene::_placeWidgets() {
