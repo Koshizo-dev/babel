@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
     clientManager->self = std::shared_ptr<Client>(new Client("Koshizo"));
     std::shared_ptr<Client> hyside(new Client("hyside"));
     hyside->setChatting(true);
+    hyside->setInCall(false);
     clientManager->self->setInCall(true);
     std::vector<std::shared_ptr<Message>> hysideMessages = {};
     std::vector<std::shared_ptr<Message>> selfMessages = {};

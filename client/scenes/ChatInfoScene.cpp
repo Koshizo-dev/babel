@@ -19,6 +19,8 @@ ChatInfoScene::~ChatInfoScene() {
     this->_userLabel.reset();
     this->_callUpButton.reset();
     this->_hangUpButton.reset();
+    this->_callUpAbsentButton.reset();
+    this->_hangUpAbsentButton.reset();
     this->_userLayout.reset();
     this->_parent.reset();
 }
@@ -41,11 +43,28 @@ void ChatInfoScene::clear() {
 void ChatInfoScene::refresh() {
     if (this->_clientManager->self->isInCall()) {
         this->_callUpButton->hide();
-        this->_hangUpButton->show();
+        this->_callUpAbsentButton->hide();
+        if (this->_clientManager->getChatting()->isInCall()) {
+            this->_hangUpAbsentButton->hide();
+            this->_hangUpButton->show();
+        }
+        else {
+            this->_hangUpButton->hide();
+            this->_hangUpAbsentButton->show();
+        }
     } else {
-        this->_callUpButton->show();
         this->_hangUpButton->hide();
+        this->_hangUpAbsentButton->hide();
+        if (this->_clientManager->getChatting()->isInCall()) {
+            this->_callUpAbsentButton->hide();
+            this->_callUpButton->show();
+        }
+        else {
+            this->_callUpButton->hide();
+            this->_callUpAbsentButton->show();
+        }
     }
+
     this->_parent->repaint();
     // TODO refresh clients
 }
@@ -70,21 +89,10 @@ void ChatInfoScene::_initWidgets() {
     this->_callUpButton->setIcon(QIcon("assets/call-up.png"));
     this->_hangUpButton = std::unique_ptr<QToolButton>(new QToolButton());
     this->_hangUpButton->setIcon(QIcon("assets/hang-up.png"));
-
-    QObject::connect(this->_callUpButton.get(), &QToolButton::clicked, [=]() {
-        // TODO leave all server side
-        this->_clientManager->self->setInCall(true);
-        this->refresh();
-        printf("Joined call!\n");
-    });
-
-    QObject::connect(this->_hangUpButton.get(), &QToolButton::clicked, [=]() {
-        // TODO leave all server side
-        this->_clientManager->self->setInCall(false);
-        this->refresh();
-        printf("Left call!\n");
-    });
-
+    this->_callUpAbsentButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_callUpAbsentButton->setIcon(QIcon("assets/call-up_absent.png"));
+    this->_hangUpAbsentButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_hangUpAbsentButton->setIcon(QIcon("assets/hang-up_absent.png"));
 }
 
 void ChatInfoScene::_placeWidgets() {
@@ -94,11 +102,49 @@ void ChatInfoScene::_placeWidgets() {
     this->_callUpButton->setIconSize(QSize(64, 64));
     this->_callUpButton->setFixedSize(64, 64);
     this->_callUpButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
+    this->_callUpAbsentButton->setIconSize(QSize(64, 64));
+    this->_callUpAbsentButton->setFixedSize(64, 64);
+    this->_callUpAbsentButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
 
     this->_hangUpButton->setIconSize(QSize(64, 64));
     this->_hangUpButton->setFixedSize(64, 64);
     this->_hangUpButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
-    this->_userLayout->addWidget(this->_hangUpButton.get());
+    this->_hangUpAbsentButton->setIconSize(QSize(64, 64));
+    this->_hangUpAbsentButton->setFixedSize(64, 64);
+    this->_hangUpAbsentButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
     this->_userLayout->addWidget(this->_callUpButton.get());
-    this->_hangUpButton->hide();
+    this->_userLayout->addWidget(this->_callUpAbsentButton.get());
+    this->_userLayout->addWidget(this->_hangUpButton.get());
+    this->_userLayout->addWidget(this->_hangUpAbsentButton.get());
+    this->refresh();
+
+    QObject::connect(this->_callUpButton.get(), &QToolButton::clicked, [=]() {
+        this->_callUp();
+    });
+
+    QObject::connect(this->_callUpAbsentButton.get(), &QToolButton::clicked, [=]() {
+        this->_callUp();
+    });
+
+    QObject::connect(this->_hangUpButton.get(), &QToolButton::clicked, [=]() {
+        this->_hangUp();
+    });
+
+    QObject::connect(this->_hangUpAbsentButton.get(), &QToolButton::clicked, [=]() {
+        this->_hangUp();
+    });
+}
+
+void ChatInfoScene::_callUp() {
+    // TODO leave all server side
+    this->_clientManager->self->setInCall(true);
+    this->refresh();
+    printf("Joined call!\n");
+}
+
+void ChatInfoScene::_hangUp() {
+    // TODO leave all server side
+    this->_clientManager->self->setInCall(false);
+    this->refresh();
+    printf("Left call!\n");
 }
