@@ -1,6 +1,8 @@
 #include "ContactScene.hpp"
 #include "../ClientError.hpp"
 #include <iostream>
+#include <qnamespace.h>
+#include <qsizepolicy.h>
 
 using namespace babel;
 
@@ -39,6 +41,14 @@ void ContactScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void ContactScene::refresh() {
+    std::string contactFilter = this->getSceneManager()->getContactFilter();
+    for (std::shared_ptr<Contact> contact: this->_contacts) {
+        contact->updateChatting();
+        if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
+            contact->getButton()->hide();
+        else
+            contact->getButton()->show();
+    }
     this->_parent->repaint();
     // TODO refresh clients
 }
@@ -73,17 +83,30 @@ void ContactScene::_placeWidgets() {
     this->_parent->setFixedWidth(364);
     this->_scrollArea->setFixedHeight(555);
 
+    this->_contactsLayout->setMargin(0);
+    this->_contactsLayout->setSpacing(0);
+
     for (std::shared_ptr<Contact> contact: this->_contacts) {
-        this->_contactsLayout->addWidget(contact->getButton().get());
+        this->_contactsLayout->addWidget(contact->getButton().get(), 0, Qt::AlignTop);
     }
+
+    this->_contactsLayout->addStretch();
+
+    this->refresh();
 }
 
 std::shared_ptr<Contact> ContactScene::_generateContact(std::shared_ptr<Client> client) {
     std::shared_ptr<Contact> contact = std::shared_ptr<Contact>(new Contact(client));
 
     QObject::connect(contact->getButton().get(), &QPushButton::clicked, [=]() {
+        if (contact->getClient()->isChatting())
+            return;
         // TODO change the ChatScene
         std::cout << "Interacted with client " << contact->getClient()->getUsername() << "!" << std::endl;
+        this->_clientManager->getChatting()->setChatting(false);
+        contact->getClient()->setChatting(true);
+        this->getSceneManager()->setContactFilter("");
+        this->getSceneManager()->getScene()->refresh();
     });
     return (contact);
 }

@@ -27,15 +27,21 @@ std::shared_ptr<QHBoxLayout> Contact::getButtonLayout() {
     return (this->_buttonLayout);
 }
 
+void Contact::updateChatting() {
+    if (this->_client->isChatting()) {
+        this->_button->setStyleSheet("background-color: lightgray");
+        this->_buttonLabel->setStyleSheet("background-color: lightgray");
+    } else {
+        this->_button->setStyleSheet("");
+        this->_buttonLabel->setStyleSheet("");
+    }
+}
+
 void Contact::_initElements() {
     std::string name = this->_client->getUsername();
     this->_button = std::shared_ptr<QPushButton>(new QPushButton());
     this->_buttonLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout());
     this->_buttonLabel = std::shared_ptr<QLabel>(new QLabel(name.c_str()));
-    if (this->_client->isChatting()) {
-        this->_button->setStyleSheet("background-color: lightgray");
-        this->_buttonLabel->setStyleSheet("background-color: lightgray");
-    }
 }
 
 void Contact::_joinElements() {

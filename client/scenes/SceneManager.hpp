@@ -17,9 +17,13 @@ namespace babel {
 
             Scene *getScene(void);
 
+            std::string getContactFilter();
+            void setContactFilter(std::string contactFilter);
+
         private:
             std::shared_ptr<QWidget> _widget = nullptr;
             std::shared_ptr<Scene> _scene = nullptr;
+            std::string _contactFilter = "";
     };
 
 }

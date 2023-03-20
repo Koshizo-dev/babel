@@ -17,6 +17,7 @@ namespace babel {
             std::shared_ptr<QPushButton> getButton();
             std::shared_ptr<QLabel> getButtonLabel();
             std::shared_ptr<QHBoxLayout> getButtonLayout();
+            void updateChatting();
 
         private:
             void _joinElements();
