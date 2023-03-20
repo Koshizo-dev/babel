@@ -67,6 +67,7 @@ void ContactScene::_placeWidgets() {
     this->_scrollArea->setWidget(this->_parent.get());
     this->_scrollArea->setWidgetResizable(true);
     this->_parent->setFixedWidth(364);
+    this->_scrollArea->setFixedHeight(555);
 
     for (std::shared_ptr<Contact> contact: this->_contacts) {
         this->_contactsLayout->addWidget(contact->getButton().get());

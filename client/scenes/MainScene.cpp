@@ -72,6 +72,7 @@ void MainScene::_initLayouts() {
 }
 
 void MainScene::_placeWidgets() {
+    this->_user->getWidget()->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     this->_leftSideLayout->addWidget(this->_user->getWidget().get());
     this->_leftSideLayout->addLayout(this->_search->getLayout().get());
     this->_leftSideLayout->addWidget(this->_contacts->getWidget().get());
