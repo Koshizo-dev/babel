@@ -12,6 +12,8 @@ namespace babel {
             void handleShiftReturn();
             void handleReturn();
 
+            void setPlaceholderText(std::string placeHolder);
+
         protected:
             bool eventFilter(QObject* obj, QEvent* event) override;
         

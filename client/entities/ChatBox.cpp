@@ -12,6 +12,10 @@ ChatBox::ChatBox(std::string placeHolder) {
     this->_chatInput->installEventFilter(this);
 }
 
+void ChatBox::setPlaceholderText(std::string placeHolder) {
+    this->_chatInput->setPlaceholderText(placeHolder.c_str());
+}
+
 bool ChatBox::eventFilter(QObject *object, QEvent *event) {
     if (object != this->_chatInput)
         return (QWidget::eventFilter(object, event));

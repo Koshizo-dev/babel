@@ -34,6 +34,7 @@ void ChatBoxScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void ChatBoxScene::refresh() {
+    this->_chatBoxInput->setPlaceholderText((std::string("Message @") + this->_clientManager->getChatting()->getUsername()));
 }
 
 std::shared_ptr<SceneManager> ChatBoxScene::getSceneManager() {

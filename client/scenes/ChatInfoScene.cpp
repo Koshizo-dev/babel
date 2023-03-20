@@ -65,6 +65,8 @@ void ChatInfoScene::refresh() {
         }
     }
 
+    this->_userLabel->setText(this->_clientManager->getChatting()->getUsername().c_str());
+
     this->_parent->repaint();
     // TODO refresh clients
 }

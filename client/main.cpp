@@ -19,7 +19,6 @@ int main(int argc, char **argv) {
     hyside->setInCall(false);
     clientManager->self->setInCall(true);
     std::vector<std::shared_ptr<Message>> hysideMessages = {};
-    std::vector<std::shared_ptr<Message>> selfMessages = {};
     std::vector<std::shared_ptr<Message>> rimostMessages = {};
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "SomeMessage", 1)));
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "AnotherMessage", 2)));
@@ -28,19 +27,19 @@ int main(int argc, char **argv) {
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "Go", 6)));
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "Yup!", 9)));
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "Sheeeeeesh", 15)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Why not", 4)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Let's go bud", 7)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "It's been awesome", 8)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Stop flooding plz", 16)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 17)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 18)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 19)));
-    selfMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 20)));
-    rimostMessages.push_back(std::shared_ptr<Message>(new Message(rimost, "tg", 4050013)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Why not", 4)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Let's go bud", 7)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "It's been awesome", 8)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "Stop flooding plz", 16)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 17)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 18)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 19)));
+    hysideMessages.push_back(std::shared_ptr<Message>(new Message(clientManager->self, "a", 20)));
+    rimostMessages.push_back(std::shared_ptr<Message>(new Message(rimost, "stfu", 4050013)));
+    rimostMessages.push_back(std::shared_ptr<Message>(new Message(rimost, "wtf", 4053)));
 
     hyside->setMessages(hysideMessages);
     rimost->setMessages(rimostMessages);
-    clientManager->self->setMessages(selfMessages);
 
     clientManager->clients.push_back(hyside);
     clientManager->clients.push_back(rimost);

@@ -25,7 +25,7 @@ namespace babel {
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
-            std::vector<std::vector<std::shared_ptr<Message>>> _groupMessagesByTime(std::shared_ptr<Client> client1, std::shared_ptr<Client> client2);
+            std::vector<std::vector<std::shared_ptr<Message>>> _groupMessagesByTime(std::shared_ptr<Client> client1);
 
             std::vector<std::shared_ptr<MessageBox>> _messages = {};
             std::shared_ptr<QVBoxLayout> _messagesLayout = nullptr;

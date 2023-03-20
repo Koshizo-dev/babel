@@ -44,6 +44,22 @@ void ChatScene::clear() {
 // Or any variable that might have been shown on screen was updated.
 void ChatScene::refresh() {
     this->_parent->repaint();
+    for (std::shared_ptr<MessageBox> message: this->_messages)
+        this->_messagesLayout->removeItem(message->getLayout().get());
+    this->_messages.clear();
+    auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->getChatting());
+
+    for (auto messages: groupedMessages) {
+        std::shared_ptr<Client> client = messages[0]->getAuthor();
+        std::shared_ptr<MessageBox> message(new MessageBox(client, messages));
+        this->_messages.push_back(message);
+    }
+    for (std::shared_ptr<MessageBox> message: this->_messages)
+        this->_messagesLayout->addLayout(message->getLayout().get());
+    QTimer::singleShot(0, [this]() {
+        QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
+        vScrollBar->setValue(vScrollBar->maximum());
+    });
     // TODO refresh clients
 }
 
@@ -63,7 +79,7 @@ void ChatScene::_initWidgets() {
     this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea());
     this->_parent = std::shared_ptr<QWidget>(new QWidget());
 
-    auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->self, this->_clientManager->getChatting());
+    auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->getChatting());
 
     for (auto messages: groupedMessages) {
         std::shared_ptr<Client> client = messages[0]->getAuthor();
@@ -83,19 +99,18 @@ void ChatScene::_placeWidgets() {
 
     for (std::shared_ptr<MessageBox> message: this->_messages)
         this->_messagesLayout->addLayout(message->getLayout().get());
+    this->_messagesLayout->addStretch();
     QTimer::singleShot(0, [this]() {
         QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
         vScrollBar->setValue(vScrollBar->maximum());
     });
 }
 
-std::vector<std::vector<std::shared_ptr<Message>>> ChatScene::_groupMessagesByTime(std::shared_ptr<Client> client1, std::shared_ptr<Client> client2) {
+std::vector<std::vector<std::shared_ptr<Message>>> ChatScene::_groupMessagesByTime(std::shared_ptr<Client> client) {
     // combine the messages from both clients into a single vector
     std::vector<std::shared_ptr<Message>> allMessages = {};
-    allMessages.reserve(client1->getMessages().size() + client2->getMessages().size());
-    for (const auto message: client1->getMessages())
-        allMessages.emplace_back(message);
-    for (const auto message: client2->getMessages())
+    allMessages.reserve(client->getMessages().size());
+    for (const auto message: client->getMessages())
         allMessages.emplace_back(message);
 
     // sort the messages by timestamp

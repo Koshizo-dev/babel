@@ -1,5 +1,5 @@
 #include "MessageBox.hpp"
-#include <qsizepolicy.h>
+#include <iostream>
 
 using namespace babel;
 
@@ -11,6 +11,14 @@ MessageBox::MessageBox(std::shared_ptr<Client> client, std::vector<std::shared_p
 }
 
 MessageBox::~MessageBox() {
+    this->_messageLabels.clear();
+    this->_messageLayouts.clear();
+    this->_userLabel.reset();
+    this->_userIcon.reset();
+    this->_userLayout.reset();
+    this->_messageLayout.reset();
+    this->_layout.reset();
+    this->_messages.clear();
 }
 
 std::shared_ptr<Client> MessageBox::getClient() {
