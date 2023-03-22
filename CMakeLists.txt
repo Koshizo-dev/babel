@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Add files to server and client side
 file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp")
-file(GLOB SV_FILES "server/*.cpp")
+file(GLOB SV_FILES "server/**/*.cpp" "server/*.cpp")
 
 # Add your project source files here
 add_executable(babel_server ${SV_FILES})

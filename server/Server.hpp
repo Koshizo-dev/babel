@@ -1,17 +1,18 @@
 #pragma once
 
-#include <string>
+#include "Client.hpp"
+
+#include <vector>
+#include <memory>
 
 namespace babel {
 
-class Server {
-public:
-    Server(std::string name, unsigned int port): _name(name), _port(port) {}
-    const std::string getName(void);
-protected:
-private:
-    const unsigned int _port;
-    const std::string _name;
-};
+    class Server {
 
-} // namespace babel
+        public:
+            virtual void run() = 0;
+            virtual std::vector<std::shared_ptr<Client>> getClients() = 0;
+            virtual void addClient(std::shared_ptr<Client> client) = 0;
+    };
+    
+}
