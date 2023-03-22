@@ -6,12 +6,19 @@
 
 #include <QtPlugin>
 
+#include "../protocol/packets/LoginPacket.hpp"
+
 Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 
 using namespace babel;
 
 int main(int argc, char **argv) {
     std::shared_ptr<ClientManager> clientManager = std::shared_ptr<ClientManager>(new ClientManager());
+
+    clientManager->packetManager = std::make_shared<ClientPacketManager>((clientManager));
+    LoginPacket packet("Koshizo");
+    clientManager->packetManager->handlePacket(packet);
+
     clientManager->self = std::shared_ptr<Client>(new Client("Koshizo"));
     std::shared_ptr<Client> hyside(new Client("hyside"));
     std::shared_ptr<Client> rimost(new Client("rimost"));
