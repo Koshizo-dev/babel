@@ -61,6 +61,7 @@ jobs:
       run: |
         sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
         sudo conan config set general.revisions_enabled=1
+        sudo conan profile update settings.compiler.version=12 default
 
     - name: Clear build folder
       run: rm -rf build
