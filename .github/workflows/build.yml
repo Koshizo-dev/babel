@@ -61,7 +61,6 @@ jobs:
       run: |
         sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
         sudo conan config set general.revisions_enabled=1
-        sudo conan profile update settings.compiler.version=12 default
 
     - name: Clear build folder
       run: rm -rf build
@@ -70,7 +69,10 @@ jobs:
       run: mkdir build
 
     - name: Install dependencies
-      run: sudo conan install . -if build --build missing -c tools.system.package_manager:mode=install
+      run: | 
+        sudo conan install . -if build --build missing -c tools.system.package_manager:mode=install
+        sudo conan profile update settings.compiler.libcxx=libstdc++11 default
+        sudo conan profile update settings.compiler.version=12 default
 
     - name: Build with CMake
       run: cmake . -B build
