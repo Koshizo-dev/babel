@@ -51,7 +51,8 @@ jobs:
             libxcursor-dev \
             libxrandr-dev \
             libxi-dev \
-            libxcb-xinput-dev
+            libxcb-xinput-dev \
+            libjack-dev
 
           wget https://github.com/conan-io/conan/releases/download/1.57.0/conan-ubuntu-64.deb
           sudo dpkg -i conan-ubuntu-64.deb
