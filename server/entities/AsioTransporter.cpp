@@ -21,13 +21,14 @@ void AsioTransporter::sendMessage(std::string message) {
 std::string AsioTransporter::readMessage() {
     std::cout << "reading!" << std::endl;
     asio::async_read_until(this->_socket, this->_buf, "\n",
-        [this](std::error_code ec, std::size_t /*length*/) {
+        [this](std::error_code ec, std::size_t length) {
             if (!ec) {
                 std::string message = std::string(
                     asio::buffer_cast<const char *>(this->_buf.data()),
-                    this->_buf.size());
-               std::cout << "Received: " << message << "\n";
-               this->sendMessage("Echo: " + message);
+                    length);
+                this->_buf.consume(length);
+                std::cout << "Received: " << message << "\n";
+                this->sendMessage("Echo: " + message);
             }
         });
     return ("");
