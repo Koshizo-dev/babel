@@ -18,12 +18,12 @@ std::string Serializer::serialize() {
     ss << CharacterField(magic).serialize(false);
     ss << CharacterField(this->_type).serialize(false);
 
-    for (const PacketField *field: this->_fields)
+    for (std::unique_ptr<PacketField> &field: this->_fields)
         ss << field->serialize();
     return (ss.str());
 }
 
-Serializer &Serializer::operator<<(const PacketField *field) {
-    this->_fields.push_back(field);
+Serializer &Serializer::operator<<(PacketField *field) {
+    this->_fields.push_back(std::unique_ptr<PacketField>(field));
     return (*this);
 }

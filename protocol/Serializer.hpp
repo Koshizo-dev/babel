@@ -3,8 +3,8 @@
 #include "fields/PacketField.hpp"
 #include "PacketType.hpp"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace babel {
 
@@ -13,11 +13,11 @@ namespace babel {
             Serializer(PacketType type);
 
             std::string serialize();
-            Serializer &operator<<(const PacketField *field);
+            Serializer &operator<<(PacketField *field);
 
         private:
             const PacketType _type;
-            std::vector<const PacketField*> _fields = {};
+            std::vector<std::unique_ptr<PacketField>> _fields = {};
     };
     
 }
