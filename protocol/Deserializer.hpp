@@ -15,6 +15,7 @@ namespace babel {
             std::unique_ptr<PacketField> deserializeField(const char *data);
 
         private:
+            std::unique_ptr<PacketField> _nextField(const char *data, int *index);
     };
     
 }

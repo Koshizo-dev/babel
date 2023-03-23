@@ -18,14 +18,12 @@ std::unique_ptr<Packet> Deserializer::deserialize(const char *data) {
     index += packetType.getSize();
 
     std::vector<std::unique_ptr<PacketField>> fields = {};
+    std::unique_ptr<PacketField> nextField = nullptr;
 
-    std::unique_ptr<PacketField> field = this->deserializeField(&data[index]);
-    index += field->getSize();
-    if (field->getType() != FieldType::STRING)
-        return (nullptr);
-    StringField *username = static_cast<StringField*>(field.get());
-    std::cout << "string = [" << username->getValue() << "]" << std::endl;
-    return nullptr;
+    while ((nextField = this->_nextField(&data[index], &index)) != nullptr)
+        fields.push_back(std::move(nextField));
+
+    return (nullptr);
 }
 
 std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) {
@@ -49,4 +47,14 @@ std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) {
             }
         }
     return (nullptr);
+}
+
+std::unique_ptr<PacketField> Deserializer::_nextField(const char *data, int *index) {
+    if (data[0] == 0)
+        return (nullptr);
+    std::unique_ptr<PacketField> field = nullptr;
+    if ((field = this->deserializeField(data)) == nullptr)
+        return (nullptr);
+    *index = *index + field->getSize();
+    return (field);
 }
