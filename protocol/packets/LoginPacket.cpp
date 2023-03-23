@@ -24,7 +24,15 @@ std::string LoginPacket::serialize() {
     return (serializer.serialize());
 }
 
-std::unique_ptr<Packet> LoginPacket::deserialize(std::string &packet) {
-    // TODO DESERIALIZE, RETURN NULL IF NOT THE SAME PACKET TYPE FIRST, AND THEN DESERIALIZE
-    return nullptr;
+std::unique_ptr<Packet> LoginPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
+    if (packetFields.size() != 1)
+        return (nullptr); // TODO throw exception
+
+    std::unique_ptr<PacketField> field = std::move(packetFields[0]);
+    if (field->getType() != FieldType::STRING)
+        return (nullptr); // TODO throw exception
+
+    StringField *name = static_cast<StringField*>(field.get());
+
+    return (std::unique_ptr<Packet>(new LoginPacket(name->getValue())));
 }

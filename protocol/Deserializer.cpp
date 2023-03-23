@@ -2,26 +2,16 @@
 #include "fields/CharacterField.hpp"
 #include "fields/StringField.hpp"
 #include "fields/IntegerField.hpp"
+#include "packets/LoginPacket.hpp"
 #include <iostream>
 
 using namespace babel;
 
-std::unique_ptr<Packet> Deserializer::deserialize(const char *data) {
-    int index = 0;
-
-    CharacterField magic = CharacterField::deserialize(data);
-    index += magic.getSize();
-    if (magic.getValue() != 0x32)
-        return (nullptr);
-
-    CharacterField packetType = CharacterField::deserialize(&data[index]);
-    index += packetType.getSize();
-
-    std::vector<std::unique_ptr<PacketField>> fields = {};
-    std::unique_ptr<PacketField> nextField = nullptr;
-
-    while ((nextField = this->_nextField(&data[index], &index)) != nullptr)
-        fields.push_back(std::move(nextField));
+std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::vector<std::unique_ptr<PacketField>> packetFields) {
+    switch (packetType) {
+        case PacketType::LOGIN:
+            return (LoginPacket().deserialize(std::move(packetFields)));
+    }
 
     return (nullptr);
 }
@@ -49,7 +39,7 @@ std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) {
     return (nullptr);
 }
 
-std::unique_ptr<PacketField> Deserializer::_nextField(const char *data, int *index) {
+std::unique_ptr<PacketField> Deserializer::nextField(const char *data, int *index) {
     if (data[0] == 0)
         return (nullptr);
     std::unique_ptr<PacketField> field = nullptr;

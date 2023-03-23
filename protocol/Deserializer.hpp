@@ -11,11 +11,9 @@ namespace babel {
 
     class Deserializer {
         public:
-            std::unique_ptr<Packet> deserialize(const char *data);
+            std::unique_ptr<Packet> deserialize(PacketType packetType, std::vector<std::unique_ptr<PacketField>> fields);
             std::unique_ptr<PacketField> deserializeField(const char *data);
-
-        private:
-            std::unique_ptr<PacketField> _nextField(const char *data, int *index);
+            std::unique_ptr<PacketField> nextField(const char *data, int *index);
     };
     
 }
