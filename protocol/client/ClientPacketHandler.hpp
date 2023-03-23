@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../PacketHandler.hpp"
-#include "../Packet.hpp"
+#include "../packets/Packet.hpp"
 
 #include <iostream>
 

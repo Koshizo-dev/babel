@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Packet.hpp"
+#include "packets/Packet.hpp"
 #include "PacketHandler.hpp"
 
 #include <memory>

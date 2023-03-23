@@ -11,12 +11,13 @@ conan_basic_setup(TARGETS)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Add files to server and client side
-file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/fields/*.cpp" "protocol/client/**/*.cpp" "protocol/client/*.cpp")
-file(GLOB SV_FILES "server/**/*.cpp" "server/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/fields/*.cpp" "protocol/server/**/*.cpp" "protocol/server/*.cpp")
+file(GLOB PROTOCOL_FILES "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/fields/*.cpp" "protocol/serialization/*.cpp")
+file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp" "protocol/client/**/*.cpp" "protocol/client/*.cpp")
+file(GLOB SV_FILES "server/**/*.cpp" "server/*.cpp" "protocol/server/**/*.cpp" "protocol/server/*.cpp")
 
 # Add your project source files here
-add_executable(babel_server ${SV_FILES})
-add_executable(babel_client ${CL_FILES})
+add_executable(babel_server ${SV_FILES} ${PROTOCOL_FILES})
+add_executable(babel_client ${CL_FILES} ${PROTOCOL_FILES})
 
 # Link your project against asio
 target_link_libraries(babel_server PRIVATE CONAN_PKG::asio CONAN_PKG::opus)

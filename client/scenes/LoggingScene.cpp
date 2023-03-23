@@ -61,7 +61,7 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
-    this->getSceneManager()->setScene(new MainScene(this->_clientManager));
+    // this->getSceneManager()->setScene(new MainScene(this->_clientManager));
     std::cerr << "[DEBUG] Sending request to connect to server" << std::endl;
     // TODO Connection packet to server
 }

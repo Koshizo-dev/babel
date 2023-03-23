@@ -1,6 +1,6 @@
 #include "PacketManager.hpp"
 #include "fields/CharacterField.hpp"
-#include "Deserializer.hpp"
+#include "serialization/Deserializer.hpp"
 
 using namespace babel;
 

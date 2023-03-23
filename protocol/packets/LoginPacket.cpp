@@ -1,7 +1,7 @@
 #include "LoginPacket.hpp"
 #include "../fields/IntegerField.hpp"
 #include "../fields/StringField.hpp"
-#include "../Serializer.hpp"
+#include "../serialization/Serializer.hpp"
 
 using namespace babel;
 

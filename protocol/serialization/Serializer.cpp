@@ -1,8 +1,5 @@
 #include "Serializer.hpp"
-#include "PacketType.hpp"
-#include "fields/IntegerField.hpp"
-#include "fields/CharacterField.hpp"
-#include "fields/StringField.hpp"
+#include "../fields/CharacterField.hpp"
 
 #include <sstream>
 

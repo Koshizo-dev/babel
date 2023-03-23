@@ -1,7 +1,7 @@
 #pragma once
 
-#include "fields/PacketField.hpp"
-#include "PacketType.hpp"
+#include "../fields/PacketField.hpp"
+#include "../packets/PacketType.hpp"
 
 #include <memory>
 #include <vector>

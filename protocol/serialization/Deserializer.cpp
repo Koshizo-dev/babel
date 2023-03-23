@@ -1,9 +1,8 @@
 #include "Deserializer.hpp"
-#include "fields/CharacterField.hpp"
-#include "fields/StringField.hpp"
-#include "fields/IntegerField.hpp"
-#include "packets/LoginPacket.hpp"
-#include <iostream>
+#include "../fields/CharacterField.hpp"
+#include "../fields/StringField.hpp"
+#include "../fields/IntegerField.hpp"
+#include "../packets/LoginPacket.hpp"
 
 using namespace babel;
 
