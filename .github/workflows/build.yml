@@ -59,7 +59,7 @@ jobs:
 
     - name: Update conan settings
       run: |
-        sudo conan profile detect
+        sudo conan profile list
         sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
         sudo conan config set general.revisions_enabled=1
         sudo conan profile update settings.compiler.libcxx=libstdc++11 Default
