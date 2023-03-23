@@ -59,7 +59,6 @@ jobs:
 
     - name: Update conan settings
       run: |
-        sudo export CONAN_DISABLE_CHECK_COMPILER=TRUE
         sudo conan profile new default --detect
         sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
         sudo conan config set general.revisions_enabled=1
