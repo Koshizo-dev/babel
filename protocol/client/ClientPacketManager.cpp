@@ -22,11 +22,3 @@ void ClientPacketManager::handlePacket(Packet &packet) {
 void ClientPacketManager::registerHandler(PacketType packetType, std::shared_ptr<ClientPacketHandler> packetHandler) {
     this->_packetHandlers[packetType] = packetHandler;
 }
-
-std::unique_ptr<Packet> ClientPacketManager::deserialize(std::string &packet) {
-    return nullptr;
-}
-
-std::string ClientPacketManager::serialize(Packet &packet) {
-    return packet.serialize();
-}

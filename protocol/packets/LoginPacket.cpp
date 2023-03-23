@@ -1,4 +1,7 @@
 #include "LoginPacket.hpp"
+#include "../fields/IntegerField.hpp"
+#include "../fields/StringField.hpp"
+#include "../Serializer.hpp"
 
 using namespace babel;
 
@@ -15,7 +18,10 @@ PacketType LoginPacket::getType() {
 }
 
 std::string LoginPacket::serialize() {
-    return (this->_username); // TODO SERIALIZE
+    Serializer serializer(this->getType());
+
+    serializer << new StringField(this->_username);
+    return (serializer.serialize());
 }
 
 std::unique_ptr<Packet> LoginPacket::deserialize(std::string &packet) {

@@ -11,8 +11,8 @@ conan_basic_setup(TARGETS)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Add files to server and client side
-file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/client/**/*.cpp" "protocol/client/*.cpp")
-file(GLOB SV_FILES "server/**/*.cpp" "server/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/server/**/*.cpp" "protocol/server/*.cpp")
+file(GLOB CL_FILES "client/**/*.cpp" "client/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/fields/*.cpp" "protocol/client/**/*.cpp" "protocol/client/*.cpp")
+file(GLOB SV_FILES "server/**/*.cpp" "server/*.cpp" "protocol/*.cpp" "protocol/packets/*.cpp" "protocol/fields/*.cpp" "protocol/server/**/*.cpp" "protocol/server/*.cpp")
 
 # Add your project source files here
 add_executable(babel_server ${SV_FILES})

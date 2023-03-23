@@ -11,8 +11,8 @@ namespace babel {
         public:
             virtual void handlePacket(Packet &packet) = 0;
 
-            virtual std::unique_ptr<Packet> deserialize(std::string &packet) = 0;
-            virtual std::string serialize(Packet &packet) = 0;
+            std::unique_ptr<Packet> deserialize(std::string &packet);
+            std::string serialize(Packet &packet);
     };
     
 }

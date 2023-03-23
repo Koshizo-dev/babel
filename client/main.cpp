@@ -7,6 +7,8 @@
 #include <QtPlugin>
 
 #include "../protocol/packets/LoginPacket.hpp"
+#include "../protocol/Deserializer.hpp"
+#include "../protocol/fields/StringField.hpp"
 
 Q_IMPORT_PLUGIN(QXcbIntegrationPlugin);
 
@@ -17,8 +19,18 @@ int main(int argc, char **argv) {
 
     clientManager->packetManager = std::make_shared<ClientPacketManager>((clientManager));
     LoginPacket packet("Koshizo");
-    clientManager->packetManager->handlePacket(packet);
+    std::string serialized = packet.serialize();
+    char const *converted = serialized.c_str();
+    for (int i = 0; i < serialized.length(); i++)
+        printf("|%d|", converted[i]);
+    printf("\n");
+    for (int i = 0; i < serialized.length(); i++)
+        printf("%c", converted[i]);
+    printf("\n");
+    Deserializer deserializer;
+    std::unique_ptr<Packet> field = Deserializer().deserialize(converted);
 
+    clientManager->packetManager->handlePacket(*field);
     clientManager->self = std::shared_ptr<Client>(new Client("Koshizo"));
     std::shared_ptr<Client> hyside(new Client("hyside"));
     std::shared_ptr<Client> rimost(new Client("rimost"));
