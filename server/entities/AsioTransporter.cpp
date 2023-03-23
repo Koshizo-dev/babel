@@ -21,7 +21,7 @@ void AsioTransporter::sendMessage(std::string message) {
 
 std::string AsioTransporter::readMessage() {
     std::cout << "reading!" << std::endl;
-    asio::async_read_until(this->_socket, this->_buf, "\n",
+    asio::async_read_until(this->_socket, this->_buf, "\r\n",
         [this](std::error_code ec, std::size_t length) {
             if (!ec) {
                 std::string message = std::string(

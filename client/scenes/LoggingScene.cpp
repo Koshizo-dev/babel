@@ -3,12 +3,11 @@
 #include "../utils.hpp"
 #include "MainScene.hpp"
 
-#include <qnamespace.h>
-#include <qobject.h>
+#include "../network/Transporter.hpp"
+#include "../network/QtSocket.hpp"
+
 #include <QLineEdit>
 #include <iostream>
-#include <qtextlayout.h>
-#include <qwidget.h>
 
 using namespace babel;
 
@@ -61,9 +60,16 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
-    // this->getSceneManager()->setScene(new MainScene(this->_clientManager));
-    std::cerr << "[DEBUG] Sending request to connect to server" << std::endl;
-    // TODO Connection packet to server
+    Transporter transporter(std::unique_ptr<Socket>(new QtSocket("127.0.0.1", 8080)));
+    
+    if (transporter.awaitingConnection()) {
+        transporter.sendMessage("Hello, world");
+        transporter.closeConnection();
+    } else {
+        std::cerr << "[DEBUG] Could not connect to server" << std::endl;
+        // this->getSceneManager()->setScene(new MainScene(this->_clientManager));
+        // TODO Connection packet to server
+    }
 }
 
 void LoggingScene::_initLayouts() {

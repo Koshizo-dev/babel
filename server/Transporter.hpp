@@ -6,7 +6,7 @@ namespace babel {
 
     class Transporter {
         public:
-            virtual void sendMessage(std::string) = 0;
+            virtual void sendMessage(std::string message) = 0;
             virtual std::string readMessage() = 0;
     };
 

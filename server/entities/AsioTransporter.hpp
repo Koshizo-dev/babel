@@ -11,7 +11,7 @@ namespace babel {
         public:
             AsioTransporter(asio::io_service &io_service);
 
-            void sendMessage(std::string) override;
+            void sendMessage(std::string message) override;
             std::string readMessage() override;
 
             asio::ip::tcp::socket &socket();
