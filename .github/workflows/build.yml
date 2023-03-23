@@ -59,6 +59,7 @@ jobs:
 
     - name: Update conan settings
       run: |
+        sudo export CONAN_DISABLE_CHECK_COMPILER=TRUE
         sudo conan profile new default --detect
         sudo conan remote add bincrafters https://bincrafters.jfrog.io/artifactory/api/conan/public-conan
         sudo conan config set general.revisions_enabled=1
@@ -73,7 +74,7 @@ jobs:
 
     - name: Install dependencies
       run: | 
-        sudo conan install . -if build --build missing -c tools.system.package_manager:mode=install
+        CONAN_DISABLE_CHECK_COMPILER=TRUE sudo conan install . -if build --build missing -c tools.system.package_manager:mode=install
 
     - name: Build with CMake
       run: cmake . -B build
