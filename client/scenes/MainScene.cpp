@@ -12,7 +12,7 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing LoggingScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
-    this->_parent = new QWidget(this->getSceneManager()->getWidget().get());
+    this->_parent = new QWidget(this->getSceneManager()->getWidget());
     this->_parent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->_parent->setMinimumSize(1280, 720);
 
@@ -22,6 +22,7 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 MainScene::~MainScene() {
+    this->_parent->deleteLater();
 }
 
 std::string MainScene::getName() {
@@ -33,9 +34,11 @@ void MainScene::display() {
     this->_contacts->display();
     this->_search->display();
 
-    this->_chatInfo->display();
-    this->_messages->display();
-    this->_chatBox->display();
+    if (this->_clientManager->getChatting() != nullptr) {
+        this->_chatInfo->display();
+        this->_messages->display();
+        this->_chatBox->display();
+    }
     
     this->_parent->show();
 }
@@ -44,11 +47,11 @@ void MainScene::clear() {
     this->_user->clear();
     this->_contacts->clear();
     this->_search->clear();
-
-    this->_chatInfo->clear();
-    this->_messages->clear();
-    this->_chatBox->clear();
-    
+    if (this->_clientManager->getChatting() != nullptr) {
+        this->_chatInfo->clear();
+        this->_messages->clear();
+        this->_chatBox->clear();
+    }
     this->_parent->hide();
 }
 
@@ -90,6 +93,8 @@ void MainScene::_initLeftLayout() {
 void MainScene::_initRightLayout() {
     this->_rightSideLayout = new QVBoxLayout();
 
+    if (this->_clientManager->getChatting() == nullptr)
+        return;
     this->_chatInfo = std::unique_ptr<ChatInfoScene>(new ChatInfoScene(this->_clientManager));
     this->_messages = std::unique_ptr<ChatScene>(new ChatScene(this->_clientManager));
     this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
@@ -104,7 +109,8 @@ void MainScene::_placeLayouts() {
     this->_parentLayout->addLayout(this->_rightSideLayout, 5);
 
     this->_placeLeftLayout();
-    this->_placeRightLayout();
+    if (this->_clientManager->getChatting() != nullptr)
+        this->_placeRightLayout();
 }
 
 void MainScene::_placeLeftLayout() {

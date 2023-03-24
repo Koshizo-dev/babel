@@ -20,7 +20,7 @@ namespace babel {
         void _loadFont();
 
         DisplaySettings _settings;
-        std::shared_ptr<QWidget> _window = nullptr;
+        std::unique_ptr<QWidget> _window = nullptr;
         std::unique_ptr<QApplication> _app = nullptr;
         std::shared_ptr<ClientManager> _clientManager = nullptr;
     };

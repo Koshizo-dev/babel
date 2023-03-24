@@ -8,20 +8,20 @@ namespace babel {
 
     class SceneManager {
         public:
-            SceneManager(std::shared_ptr<QWidget> widget);
+            SceneManager(QWidget *widget);
 
-            std::shared_ptr<QWidget> getWidget(void);
+            QWidget *getWidget(void);
 
             // will clear up the previous scene first.
             void setScene(Scene *scene);
 
-            Scene *getScene(void);
+            std::shared_ptr<Scene> getScene(void);
 
             std::string getContactFilter();
             void setContactFilter(std::string contactFilter);
 
         private:
-            std::shared_ptr<QWidget> _widget = nullptr;
+            QWidget *_widget = nullptr;
             std::shared_ptr<Scene> _scene = nullptr;
             std::string _contactFilter = "";
     };

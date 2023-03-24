@@ -3,11 +3,11 @@
 
 using namespace babel;
 
-SceneManager::SceneManager(std::shared_ptr<QWidget> widget) {
+SceneManager::SceneManager(QWidget *widget) {
     this->_widget = widget;
 }
 
-std::shared_ptr<QWidget> SceneManager::getWidget(void) {
+QWidget *SceneManager::getWidget(void) {
     return (this->_widget);
 }
 
@@ -17,8 +17,8 @@ void SceneManager::setScene(Scene *scene) {
     this->_scene->display();
 }
 
-Scene *SceneManager::getScene(void) {
-    return (this->_scene.get());
+std::shared_ptr<Scene> SceneManager::getScene(void) {
+    return (this->_scene);
 }
 
 std::string SceneManager::getContactFilter() {

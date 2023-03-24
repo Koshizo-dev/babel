@@ -23,6 +23,7 @@ LoggingScene::LoggingScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 LoggingScene::~LoggingScene() {
+    this->_widget->deleteLater();
 }
 
 std::string LoggingScene::getName() {
@@ -74,7 +75,7 @@ void LoggingScene::_initLayouts() {
 }
 
 void LoggingScene::_initWidgets() {
-    this->_widget = new QWidget(this->getSceneManager()->getWidget().get());
+    this->_widget = new QWidget(this->getSceneManager()->getWidget());
 
     this->_loggingButton = new QPushButton("Login");
     this->_loggingButton->setGeometry(0, 0, 200, 100);

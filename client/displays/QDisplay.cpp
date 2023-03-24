@@ -13,9 +13,9 @@ using namespace babel;
 QDisplay::QDisplay(DisplaySettings settings, std::shared_ptr<ClientManager> clientManager) : _settings(settings), _clientManager(clientManager){
     this->_app = std::make_unique<QApplication>(settings.argc, settings.argv);
     this->_app->setApplicationDisplayName(this->_settings.title.c_str());
-    this->_window = std::make_shared<Window>(clientManager);
+    this->_window = std::make_unique<Window>(clientManager);
     this->_loadFont();
-    this->_clientManager->sceneManager = std::make_shared<SceneManager>(this->_window);
+    this->_clientManager->sceneManager = std::make_shared<SceneManager>(this->_window.get());
     this->_clientManager->sceneManager->setScene(new LoggingScene(this->_clientManager));
 
     _window->show();

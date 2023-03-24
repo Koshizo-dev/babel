@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 
     int code = display->run();
 
-    delete display;
     clientManager->reset();
+    delete display;
     return (code);
 }
