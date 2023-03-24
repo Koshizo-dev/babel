@@ -2,7 +2,16 @@
 
 using namespace babel;
 
-Transporter::Transporter(std::unique_ptr<Socket> socket): _socket(std::move(socket)) {}
+Transporter::Transporter(std::shared_ptr<EventManager> eventManager, std::unique_ptr<Socket> socket): _eventManager(eventManager), _socket(std::move(socket)) {
+    this->_socket->setEventManager(this->_eventManager);
+}
+
+Transporter::~Transporter() {
+    if (this->_socket) {
+        this->sendMessage("DISCONNECT");
+        this->_socket->closeConnection();
+    }
+}
 
 bool Transporter::awaitingConnection() {
     return (this->_socket->awaitingConnection());

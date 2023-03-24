@@ -28,7 +28,10 @@ std::string AsioTransporter::readMessage() {
                     asio::buffer_cast<const char *>(this->_buf.data()),
                     length);
                 this->_buf.consume(length);
-                std::cout << "Received: " << message << "\n";
+                printf("packet = ");
+                for (int i = 0; i < message.length(); i++)
+                    printf("[%d]", message[i]);
+                printf("\n");
                 this->sendMessage("Echo: " + message);
             }
         });

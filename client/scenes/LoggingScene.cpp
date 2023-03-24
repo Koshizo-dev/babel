@@ -5,6 +5,7 @@
 
 #include "../network/Transporter.hpp"
 #include "../network/QtSocket.hpp"
+#include "../../protocol/packets/LoginPacket.hpp"
 
 #include <QLineEdit>
 #include <iostream>
@@ -60,11 +61,12 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
-    Transporter transporter(std::unique_ptr<Socket>(new QtSocket("127.0.0.1", 8080)));
-    
-    if (transporter.awaitingConnection()) {
-        transporter.sendMessage("Hello, world");
-        transporter.closeConnection();
+    this->_clientManager->transporter = std::make_shared<Transporter>(this->_clientManager->eventManager, std::unique_ptr<Socket>(new QtSocket("127.0.0.1", 8080)));
+
+    if (this->_clientManager->transporter->awaitingConnection()) {
+        this->_clientManager->transporter->sendMessage("Hello, world");
+        LoginPacket packet("Koshizo");
+        this->_clientManager->transporter->sendMessage(packet.serialize());
     } else {
         std::cerr << "[DEBUG] Could not connect to server" << std::endl;
         // this->getSceneManager()->setScene(new MainScene(this->_clientManager));

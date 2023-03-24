@@ -1,6 +1,9 @@
 #include "QtSocket.hpp"
 
 #include <QHostAddress>
+#include <QWidget>
+#include <QAbstractSocket>
+#include <qabstractsocket.h>
 
 using namespace babel;
 
@@ -23,5 +26,13 @@ bool QtSocket::flush() {
 }
 
 void QtSocket::write(std::string message) {
-    this->_socket->write(message.c_str());
+    this->_socket->write(message.data(), message.length());
+}
+
+void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
+    this->_eventManager = eventManager;
+    QAbstractSocket::connect(this->_socket.get(), &QTcpSocket::readyRead, [=]() {
+        QByteArray data = this->_socket->readAll();
+        this->_eventManager->handlePacket(data.toStdString());
+    });
 }

@@ -16,12 +16,9 @@ using namespace babel;
 int main(int argc, char **argv) {
     std::shared_ptr<ClientManager> clientManager = std::shared_ptr<ClientManager>(new ClientManager());
 
-    clientManager->packetManager = std::make_shared<ClientPacketManager>((clientManager));
-    LoginPacket packet("Koshizo");
-    std::string serialized = packet.serialize();
-    std::unique_ptr<Packet> newPacket = clientManager->packetManager->deserialize(serialized);
+    clientManager->packetManager = std::make_shared<ClientPacketManager>((ClientPacketManager(clientManager)));
+    clientManager->eventManager = std::make_shared<EventManager>(EventManager(clientManager->packetManager));
 
-    clientManager->packetManager->handlePacket(*newPacket);
     clientManager->self = std::shared_ptr<Client>(new Client("Koshizo"));
     std::shared_ptr<Client> hyside(new Client("hyside"));
     std::shared_ptr<Client> rimost(new Client("rimost"));
