@@ -3,7 +3,8 @@
 namespace babel {
 
     enum PacketType {
-        LOGIN
+        LOGIN,
+        LOGIN_ERROR
     };
 
 }

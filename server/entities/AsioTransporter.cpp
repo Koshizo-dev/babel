@@ -11,6 +11,7 @@ asio::ip::tcp::socket &AsioTransporter::socket() {
 }
 
 void AsioTransporter::sendMessage(std::string message) {
+    message += "\r\n";
     asio::async_write(this->_socket, asio::buffer(message),
         [this](std::error_code ec, std::size_t /*length*/) {
     });

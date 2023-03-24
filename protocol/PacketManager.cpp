@@ -5,7 +5,7 @@
 using namespace babel;
 
 std::unique_ptr<Packet> PacketManager::deserialize(std::string &packet) {
-    char const *data = packet.c_str();
+    char const *data = packet.data();
     Deserializer deserializer;
     int index = 0;
 

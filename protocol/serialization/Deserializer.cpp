@@ -3,6 +3,7 @@
 #include "../fields/StringField.hpp"
 #include "../fields/IntegerField.hpp"
 #include "../packets/LoginPacket.hpp"
+#include "../packets/LoginErrorPacket.hpp"
 
 using namespace babel;
 
@@ -10,6 +11,8 @@ std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::ve
     switch (packetType) {
         case PacketType::LOGIN:
             return (LoginPacket().deserialize(std::move(packetFields)));
+        case PacketType::LOGIN_ERROR:
+            return (LoginErrorPacket().deserialize(std::move(packetFields)));
     }
 
     return (nullptr);

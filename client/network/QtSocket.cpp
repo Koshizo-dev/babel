@@ -33,6 +33,7 @@ void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
     this->_eventManager = eventManager;
     QAbstractSocket::connect(this->_socket.get(), &QTcpSocket::readyRead, [=]() {
         QByteArray data = this->_socket->readAll();
-        this->_eventManager->handlePacket(data.toStdString());
+        std::string packet = std::string(data.constData(), data.length()-2);
+        this->_eventManager->handlePacket(packet);
     });
 }

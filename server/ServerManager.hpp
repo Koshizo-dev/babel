@@ -9,6 +9,8 @@ namespace babel {
 
     class ServerManager {
         public:
+            bool usernameExists(const std::string &target);
+    
             std::vector<std::shared_ptr<IoClient>> clients = {};
             std::shared_ptr<Database> database = nullptr;
             std::shared_ptr<ServerPacketManager> packetManager = nullptr;

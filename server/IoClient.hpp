@@ -13,6 +13,7 @@ namespace babel {
         public:
             IoClient(std::shared_ptr<EventManager>, std::shared_ptr<Transporter> transporter);
 
+            std::string username = "";
             std::shared_ptr<Transporter> getTransporter();
 
         private:
@@ -21,5 +22,5 @@ namespace babel {
             std::shared_ptr<EventManager> _eventManager;
             std::shared_ptr<Transporter> _transporter;
     };
-    
+
 }
