@@ -32,7 +32,7 @@ std::string AsioTransporter::readMessage() {
                 for (int i = 0; i < message.length(); i++)
                     printf("[%d]", message[i]);
                 printf("\n");
-                this->sendMessage("Echo: " + message);
+                this->sendMessage(message);
             }
         });
     return ("");

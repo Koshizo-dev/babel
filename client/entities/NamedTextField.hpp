@@ -13,6 +13,8 @@ namespace babel {
             ~NamedTextField();
 
             QHBoxLayout *getLayout();
+            void setValue(std::string value);
+            std::string getValue();
 
         private:
             std::shared_ptr<QWidget> _parent = nullptr;

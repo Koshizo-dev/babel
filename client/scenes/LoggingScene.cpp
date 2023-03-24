@@ -61,11 +61,13 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
-    this->_clientManager->transporter = std::make_shared<Transporter>(this->_clientManager->eventManager, std::unique_ptr<Socket>(new QtSocket("127.0.0.1", 8080)));
+    std::string hostname = this->_serverField->getValue();
+    unsigned int port = std::stoi(this->_portField->getValue());
+
+    this->_clientManager->transporter = std::make_shared<Transporter>(this->_clientManager->eventManager, std::unique_ptr<Socket>(new QtSocket(hostname, port)));
 
     if (this->_clientManager->transporter->awaitingConnection()) {
-        this->_clientManager->transporter->sendMessage("Hello, world");
-        LoginPacket packet("Koshizo");
+        LoginPacket packet(this->_usernameField->getValue());
         this->_clientManager->transporter->sendMessage(packet.serialize());
     } else {
         std::cerr << "[DEBUG] Could not connect to server" << std::endl;
@@ -87,7 +89,9 @@ void LoggingScene::_initWidgets() {
    
     this->_usernameField = std::unique_ptr<NamedTextField>(new NamedTextField("Username", this->_widget));
     this->_serverField = std::unique_ptr<NamedTextField>(new NamedTextField("Server", this->_widget));
+    this->_serverField->setValue("127.0.0.1");
     this->_portField = std::unique_ptr<NamedTextField>(new NamedTextField("Port", this->_widget, 0.7));
+    this->_portField->setValue("8080");
 }
 
 void LoggingScene::_placeWidgets() {

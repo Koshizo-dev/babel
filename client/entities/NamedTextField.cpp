@@ -26,3 +26,11 @@ NamedTextField::~NamedTextField() {
 QHBoxLayout *NamedTextField::getLayout() {
     return (this->_layout.get());
 }
+
+void NamedTextField::setValue(std::string value) {
+    this->_input->setText(value.c_str());
+}
+
+std::string NamedTextField::getValue() {
+    return (this->_input->text().toStdString());
+}
