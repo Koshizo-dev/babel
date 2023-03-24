@@ -6,12 +6,14 @@
 #include "EventManager.hpp"
 #include "network/Transporter.hpp"
 
+#include <mutex>
 #include <vector>
 
 namespace babel {
 
     class ClientManager {
         public:
+            std::mutex mutex;
 
             std::shared_ptr<SceneManager> sceneManager = nullptr;
             std::vector<std::shared_ptr<Client>> clients = {};

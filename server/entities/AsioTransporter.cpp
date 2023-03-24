@@ -11,29 +11,22 @@ asio::ip::tcp::socket &AsioTransporter::socket() {
 }
 
 void AsioTransporter::sendMessage(std::string message) {
-    std::cout << "writing!" << std::endl;
     asio::async_write(this->_socket, asio::buffer(message),
         [this](std::error_code ec, std::size_t /*length*/) {
-            if (!ec)
-                this->readMessage();
-        });
+    });
 }
 
-std::string AsioTransporter::readMessage() {
-    std::cout << "reading!" << std::endl;
+void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
     asio::async_read_until(this->_socket, this->_buf, "\r\n",
-        [this](std::error_code ec, std::size_t length) {
-            if (!ec) {
-                std::string message = std::string(
-                    asio::buffer_cast<const char *>(this->_buf.data()),
-                    length);
-                this->_buf.consume(length);
-                printf("packet = ");
-                for (int i = 0; i < message.length(); i++)
-                    printf("[%d]", message[i]);
-                printf("\n");
-                this->sendMessage(message);
+        [this, callback](std::error_code ec, std::size_t length) {
+            if (ec) {
+                callback("");
+                return;
             }
-        });
-    return ("");
+            std::string message = std::string(
+                asio::buffer_cast<const char *>(this->_buf.data()),
+                length-2);
+            this->_buf.consume(length);
+            callback(message);
+    });
 }

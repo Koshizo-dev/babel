@@ -17,7 +17,6 @@ namespace babel {
 
         private:
             std::shared_ptr<ClientManager> _clientManager = nullptr;
-
             std::map<PacketType, std::shared_ptr<ClientPacketHandler>> _packetHandlers = {};
     };
     

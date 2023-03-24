@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Transporter.hpp"
+#include "../IoClient.hpp"
 
 #include <asio.hpp>
 #include <asio/io_service.hpp>
@@ -12,7 +13,7 @@ namespace babel {
             AsioTransporter(asio::io_service &io_service);
 
             void sendMessage(std::string message) override;
-            std::string readMessage() override;
+            void readMessage(std::function<void(std::string)> callback) override;
 
             asio::ip::tcp::socket &socket();
 
