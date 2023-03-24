@@ -7,10 +7,9 @@ Transporter::Transporter(std::shared_ptr<EventManager> eventManager, std::unique
 }
 
 Transporter::~Transporter() {
-    if (this->_socket) {
-        this->sendMessage("DISCONNECT");
-        this->_socket->closeConnection();
-    }
+    printf("in destructor!\n");
+    this->sendMessage("DISCONNECT");
+    this->_socket->closeConnection();
 }
 
 bool Transporter::awaitingConnection() {

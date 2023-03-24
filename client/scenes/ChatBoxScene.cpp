@@ -16,8 +16,6 @@ ChatBoxScene::ChatBoxScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 ChatBoxScene::~ChatBoxScene() {
-    this->_chatBoxInput.reset();
-    // this->_searchLayout.reset();
 }
 
 std::string ChatBoxScene::getName() {
@@ -41,18 +39,18 @@ std::shared_ptr<SceneManager> ChatBoxScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
-std::shared_ptr<QLayout> ChatBoxScene::getLayout() {
+QLayout *ChatBoxScene::getLayout() {
     return (this->_chatBoxLayout);
 }
 
 void ChatBoxScene::_initLayouts() {
-    this->_chatBoxLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout());
+    this->_chatBoxLayout = new QHBoxLayout();
 }
 
 void ChatBoxScene::_initWidgets() {
-    this->_chatBoxInput = std::unique_ptr<ChatBox>(new ChatBox((std::string("Message @") + this->_clientManager->getChatting()->getUsername())));
+    this->_chatBoxInput = new ChatBox((std::string("Message @") + this->_clientManager->getChatting()->getUsername()));
 }
 
 void ChatBoxScene::_placeWidgets() {
-    this->_chatBoxLayout->addWidget(this->_chatBoxInput.get());
+    this->_chatBoxLayout->addWidget(this->_chatBoxInput);
 }

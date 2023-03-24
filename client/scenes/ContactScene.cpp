@@ -17,11 +17,6 @@ ContactScene::ContactScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 ContactScene::~ContactScene() {
-    this->_contacts.clear();
-    this->_contactsLayout.reset();
-    this->_scrollArea.reset();
-    this->_parent->setParent(nullptr);
-    this->_parent.reset();
 }
 
 std::string ContactScene::getName() {
@@ -42,7 +37,7 @@ void ContactScene::clear() {
 // Or any variable that might have been shown on screen was updated.
 void ContactScene::refresh() {
     std::string contactFilter = this->getSceneManager()->getContactFilter();
-    for (std::shared_ptr<Contact> contact: this->_contacts) {
+    for (auto *contact: this->_contacts) {
         contact->updateChatting();
         if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
             contact->getButton()->hide();
@@ -57,26 +52,26 @@ std::shared_ptr<SceneManager> ContactScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
-std::shared_ptr<QWidget> ContactScene::getWidget() {
+QWidget *ContactScene::getWidget() {
     return (this->_scrollArea);
 }
 
 void ContactScene::_initLayouts() {
-    this->_contactsLayout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this->_parent.get()));
+    this->_contactsLayout = new QVBoxLayout(this->_parent);
 }
 
 void ContactScene::_initWidgets() {
-    this->_scrollArea = std::shared_ptr<QScrollArea>(new QScrollArea());
-    this->_parent = std::shared_ptr<QWidget>(new QWidget());
+    this->_scrollArea = new QScrollArea();
+    this->_parent = new QWidget();
 
-    for (std::shared_ptr<Client> client: this->_clientManager->clients) {
-        std::shared_ptr<Contact> contact = this->_generateContact(client);
+    for (auto client: this->_clientManager->clients) {
+        auto *contact = this->_generateContact(client);
         this->_contacts.push_back(contact);
     }
 
     // sort the contacts by message timestamps
     std::sort(this->_contacts.begin(), this->_contacts.end(),
-              [](const std::shared_ptr<Contact> a, const std::shared_ptr<Contact> b) { 
+              [](const Contact *a, const Contact *b) { 
             long aTimestamp = 0;
             if (a->getClient()->getMessages().size() != 0)
                 aTimestamp = a->getClient()->getMessages()[a->getClient()->getMessages().size()-1]->getTimestamp();
@@ -90,7 +85,7 @@ void ContactScene::_initWidgets() {
 void ContactScene::_placeWidgets() {
     this->_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->_scrollArea->setWidget(this->_parent.get());
+    this->_scrollArea->setWidget(this->_parent);
     this->_scrollArea->setWidgetResizable(true);
     this->_parent->setFixedWidth(364);
     this->_scrollArea->setFixedHeight(555);
@@ -98,8 +93,8 @@ void ContactScene::_placeWidgets() {
     this->_contactsLayout->setMargin(0);
     this->_contactsLayout->setSpacing(5);
 
-    for (std::shared_ptr<Contact> contact: this->_contacts) {
-        this->_contactsLayout->addWidget(contact->getButton().get(), 0, Qt::AlignTop);
+    for (auto *contact: this->_contacts) {
+        this->_contactsLayout->addWidget(contact->getButton(), 0, Qt::AlignTop);
     }
 
     this->_contactsLayout->addStretch();
@@ -107,10 +102,10 @@ void ContactScene::_placeWidgets() {
     this->refresh();
 }
 
-std::shared_ptr<Contact> ContactScene::_generateContact(std::shared_ptr<Client> client) {
-    std::shared_ptr<Contact> contact = std::shared_ptr<Contact>(new Contact(client));
+Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
+    Contact *contact = new Contact(client);
 
-    QObject::connect(contact->getButton().get(), &QPushButton::clicked, [=]() {
+    QObject::connect(contact->getButton(), &QPushButton::clicked, [=]() {
         if (contact->getClient()->isChatting())
             return;
         // TODO change the ChatScene

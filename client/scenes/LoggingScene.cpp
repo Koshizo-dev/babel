@@ -23,14 +23,6 @@ LoggingScene::LoggingScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 LoggingScene::~LoggingScene() {
-    this->_loggingButton.reset();
-    this->_usernameField.reset();
-    this->_serverField.reset();
-    this->_portField.reset();
-    this->_errorMessage.reset();
-    this->_topLayout.reset();
-    this->_layout.reset();
-    this->_widget.reset();
 }
 
 std::string LoggingScene::getName() {
@@ -64,33 +56,33 @@ void LoggingScene::_loggingButtonClicked() {
     std::string hostname = this->_serverField->getValue();
     unsigned int port = std::stoi(this->_portField->getValue());
 
-    this->_clientManager->transporter = std::make_shared<Transporter>(this->_clientManager->eventManager, std::unique_ptr<Socket>(new QtSocket(hostname, port)));
+    this->_clientManager->transporter = std::make_shared<Transporter>(this->_clientManager->eventManager, std::make_unique<QtSocket>(hostname, port));
 
     if (this->_clientManager->transporter->awaitingConnection()) {
         LoginPacket packet(this->_usernameField->getValue());
         this->_clientManager->transporter->sendMessage(packet.serialize());
     } else {
         std::cerr << "[DEBUG] Could not connect to server" << std::endl;
-        // this->getSceneManager()->setScene(new MainScene(this->_clientManager));
-        // TODO Connection packet to server
+        // TODO show  error message under
+        this->_loggingAction = false;
     }
 }
 
 void LoggingScene::_initLayouts() {
-    this->_layout = std::unique_ptr<QBoxLayout>(new QVBoxLayout());
-    this->_topLayout = std::unique_ptr<QBoxLayout>(new QHBoxLayout());
+    this->_layout = new QVBoxLayout();
+    this->_topLayout = new QHBoxLayout();
 }
 
 void LoggingScene::_initWidgets() {
-    this->_widget = std::shared_ptr<QWidget>(new QWidget(this->getSceneManager()->getWidget().get()));
+    this->_widget = new QWidget(this->getSceneManager()->getWidget().get());
 
-    this->_loggingButton = std::unique_ptr<QPushButton>(new QPushButton("Login"));
+    this->_loggingButton = new QPushButton("Login");
     this->_loggingButton->setGeometry(0, 0, 200, 100);
    
-    this->_usernameField = std::unique_ptr<NamedTextField>(new NamedTextField("Username", this->_widget));
-    this->_serverField = std::unique_ptr<NamedTextField>(new NamedTextField("Server", this->_widget));
+    this->_usernameField = new NamedTextField("Username", this->_widget);
+    this->_serverField = new NamedTextField("Server", this->_widget);
     this->_serverField->setValue("127.0.0.1");
-    this->_portField = std::unique_ptr<NamedTextField>(new NamedTextField("Port", this->_widget, 0.7));
+    this->_portField = new NamedTextField("Port", this->_widget, 0.7);
     this->_portField->setValue("8080");
 }
 
@@ -98,16 +90,16 @@ void LoggingScene::_placeWidgets() {
     this->_topLayout->addLayout(this->_usernameField->getLayout());
     this->_topLayout->addLayout(this->_serverField->getLayout());
     this->_topLayout->addLayout(this->_portField->getLayout());
-    this->_layout->addLayout(this->_topLayout.get());
-    this->_layout->addWidget(this->_loggingButton.get());
+    this->_layout->addLayout(this->_topLayout);
+    this->_layout->addWidget(this->_loggingButton);
 
     // Set the layout for the parent widget
-    this->_widget->setLayout(this->_layout.get());
+    this->_widget->setLayout(this->_layout);
     // Set the size of the widget and move it to the center of the parent
     this->_widget->setFixedSize(this->_widget->sizeHint());
     this->_widget->move((this->getSceneManager()->getWidget()->width() - this->_widget->width()) / 2, (this->getSceneManager()->getWidget()->height() - this->_widget->height()) / 2);
 
-    QObject::connect(this->_loggingButton.get(), &QPushButton::clicked, [=]() {
+    QObject::connect(this->_loggingButton, &QPushButton::clicked, [=]() {
        this->_loggingButtonClicked(); 
     });
 }

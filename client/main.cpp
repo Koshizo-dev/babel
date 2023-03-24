@@ -15,9 +15,8 @@ using namespace babel;
 
 int main(int argc, char **argv) {
     std::shared_ptr<ClientManager> clientManager = std::shared_ptr<ClientManager>(new ClientManager());
-
-    clientManager->packetManager = std::make_shared<ClientPacketManager>((ClientPacketManager(clientManager)));
-    clientManager->eventManager = std::make_shared<EventManager>(EventManager(clientManager->packetManager));
+    clientManager->packetManager = std::make_shared<ClientPacketManager>(clientManager);
+    clientManager->eventManager = std::make_shared<EventManager>(clientManager->packetManager);
 
     std::shared_ptr<Client> hyside(new Client("hyside"));
     std::shared_ptr<Client> rimost(new Client("rimost"));
@@ -65,5 +64,6 @@ int main(int argc, char **argv) {
     int code = display->run();
 
     delete display;
+    clientManager->reset();
     return (code);
 }

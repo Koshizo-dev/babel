@@ -18,7 +18,7 @@ namespace babel {
             void clear() override;
             void refresh() override;
             std::shared_ptr<SceneManager> getSceneManager() override;
-            std::shared_ptr<QWidget> getWidget();
+            QWidget *getWidget();
             
         private:
             void _initLayouts();
@@ -28,13 +28,13 @@ namespace babel {
             void _callUp();
             void _hangUp();
     
-            std::unique_ptr<QLabel> _userLabel = nullptr;
-            std::unique_ptr<QToolButton> _callUpButton = nullptr;
-            std::unique_ptr<QToolButton> _hangUpButton = nullptr;
-            std::unique_ptr<QToolButton> _callUpAbsentButton = nullptr;
-            std::unique_ptr<QToolButton> _hangUpAbsentButton = nullptr;
-            std::unique_ptr<QHBoxLayout> _userLayout = nullptr;
-            std::shared_ptr<QWidget> _parent = nullptr;
+            QLabel *_userLabel = nullptr;
+            QToolButton *_callUpButton = nullptr;
+            QToolButton *_hangUpButton = nullptr;
+            QToolButton *_callUpAbsentButton = nullptr;
+            QToolButton *_hangUpAbsentButton = nullptr;
+            QHBoxLayout *_userLayout = nullptr;
+            QWidget *_parent = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 

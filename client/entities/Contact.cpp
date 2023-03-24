@@ -11,19 +11,19 @@ Contact::Contact(std::shared_ptr<Client> client) {
 Contact::~Contact() {
 }
 
-std::shared_ptr<Client> Contact::getClient() {
+std::shared_ptr<Client> Contact::getClient() const {
     return (this->_client);
 }
 
-std::shared_ptr<QPushButton> Contact::getButton() {
+QPushButton *Contact::getButton() {
     return (this->_button);
 }
 
-std::shared_ptr<QLabel> Contact::getButtonLabel() {
+QLabel *Contact::getButtonLabel() {
     return (this->_buttonLabel);
 }
 
-std::shared_ptr<QHBoxLayout> Contact::getButtonLayout() {
+QHBoxLayout *Contact::getButtonLayout() {
     return (this->_buttonLayout);
 }
 
@@ -39,16 +39,16 @@ void Contact::updateChatting() {
 
 void Contact::_initElements() {
     std::string name = this->_client->getUsername();
-    this->_button = std::shared_ptr<QPushButton>(new QPushButton());
-    this->_buttonLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout());
-    this->_buttonLabel = std::shared_ptr<QLabel>(new QLabel(name.c_str()));
+    this->_button = new QPushButton();
+    this->_buttonLayout = new QHBoxLayout();
+    this->_buttonLabel = new QLabel(name.c_str());
 }
 
 void Contact::_joinElements() {
-    this->_buttonLayout->addWidget(this->_client->getIcon().get());
-    this->_buttonLayout->addWidget(this->_buttonLabel.get());
+    this->_buttonLayout->addWidget(this->_client->getIcon());
+    this->_buttonLayout->addWidget(this->_buttonLabel);
 
-    this->_button->setLayout(this->_buttonLayout.get());
+    this->_button->setLayout(this->_buttonLayout);
     this->_buttonLayout->setContentsMargins(0, 0, 0, 0);
     
     // adjust the size of the button to fit both the icon and the label

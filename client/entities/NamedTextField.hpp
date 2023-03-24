@@ -8,8 +8,8 @@
 namespace babel {
     class NamedTextField {
         public:
-            NamedTextField(std::string name, std::shared_ptr<QWidget> parent);
-            NamedTextField(std::string name, std::shared_ptr<QWidget> parent, double modifier);
+            NamedTextField(std::string name, QWidget* parent);
+            NamedTextField(std::string name, QWidget* parent, double modifier);
             ~NamedTextField();
 
             QHBoxLayout *getLayout();
@@ -17,9 +17,9 @@ namespace babel {
             std::string getValue();
 
         private:
-            std::shared_ptr<QWidget> _parent = nullptr;
-            std::shared_ptr<QHBoxLayout> _layout = nullptr;
-            std::shared_ptr<QLineEdit> _input = nullptr;
-            std::shared_ptr<QLabel> _label = nullptr;
+            QWidget *_parent = nullptr;
+            QHBoxLayout *_layout = nullptr;
+            QLineEdit *_input = nullptr;
+            QLabel *_label = nullptr;
     };
 }

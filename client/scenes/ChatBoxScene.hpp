@@ -19,17 +19,17 @@ namespace babel {
             void clear() override;
             void refresh() override;
             std::shared_ptr<SceneManager> getSceneManager() override;
-            std::shared_ptr<QLayout> getLayout();
+            QLayout *getLayout();
             
         private:
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
     
-            std::unique_ptr<ChatBox> _chatBoxInput = nullptr;
+            ChatBox *_chatBoxInput = nullptr;
 
             // Isn't really useful here, but left here in case of widgets to the chatbox
-            std::shared_ptr<QHBoxLayout> _chatBoxLayout = nullptr;
+            QHBoxLayout *_chatBoxLayout = nullptr;
 
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     };

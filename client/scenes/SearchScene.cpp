@@ -15,8 +15,6 @@ SearchScene::SearchScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 SearchScene::~SearchScene() {
-    this->_searchInput.reset();
-    // this->_searchLayout.reset();
 }
 
 std::string SearchScene::getName() {
@@ -40,30 +38,30 @@ std::shared_ptr<SceneManager> SearchScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
-std::shared_ptr<QLayout> SearchScene::getLayout() {
+QLayout *SearchScene::getLayout() {
     return (this->_searchLayout);
 }
 
 void SearchScene::_initLayouts() {
-    this->_searchLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout());
+    this->_searchLayout = new QHBoxLayout();
 }
 
 void SearchScene::_initWidgets() {
-    this->_searchInput = std::unique_ptr<QLineEdit>(new QLineEdit());
+    this->_searchInput = new QLineEdit();
+    this->_searchInput->setPlaceholderText("Find an user.");
 
-    QObject::connect(this->_searchInput.get(), &QLineEdit::textChanged, [=]() {
+    QObject::connect(this->_searchInput, &QLineEdit::textChanged, [=]() {
         // TODO If user does exist, switch up to his conversation, otherwise add a new contact at the top of the list but don't switch to it
         this->getSceneManager()->setContactFilter(this->_searchInput->text().toStdString());
         this->getSceneManager()->getScene()->refresh();
     });
 
-    QObject::connect(this->_searchInput.get(), &QLineEdit::returnPressed, [=]() {
+    QObject::connect(this->_searchInput, &QLineEdit::returnPressed, [=]() {
         // TODO If user does exist, switch up to his conversation, otherwise add a new contact at the top of the list but don't switch to it
         std::cout << "Pressed returned ! | text = [" << this->_searchInput->text().toStdString() << "]" << std::endl;
     });
 }
 
 void SearchScene::_placeWidgets() {
-    this->_searchLayout->addWidget(this->_searchInput.get());
-    this->_searchInput->setPlaceholderText("Find an user.");
+    this->_searchLayout->addWidget(this->_searchInput);
 }

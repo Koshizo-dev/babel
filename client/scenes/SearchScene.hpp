@@ -18,15 +18,15 @@ namespace babel {
             void clear() override;
             void refresh() override;
             std::shared_ptr<SceneManager> getSceneManager() override;
-            std::shared_ptr<QLayout> getLayout();
+            QLayout *getLayout();
             
         private:
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
     
-            std::unique_ptr<QLineEdit> _searchInput = nullptr;
-            std::shared_ptr<QHBoxLayout> _searchLayout = nullptr;
+            QLineEdit *_searchInput = nullptr;
+            QHBoxLayout *_searchLayout = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 

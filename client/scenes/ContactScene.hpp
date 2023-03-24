@@ -19,18 +19,18 @@ namespace babel {
             void clear() override;
             void refresh() override;
             std::shared_ptr<SceneManager> getSceneManager() override;
-            std::shared_ptr<QWidget> getWidget();
+            QWidget *getWidget();
             
         private:
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
-            std::shared_ptr<Contact> _generateContact(std::shared_ptr<Client> client);
+            Contact *_generateContact(std::shared_ptr<Client> client);
     
-            std::vector<std::shared_ptr<Contact>> _contacts = {};
-            std::shared_ptr<QVBoxLayout> _contactsLayout = nullptr;
-            std::shared_ptr<QScrollArea> _scrollArea = nullptr;
-            std::shared_ptr<QWidget> _parent = nullptr;
+            std::vector<Contact*> _contacts = {};
+            QVBoxLayout *_contactsLayout = nullptr;
+            QScrollArea *_scrollArea = nullptr;
+            QWidget *_parent = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 }

@@ -12,8 +12,7 @@ namespace babel {
             Client(std::string username);
 
             std::string getUsername();
-            std::shared_ptr<Icon> getIcon();
-            std::shared_ptr<Icon> getNewIcon(int size = 64);
+            Icon *getIcon(int size = 64);
             std::vector<std::shared_ptr<Message>> getMessages();
             bool isChatting();
             bool isInCall();
@@ -26,13 +25,12 @@ namespace babel {
 
         private:
             std::string _username = "Koshizo"; // Easter egg since, not able to have capitals
-            std::shared_ptr<Icon> _icon = nullptr;
             bool _isChatting = false;
             bool _isInCall = false;
             bool _isChatWindow = false;
             std::vector<std::shared_ptr<Message>> _messages = {};
 
-            std::shared_ptr<Icon> _generateIcon(int size); // Must be called in constructor
+            Icon *_generateIcon(int size); // Must be called in constructor
     };
 
 } // namespace babel

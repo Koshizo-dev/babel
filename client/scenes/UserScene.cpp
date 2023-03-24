@@ -16,10 +16,6 @@ UserScene::UserScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 UserScene::~UserScene() {
-    this->_userLabel.reset();
-    this->_logoutButton.reset();
-    this->_userLayout.reset();
-    this->_parent.reset();
 }
 
 std::string UserScene::getName() {
@@ -46,22 +42,22 @@ std::shared_ptr<SceneManager> UserScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
-std::shared_ptr<QWidget> UserScene::getWidget() {
+QWidget *UserScene::getWidget() {
     return (this->_parent);
 }
 
 void UserScene::_initLayouts() {
-    this->_userLayout = std::unique_ptr<QHBoxLayout>(new QHBoxLayout(this->_parent.get()));
+    this->_userLayout = new QHBoxLayout(this->_parent);
 }
 
 void UserScene::_initWidgets() {
-    this->_parent = std::shared_ptr<QWidget>(new QWidget());
-    this->_userLabel = std::unique_ptr<QLabel>(new QLabel(this->_clientManager->self->getUsername().c_str()));
+    this->_parent = new QWidget();
+    this->_userLabel = new QLabel(this->_clientManager->self->getUsername().c_str());
 
-    this->_logoutButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_logoutButton = new QToolButton();
     this->_logoutButton->setIcon(QIcon("assets/logout.png"));
 
-    QObject::connect(this->_logoutButton.get(), &QToolButton::clicked, [=]() {
+    QObject::connect(this->_logoutButton, &QToolButton::clicked, [=]() {
         // TODO disconnect user server side
         this->_clientManager->disconnect();
         printf("User disconnected!\n");
@@ -71,11 +67,11 @@ void UserScene::_initWidgets() {
 }
 
 void UserScene::_placeWidgets() {
-    this->_userLayout->addWidget(this->_clientManager->self->getIcon().get());
-    this->_userLayout->addWidget(this->_userLabel.get());
+    this->_userLayout->addWidget(this->_clientManager->self->getIcon());
+    this->_userLayout->addWidget(this->_userLabel);
 
     this->_logoutButton->setIconSize(QSize(64, 64));
     this->_logoutButton->setFixedSize(64, 64);
     this->_logoutButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
-    this->_userLayout->addWidget(this->_logoutButton.get());
+    this->_userLayout->addWidget(this->_logoutButton);
 }

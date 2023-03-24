@@ -16,13 +16,6 @@ ChatInfoScene::ChatInfoScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 ChatInfoScene::~ChatInfoScene() {
-    this->_userLabel.reset();
-    this->_callUpButton.reset();
-    this->_hangUpButton.reset();
-    this->_callUpAbsentButton.reset();
-    this->_hangUpAbsentButton.reset();
-    this->_userLayout.reset();
-    this->_parent.reset();
 }
 
 std::string ChatInfoScene::getName() {
@@ -75,31 +68,31 @@ std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() {
     return (this->_clientManager->sceneManager);
 }
 
-std::shared_ptr<QWidget> ChatInfoScene::getWidget() {
+QWidget *ChatInfoScene::getWidget() {
     return (this->_parent);
 }
 
 void ChatInfoScene::_initLayouts() {
-    this->_userLayout = std::unique_ptr<QHBoxLayout>(new QHBoxLayout(this->_parent.get()));
+    this->_userLayout = new QHBoxLayout(this->_parent);
 }
 
 void ChatInfoScene::_initWidgets() {
-    this->_parent = std::shared_ptr<QWidget>(new QWidget());
-    this->_userLabel = std::unique_ptr<QLabel>(new QLabel(this->_clientManager->getChatting()->getUsername().c_str()));
+    this->_parent = new QWidget();
+    this->_userLabel = new QLabel(this->_clientManager->getChatting()->getUsername().c_str());
 
-    this->_callUpButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_callUpButton = new QToolButton();
     this->_callUpButton->setIcon(QIcon("assets/call-up.png"));
-    this->_hangUpButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_hangUpButton = new QToolButton();
     this->_hangUpButton->setIcon(QIcon("assets/hang-up.png"));
-    this->_callUpAbsentButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_callUpAbsentButton = new QToolButton();
     this->_callUpAbsentButton->setIcon(QIcon("assets/call-up_absent.png"));
-    this->_hangUpAbsentButton = std::unique_ptr<QToolButton>(new QToolButton());
+    this->_hangUpAbsentButton = new QToolButton();
     this->_hangUpAbsentButton->setIcon(QIcon("assets/hang-up_absent.png"));
 }
 
 void ChatInfoScene::_placeWidgets() {
     this->_userLabel->setStyleSheet("font-style: italic; font-weight: 900; text-decoration: underline;");
-    this->_userLayout->addWidget(this->_userLabel.get());
+    this->_userLayout->addWidget(this->_userLabel);
 
     this->_callUpButton->setIconSize(QSize(64, 64));
     this->_callUpButton->setFixedSize(64, 64);
@@ -114,25 +107,25 @@ void ChatInfoScene::_placeWidgets() {
     this->_hangUpAbsentButton->setIconSize(QSize(64, 64));
     this->_hangUpAbsentButton->setFixedSize(64, 64);
     this->_hangUpAbsentButton->setStyleSheet("background-color: rgba(0, 0, 0, 0); border: none;");
-    this->_userLayout->addWidget(this->_callUpButton.get());
-    this->_userLayout->addWidget(this->_callUpAbsentButton.get());
-    this->_userLayout->addWidget(this->_hangUpButton.get());
-    this->_userLayout->addWidget(this->_hangUpAbsentButton.get());
+    this->_userLayout->addWidget(this->_callUpButton);
+    this->_userLayout->addWidget(this->_callUpAbsentButton);
+    this->_userLayout->addWidget(this->_hangUpButton);
+    this->_userLayout->addWidget(this->_hangUpAbsentButton);
     this->refresh();
 
-    QObject::connect(this->_callUpButton.get(), &QToolButton::clicked, [=]() {
+    QObject::connect(this->_callUpButton, &QToolButton::clicked, [=]() {
         this->_callUp();
     });
 
-    QObject::connect(this->_callUpAbsentButton.get(), &QToolButton::clicked, [=]() {
+    QObject::connect(this->_callUpAbsentButton, &QToolButton::clicked, [=]() {
         this->_callUp();
     });
 
-    QObject::connect(this->_hangUpButton.get(), &QToolButton::clicked, [=]() {
+    QObject::connect(this->_hangUpButton, &QToolButton::clicked, [=]() {
         this->_hangUp();
     });
 
-    QObject::connect(this->_hangUpAbsentButton.get(), &QToolButton::clicked, [=]() {
+    QObject::connect(this->_hangUpAbsentButton, &QToolButton::clicked, [=]() {
         this->_hangUp();
     });
 }

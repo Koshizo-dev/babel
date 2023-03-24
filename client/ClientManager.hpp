@@ -12,6 +12,7 @@ namespace babel {
 
     class ClientManager {
         public:
+
             std::shared_ptr<SceneManager> sceneManager = nullptr;
             std::vector<std::shared_ptr<Client>> clients = {};
             std::shared_ptr<EventManager> eventManager = nullptr;
@@ -20,6 +21,7 @@ namespace babel {
             std::shared_ptr<Transporter> transporter = nullptr;
 
             std::shared_ptr<Client> getChatting();
+            void reset();
             void disconnect();
     };
 }

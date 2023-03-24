@@ -10,14 +10,8 @@ std::string Client::getUsername() {
     return (this->_username);
 }
 
-std::shared_ptr<Icon> Client::getIcon() {
-    if (this->_icon == nullptr)
-        this->_icon = this->_generateIcon(64);
-    return (this->_icon);
-}
-
-std::shared_ptr<Icon> Client::getNewIcon(int size) {
-    return(this->_generateIcon(size));
+Icon *Client::getIcon(int size) {
+    return (this->_generateIcon(size));
 }
 
 std::vector<std::shared_ptr<Message>> Client::getMessages() {
@@ -52,6 +46,6 @@ void Client::setChatWindow(bool isChatWindow) {
     this->_isChatWindow = isChatWindow;
 }
 
-std::shared_ptr<Icon> Client::_generateIcon(int size) {
-    return (std::shared_ptr<Icon>(new Icon(this->_username, nullptr, size)));
+Icon *Client::_generateIcon(int size) {
+    return (new Icon(this->_username, nullptr, size));
 }

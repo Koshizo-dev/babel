@@ -26,14 +26,14 @@ namespace babel {
             void _initWidgets();
             void _placeWidgets();
 
-            std::unique_ptr<QPushButton> _loggingButton = nullptr;
-            std::unique_ptr<NamedTextField> _usernameField = nullptr;
-            std::unique_ptr<NamedTextField> _serverField = nullptr;
-            std::unique_ptr<NamedTextField> _portField = nullptr;
-            std::unique_ptr<QLabel> _errorMessage = nullptr;
-            std::unique_ptr<QBoxLayout> _topLayout = nullptr;
-            std::unique_ptr<QBoxLayout> _layout = nullptr;
-            std::shared_ptr<QWidget> _widget = nullptr;
+            QPushButton *_loggingButton = nullptr;
+            NamedTextField *_usernameField = nullptr;
+            NamedTextField *_serverField = nullptr;
+            NamedTextField *_portField = nullptr;
+            QLabel *_errorMessage = nullptr;
+            QBoxLayout *_topLayout = nullptr;
+            QBoxLayout *_layout = nullptr;
+            QWidget *_widget = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
             bool _loggingAction = false;
     };

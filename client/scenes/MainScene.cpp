@@ -12,7 +12,7 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing LoggingScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
-    this->_parent = std::shared_ptr<QWidget>(new QWidget(this->getSceneManager()->getWidget().get()));
+    this->_parent = new QWidget(this->getSceneManager()->getWidget().get());
     this->_parent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->_parent->setMinimumSize(1280, 720);
 
@@ -22,12 +22,6 @@ MainScene::MainScene(std::shared_ptr<ClientManager> clientManager) {
 }
 
 MainScene::~MainScene() {
-    this->_contacts.reset();
-    this->_search.reset();
-    this->_user.reset();
-    this->_leftSideLayout.reset();
-    this->_rightSideLayout.reset();
-    this->_parentLayout.reset();
 }
 
 std::string MainScene::getName() {
@@ -78,7 +72,7 @@ std::shared_ptr<SceneManager> MainScene::getSceneManager() {
 }
 
 void MainScene::_initLayouts() {
-    this->_parentLayout = std::unique_ptr<QHBoxLayout>(new QHBoxLayout(this->_parent.get()));
+    this->_parentLayout = new QHBoxLayout(this->_parent);
 
     this->_initLeftLayout();
     this->_initRightLayout();
@@ -86,7 +80,7 @@ void MainScene::_initLayouts() {
 
 
 void MainScene::_initLeftLayout() {
-    this->_leftSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout());
+    this->_leftSideLayout = new QVBoxLayout();
 
     this->_user = std::unique_ptr<UserScene>(new UserScene(this->_clientManager));
     this->_contacts = std::unique_ptr<ContactScene>(new ContactScene(this->_clientManager));
@@ -94,7 +88,7 @@ void MainScene::_initLeftLayout() {
 }
 
 void MainScene::_initRightLayout() {
-    this->_rightSideLayout = std::unique_ptr<QVBoxLayout>(new QVBoxLayout());
+    this->_rightSideLayout = new QVBoxLayout();
 
     this->_chatInfo = std::unique_ptr<ChatInfoScene>(new ChatInfoScene(this->_clientManager));
     this->_messages = std::unique_ptr<ChatScene>(new ChatScene(this->_clientManager));
@@ -105,9 +99,9 @@ void MainScene::_placeLayouts() {
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::VLine);
     line->setFrameShadow(QFrame::Sunken);
-    this->_parentLayout->addLayout(this->_leftSideLayout.get(), 2);
+    this->_parentLayout->addLayout(this->_leftSideLayout, 2);
     this->_parentLayout->addWidget(line, 4);
-    this->_parentLayout->addLayout(this->_rightSideLayout.get(), 5);
+    this->_parentLayout->addLayout(this->_rightSideLayout, 5);
 
     this->_placeLeftLayout();
     this->_placeRightLayout();
@@ -115,13 +109,13 @@ void MainScene::_placeLayouts() {
 
 void MainScene::_placeLeftLayout() {
     this->_user->getWidget()->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    this->_leftSideLayout->addWidget(this->_user->getWidget().get());
-    this->_leftSideLayout->addLayout(this->_search->getLayout().get());
-    this->_leftSideLayout->addWidget(this->_contacts->getWidget().get());
+    this->_leftSideLayout->addWidget(this->_user->getWidget());
+    this->_leftSideLayout->addLayout(this->_search->getLayout());
+    this->_leftSideLayout->addWidget(this->_contacts->getWidget());
 }
 
 void MainScene::_placeRightLayout() {
-    this->_rightSideLayout->addWidget(this->_chatInfo->getWidget().get(), 1);
-    this->_rightSideLayout->addWidget(this->_messages->getWidget().get(), 10);
-    this->_rightSideLayout->addLayout(this->_chatBox->getLayout().get(), 3);
+    this->_rightSideLayout->addWidget(this->_chatInfo->getWidget(), 1);
+    this->_rightSideLayout->addWidget(this->_messages->getWidget(), 10);
+    this->_rightSideLayout->addLayout(this->_chatBox->getLayout(), 3);
 }

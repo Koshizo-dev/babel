@@ -19,7 +19,7 @@ namespace babel {
             void clear() override;
             void refresh() override;
             std::shared_ptr<SceneManager> getSceneManager() override;
-            std::shared_ptr<QWidget> getWidget();
+            QWidget *getWidget();
 
         private:
             void _initLayouts();
@@ -27,10 +27,10 @@ namespace babel {
             void _placeWidgets();
             std::vector<std::vector<std::shared_ptr<Message>>> _groupMessagesByTime(std::shared_ptr<Client> client1);
 
-            std::vector<std::shared_ptr<MessageBox>> _messages = {};
-            std::shared_ptr<QVBoxLayout> _messagesLayout = nullptr;
-            std::shared_ptr<QScrollArea> _scrollArea = nullptr;
-            std::shared_ptr<QWidget> _parent = nullptr;
+            std::vector<MessageBox*> _messages = {};
+            QVBoxLayout* _messagesLayout = nullptr;
+            QScrollArea* _scrollArea = nullptr;
+            QWidget* _parent = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
     };
 }
