@@ -64,6 +64,12 @@ void MainScene::refresh() {
 }
 
 void MainScene::handleEvent(Event &event) {
+    if (event.type == Event::LOGOUT) {
+        this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
+        Event event(Event::LOGOUT);
+        this->getSceneManager()->getScene()->handleEvent(event);
+        return;
+    }
     this->_user->handleEvent(event);
     this->_contacts->handleEvent(event);
     this->_search->handleEvent(event);

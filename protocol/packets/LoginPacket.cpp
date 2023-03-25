@@ -26,11 +26,11 @@ std::string LoginPacket::serialize() {
 
 std::unique_ptr<Packet> LoginPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
     if (packetFields.size() != 1)
-        return (nullptr); // TODO throw exception
+        return (nullptr);
 
     std::unique_ptr<PacketField> field = std::move(packetFields[0]);
     if (field->getType() != FieldType::STRING)
-        return (nullptr); // TODO throw exception
+        return (nullptr);
 
     StringField *name = static_cast<StringField*>(field.get());
 

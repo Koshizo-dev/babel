@@ -9,6 +9,8 @@ namespace babel {
 
     class ServerManager {
         public:
+            void close();
+
             bool usernameExists(const std::string &target);
             void login(IoClient *origin);
             void logout(IoClient *origin);
@@ -18,5 +20,5 @@ namespace babel {
             std::shared_ptr<ServerPacketManager> packetManager = nullptr;
             std::shared_ptr<EventManager> eventManager = nullptr;
     };
-    
+
 }

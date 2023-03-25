@@ -20,7 +20,7 @@ std::string LogoutPacket::serialize() {
 
 std::unique_ptr<Packet> LogoutPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
     if (packetFields.size() != 0)
-        return (nullptr); // TODO throw exception
+        return (nullptr);
 
     return (std::unique_ptr<Packet>(new LogoutPacket()));
 }

@@ -57,9 +57,7 @@ void UserScene::_initWidgets() {
     this->_logoutButton->setIcon(QIcon("assets/logout.png"));
 
     QObject::connect(this->_logoutButton, &QToolButton::clicked, [=]() {
-        // TODO disconnect user server side
         this->_clientManager->disconnect();
-        printf("User disconnected!\n");
         this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
     });
     

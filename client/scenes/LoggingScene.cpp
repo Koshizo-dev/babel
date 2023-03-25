@@ -45,7 +45,13 @@ void LoggingScene::handleEvent(Event &event) {
     if (event.type == Event::LOGIN_FAILED) {
         std::cerr << "login failed: [" << event.data.loginFailed.errorMessage << "]" << std::endl;
         this->_loggingAction = false;
-        // TODO
+        // TODO SHOW MESSAGE UI
+        return;
+    }
+    if (event.type == Event::LOGOUT) {
+        std::cerr << "server forced logout!" << std::endl;
+        // TODO SHOW MESSAGE UI
+        return;
     }
 }
 

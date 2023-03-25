@@ -18,7 +18,7 @@ std::shared_ptr<Transporter> IoClient::getTransporter() {
 }
 
 void IoClient::_handle() {
-    if (this->_transporter->isClosed())
+    if (this->_transporter == nullptr || this->_transporter->isClosed())
         return;
     this->_transporter->readMessage([this](std::string message) {
         if (message != "")

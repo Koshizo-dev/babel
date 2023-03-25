@@ -13,6 +13,7 @@ namespace babel {
         public:
             enum EventType {
                 LOGIN_FAILED,
+                LOGOUT,
                 CONTACT_FILTER_UPDATE,
                 NEW_CONTACT,
                 NEW_BULK_CONTACT,
