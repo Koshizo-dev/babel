@@ -4,6 +4,7 @@
 #include "../../server/ServerManager.hpp"
 #include "packets/LoginPacketHandler.hpp"
 #include "packets/LogoutPacketHandler.hpp"
+#include "packets/ContactPacketHandler.hpp"
 #include "packets/MessagePacketHandler.hpp"
 
 using namespace babel;
@@ -13,6 +14,7 @@ ServerPacketManager::ServerPacketManager(std::shared_ptr<ServerManager> serverMa
 
     this->registerHandler(PacketType::LOGIN, std::shared_ptr<ServerPacketHandler>(new LoginPacketHandler()));
     this->registerHandler(PacketType::LOGOUT, std::shared_ptr<ServerPacketHandler>(new LogoutPacketHandler()));
+    this->registerHandler(PacketType::CONTACT, std::shared_ptr<ServerPacketHandler>(new ContactPacketHandler()));
     this->registerHandler(PacketType::MESSAGE, std::shared_ptr<ServerPacketHandler>(new MessagePacketHandler()));
 }
 

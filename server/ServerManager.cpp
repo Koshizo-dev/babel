@@ -1,5 +1,6 @@
 #include "ServerManager.hpp"
 #include "../protocol/packets/LogoutPacket.hpp"
+#include "../protocol/packets/ContactPacket.hpp"
 #include "../protocol/packets/MessagePacket.hpp"
 
 #include <algorithm>
@@ -8,9 +9,11 @@
 using namespace babel;
 
 void ServerManager::close() {
-    if (this->clients.size() == 0)
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    if (this->_clients.size() == 0)
         return;
-    auto current = this->clients[0];
+    auto current = this->_clients[0];
     LogoutPacket packet;
     current->getTransporter()->sendMessage(packet.serialize());
     this->logout(current.get());
@@ -22,14 +25,24 @@ std::uint64_t ServerManager::getTimestamp() {
     return (static_cast<std::int64_t>(now_ms.time_since_epoch().count()));
 }
 
+void ServerManager::addClient(std::shared_ptr<IoClient> client) {
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    this->_clients.push_back(client);
+}
+
 bool ServerManager::usernameExists(const std::string &target) {
-    return std::any_of(clients.begin(), clients.end(), [&](const std::shared_ptr<IoClient> &client) {
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    return std::any_of(this->_clients.begin(), this->_clients.end(), [&](const std::shared_ptr<IoClient> &client) {
         return client->username == target;
     });
 }
 
 std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string &target) {
-    for (auto client: this->clients)
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    for (auto client: this->_clients)
         if (client->username == target)
             return (client);
 
@@ -37,25 +50,58 @@ std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string &targe
 }
 
 void ServerManager::login(IoClient *origin) {
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
     std::cout << "[+] " << origin->username << std::endl;
-    // TODO check database, create if does not exist, otherwise send contacts to user
+    this->database->addClient(origin->username);
+
+    std::vector<std::string> contacts = this->database->getContacts(origin->username);
+    std::vector<Message> messages = this->database->getMessages(origin->username);
+
+    for (std::string contact: contacts) {
+        ContactPacket packet;
+        origin->getTransporter()->sendMessage(packet.serialize());
+        origin->addContact(contact);
+    }
+
+    for (Message message: messages) {
+        MessagePacket packet(message.getSender(), message.getRecipient(), message.getContent(), message.getTimestamp());
+        origin->getTransporter()->sendMessage(packet.serialize());
+    }
 }
 
 void ServerManager::logout(IoClient *origin) {
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
     if (origin->username == "")
         std::cout << "[-] Unknown user" << std::endl;
     else {
         origin->getTransporter()->close();
-        this->clients.erase(std::remove_if(this->clients.begin(), this->clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->clients.end());
+        this->_clients.erase(std::remove_if(this->_clients.begin(), this->_clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->_clients.end());
         std::cout << "[-] " << origin->username << std::endl;
     }
 }
 
 void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    if (!origin->isContactWith(recipientName)) {
+        ContactPacket packet;
+        origin->getTransporter()->sendMessage(packet.serialize());
+        origin->addContact(recipientName);
+    }
+    std::shared_ptr<IoClient> recipient = this->retrieveClient(recipientName);
+    if (recipient != nullptr) {
+        if (!recipient->isContactWith(origin->username)) {
+            ContactPacket packet;
+            origin->getTransporter()->sendMessage(packet.serialize());
+            recipient->addContact(origin->username);
+        }
+    }
+
     MessagePacket message(origin->username, recipientName, content, this->getTimestamp());
     std::string serializedMessage = message.serialize();
 
-    std::shared_ptr<IoClient> recipient = this->retrieveClient(recipientName);
     if (recipient != nullptr)
         recipient->getTransporter()->sendMessage(serializedMessage);
     origin->getTransporter()->sendMessage(serializedMessage);

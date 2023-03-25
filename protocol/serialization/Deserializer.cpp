@@ -6,6 +6,7 @@
 #include "../packets/LoginPacket.hpp"
 #include "../packets/LoginErrorPacket.hpp"
 #include "../packets/LogoutPacket.hpp"
+#include "../packets/ContactPacket.hpp"
 #include "../packets/MessagePacket.hpp"
 
 #include <iostream>
@@ -20,6 +21,8 @@ std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::ve
             return (LoginErrorPacket().deserialize(std::move(packetFields)));
         case PacketType::LOGOUT:
             return (LogoutPacket().deserialize(std::move(packetFields)));
+        case PacketType::CONTACT:
+            return (ContactPacket().deserialize(std::move(packetFields)));
         case PacketType::MESSAGE:
             return (MessagePacket().deserialize(std::move(packetFields)));
     }

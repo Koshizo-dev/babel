@@ -23,7 +23,7 @@ void AsioServer::_accept() {
     this->_acceptor.async_accept(new_transporter->socket(),
     [this, new_transporter](std::error_code ec) {
         if (!ec) {
-            this->_serverManager->clients.push_back(std::make_shared<IoClient>(this->_serverManager->eventManager, new_transporter));
+            this->_serverManager->addClient(std::make_shared<IoClient>(this->_serverManager->eventManager, new_transporter));
         }
         this->_accept();
     });

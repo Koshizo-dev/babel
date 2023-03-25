@@ -6,6 +6,7 @@ namespace babel {
         LOGIN,
         LOGIN_ERROR,
         LOGOUT,
+        CONTACT,
         MESSAGE,
     };
 

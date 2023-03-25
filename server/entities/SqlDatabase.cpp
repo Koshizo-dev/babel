@@ -45,6 +45,23 @@ void SqlDatabase::init() {
     this->process(create_contacts);
 }
 
+void SqlDatabase::addClient(std::string username) {
+}
+
+void SqlDatabase::addContact(std::string username, std::string contact) {
+}
+
+void SqlDatabase::addMessage(Message &message) {
+}
+
+std::vector<Message> SqlDatabase::getMessages(std::string username) {
+    return {};
+}
+
+std::vector<std::string> SqlDatabase::getContacts(std::string usernam) {
+    return {};
+}
+
 void SqlDatabase::process(std::string request) {
     int rc = sqlite3_exec(this->_db, request.c_str(), nullptr, nullptr, nullptr);
 

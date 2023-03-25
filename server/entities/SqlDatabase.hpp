@@ -15,6 +15,11 @@ namespace babel {
             void connect() override;
             void disconnect() override;
             void init() override;
+            void addClient(std::string username) override;
+            void addContact(std::string username, std::string contact) override;
+            void addMessage(Message &message) override;
+            std::vector<Message> getMessages(std::string username) override;
+            std::vector<std::string> getContacts(std::string username) override;
             void process(std::string request);
 
         private:

@@ -15,15 +15,16 @@ namespace babel {
         public:
             std::mutex mutex;
 
+            std::shared_ptr<Client> getClient(std::string username);
+            std::shared_ptr<Client> getChatting();
+            void reset();
+            void disconnect();
+
             std::shared_ptr<SceneManager> sceneManager = nullptr;
             std::vector<std::shared_ptr<Client>> clients = {};
             std::shared_ptr<EventManager> eventManager = nullptr;
             std::shared_ptr<PacketManager> packetManager = nullptr;
             std::shared_ptr<Client> self = nullptr;
             std::shared_ptr<Transporter> transporter = nullptr;
-
-            std::shared_ptr<Client> getChatting();
-            void reset();
-            void disconnect();
     };
 }

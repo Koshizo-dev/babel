@@ -1,5 +1,7 @@
 #include "SearchScene.hpp"
 #include "../ClientError.hpp"
+#include "../../protocol/packets/ContactPacket.hpp"
+
 #include <iostream>
 
 using namespace babel;
@@ -61,8 +63,26 @@ void SearchScene::_initWidgets() {
     });
 
     QObject::connect(this->_searchInput, &QLineEdit::returnPressed, [=]() {
-        // TODO If user does exist, switch up to his conversation, otherwise add a new contact at the top of the list but don't switch to it
-        std::cout << "Pressed returned ! | text = [" << this->_searchInput->text().toStdString() << "]" << std::endl;
+        std::string username = this->_searchInput->text().toStdString();
+        this->_searchInput->setText("");
+
+        Event filterEvent(Event::CONTACT_FILTER_UPDATE);
+        new (&filterEvent.data.contactFilter) Event::ContactFilterUpdate({this->_searchInput->text().toStdString()});
+        this->getSceneManager()->getScene()->handleEvent(filterEvent);
+
+        std::shared_ptr<Client> target = this->_clientManager->getClient(username);
+        if (target != nullptr) {
+            auto previousChatting = this->_clientManager->getChatting();
+            if (previousChatting != nullptr)
+                previousChatting->setChatting(false);
+            target->setChatting(true);
+            Event event(Event::NEW_CHATTING);
+            new (&event.data.newChatting) Event::NewChatting({previousChatting, target});
+            this->getSceneManager()->getScene()->handleEvent(event);
+            return;
+        }
+        ContactPacket packet(username);
+        this->_clientManager->transporter->sendMessage(packet.serialize());
     });
 }
 

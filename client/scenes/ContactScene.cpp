@@ -37,21 +37,33 @@ void ContactScene::refresh() {
 }
 
 void ContactScene::handleEvent(Event &event) {
-    if (event.type == Event::NEW_CHATTING) {
-        for (auto *contact: this->_contacts) {
-            if (contact->getClient() == event.data.newChatting.previousClient || contact->getClient() == event.data.newChatting.newClient)
-                contact->updateChatting();
+    switch (event.type) {
+        case Event::NEW_CONTACT:
+        {
+            std::shared_ptr<Client> newContact = event.data.newContact.contact;
+            Contact *contact = this->_generateContact(newContact);
+            this->_contacts.insert(this->_contacts.begin(), contact);
+            this->_contactsLayout->insertWidget(0, contact->getButton(), 0, Qt::AlignTop);
         }
-    }
-    if (event.type == Event::CONTACT_FILTER_UPDATE) {
-        std::string contactFilter = event.data.contactFilter.filter;
+        case Event::NEW_CHATTING:
+        {
+            for (auto *contact: this->_contacts)
+                if (contact->getClient() == event.data.newChatting.previousClient || contact->getClient() == event.data.newChatting.newClient)
+                    contact->updateChatting();
+            break;
+        }
+        case Event::CONTACT_FILTER_UPDATE:
+        {       
+            std::string contactFilter = event.data.contactFilter.filter;
 
-        for (auto *contact: this->_contacts) {
-            if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
-                contact->getButton()->hide();
-            else
-                contact->getButton()->show();
+            for (auto *contact: this->_contacts) {
+                if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
+                    contact->getButton()->hide();
+                else
+                    contact->getButton()->show();
+            }
         }
+        default: break;
     }
 }
 
