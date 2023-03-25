@@ -1,5 +1,8 @@
 #include "SqlDatabase.hpp"
 #include "../DatabaseError.hpp"
+#include "SqlStatement.hpp"
+
+#include <stdexcept>
 
 using namespace babel;
 
@@ -36,7 +39,8 @@ void SqlDatabase::init() {
     std::string create_messages = "CREATE TABLE IF NOT EXISTS messages ("
                                  "  sender text not null,"
                                  "  receiver text not null,"
-                                 "  message text not null,"
+                                 "  content text not null,"
+                                 "  timestamp integer not null,"
                                  "  foreign key(sender) references clients(username),"
                                  "  foreign key(receiver) references clients(username)"
                                  ");";
@@ -46,20 +50,79 @@ void SqlDatabase::init() {
 }
 
 void SqlDatabase::addClient(std::string username) {
+    std::string insertClient = "INSERT OR IGNORE INTO clients (username) VALUES (?)";
+    SqliteStatement stmt(this->_db, insertClient);
+    stmt.bind(1, username);
+    stmt.step();
 }
 
 void SqlDatabase::addContact(std::string username, std::string contact) {
+    // check if sender is in recipient's contact list
+    std::string selectContact = "SELECT contact FROM contacts WHERE username = ? AND contact = ?";
+    SqliteStatement stmtContact(this->_db, selectContact);
+    stmtContact.bind(1, username);
+    stmtContact.bind(2, contact);
+    bool inContacts = stmtContact.step();
+
+    if (inContacts)
+        return;
+
+    std::string insertContact = "INSERT INTO contacts (username, contact) VALUES (?, ?)";
+    SqliteStatement stmtInsertContact(this->_db, insertContact);
+    stmtInsertContact.bind(1, username);
+    stmtInsertContact.bind(2, contact);
+    stmtInsertContact.step();
 }
 
 void SqlDatabase::addMessage(Message &message) {
+    this->addContact(message.getSender(), message.getRecipient());
+    this->addContact(message.getRecipient(), message.getSender());
+
+    std::string insert_message = "INSERT INTO messages (sender, receiver, content, timestamp) VALUES (?, ?, ?, ?)";
+    SqliteStatement stmt(this->_db, insert_message);
+    stmt.bind(1, message.getSender());
+    stmt.bind(2, message.getRecipient());
+    stmt.bind(3, message.getContent());
+    stmt.bind(4, message.getTimestamp());
+
+    stmt.step();
 }
 
 std::vector<Message> SqlDatabase::getMessages(std::string username) {
-    return {};
+    std::vector<Message> messages;
+
+    // Query messages where username is the sender or the recipient
+    std::string selectMessages = "SELECT sender, receiver, content, timestamp FROM messages WHERE sender = ? OR receiver = ?";
+    SqliteStatement stmt(this->_db, selectMessages);
+    stmt.bind(1, username);
+    stmt.bind(2, username);
+
+    // Iterate over the result set and construct Message objects
+    while (stmt.step() == true) {
+        std::string sender = stmt.getText(0);
+        std::string receiver = stmt.getText(1);
+        std::string content = stmt.getText(2);
+        std::uint64_t timestamp = stmt.getInt64(3);
+        Message message(sender, receiver, content, timestamp);
+        messages.push_back(message);
+    }
+
+    return messages;
 }
 
-std::vector<std::string> SqlDatabase::getContacts(std::string usernam) {
-    return {};
+std::vector<std::string> SqlDatabase::getContacts(std::string username) {
+    std::vector<std::string> contacts = {};
+
+    std::string selectContacts = "SELECT contact FROM contacts WHERE username = ?";
+    SqliteStatement stmt(this->_db, selectContacts);
+    stmt.bind(1, username);
+
+    while (stmt.step() == true) {
+        std::string contact = stmt.getText(0);
+        contacts.push_back(contact);
+    }
+
+    return contacts;
 }
 
 void SqlDatabase::process(std::string request) {

@@ -59,12 +59,15 @@ void ServerManager::login(IoClient *origin) {
     std::vector<Message> messages = this->database->getMessages(origin->username);
 
     for (std::string contact: contacts) {
+        std::cout << "contact = [" << contact << "]" << std::endl;
         ContactPacket packet;
         origin->getTransporter()->sendMessage(packet.serialize());
         origin->addContact(contact);
     }
 
     for (Message message: messages) {
+        std::cout << "{" << message.getTimestamp() << "}: sender = [" << message.getSender() << "] | recipient = [" << message.getRecipient() << "]" << std::endl;
+        std::cout << "[" << message.getContent() << "]" << std::endl;
         MessagePacket packet(message.getSender(), message.getRecipient(), message.getContent(), message.getTimestamp());
         origin->getTransporter()->sendMessage(packet.serialize());
     }
@@ -98,11 +101,15 @@ void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std
         }
     }
 
-    MessagePacket message(origin->username, recipientName, content, this->getTimestamp());
+    std::uint64_t timestamp = this->getTimestamp();
+
+    MessagePacket message(origin->username, recipientName, content, timestamp);
     std::string serializedMessage = message.serialize();
 
     if (recipient != nullptr)
         recipient->getTransporter()->sendMessage(serializedMessage);
     origin->getTransporter()->sendMessage(serializedMessage);
+    Message dbMessage(origin->username, recipientName, content, timestamp);
+    this->database->addMessage(dbMessage);
     // TODO ADD ENTRY TO DATABASE
 }
