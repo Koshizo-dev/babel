@@ -31,12 +31,8 @@ void ChatInfoScene::clear() {
     this->_parent->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void ChatInfoScene::refresh() {
     this->_parent->repaint();
-    // TODO refresh clients
 }
 
 void ChatInfoScene::handleEvent(Event &event) {

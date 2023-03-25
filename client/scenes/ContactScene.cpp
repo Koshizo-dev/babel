@@ -47,7 +47,6 @@ void ContactScene::handleEvent(Event &event) {
         std::string contactFilter = event.data.contactFilter.filter;
 
         for (auto *contact: this->_contacts) {
-            contact->updateChatting();
             if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
                 contact->getButton()->hide();
             else
@@ -116,7 +115,6 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
     QObject::connect(contact->getButton(), &QPushButton::clicked, [=]() {
         if (contact->getClient()->isChatting())
             return;
-        std::cout << "Interacted with client " << contact->getClient()->getUsername() << "!" << std::endl;
         auto previousChatting = this->_clientManager->getChatting();
         previousChatting->setChatting(false);
         contact->getClient()->setChatting(true);
@@ -126,7 +124,8 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
         this->getSceneManager()->getScene()->handleEvent(filterEvent);
 
         Event event(Event::NEW_CHATTING);
-        new (&filterEvent.data.newChatting) Event::NewChatting({previousChatting, contact->getClient()});
+        auto data = new (&event.data.newChatting) Event::NewChatting({previousChatting, contact->getClient()});
+        
         this->getSceneManager()->getScene()->handleEvent(event);
 
     });
