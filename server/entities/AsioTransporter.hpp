@@ -13,16 +13,16 @@ namespace babel {
         public:
             AsioTransporter(asio::io_service &io_service);
 
-            void sendMessage(std::string message) override;
-            void readMessage(std::function<void(std::string)> callback) override;
-            void close() override;
-            bool isClosed() override;
+            const void sendMessage(std::string message) override;
+            const void readMessage(std::function<void(std::string)> callback) override;
+            const void close() override;
+            const bool isClosed() const override;
 
             asio::ip::tcp::socket &socket();
 
         private:
-            void _newWrite();
-            void _endWrite();
+            const void _newWrite();
+            const void _endWrite();
     
             asio::ip::tcp::socket _socket;
             asio::streambuf _buf;

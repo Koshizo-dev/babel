@@ -3,21 +3,21 @@
 
 using namespace babel;
 
-std::shared_ptr<Client> ClientManager::getClient(std::string username) {
+const std::shared_ptr<Client> ClientManager::getClient(std::string username) const {
     for (std::shared_ptr<Client> client: this->clients)
         if (client->getUsername() == username)
             return (client);
     return (nullptr);
 }
 
-std::shared_ptr<Client> ClientManager::getChatting() {
+const std::shared_ptr<Client> ClientManager::getChatting() {
     for (std::shared_ptr<Client> client: this->clients)
         if (client->isChatting())
             return (client);
     return (nullptr);
 }
 
-void ClientManager::reset() {
+const void ClientManager::reset() {
     this->transporter.reset();
     this->sceneManager.reset();
     this->clients.clear();
@@ -26,7 +26,7 @@ void ClientManager::reset() {
     this->self.reset();
 }
 
-void ClientManager::disconnect() {
+const void ClientManager::disconnect() {
     this->self.reset();
     this->clients.clear();
     this->transporter.reset();

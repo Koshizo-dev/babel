@@ -6,47 +6,46 @@ Client::Client(std::string username) {
     this->_username = username;
 }
 
-std::string Client::getUsername() {
+const std::string Client::getUsername() const {
     return (this->_username);
 }
 
-Icon *Client::getIcon(int size) {
+Icon *Client::getIcon(int size) const {
     return (this->_generateIcon(size));
 }
 
-std::vector<std::shared_ptr<Message>> Client::getMessages() {
+const std::vector<std::shared_ptr<Message>> Client::getMessages() const {
     return (this->_messages);
 }
 
-void Client::addMessage(std::shared_ptr<Message> message) {
-    // std::lock_guard<std::mutex> lock(this->_mutex);
+const void Client::addMessage(std::shared_ptr<Message> message) {
     this->_messages.push_back(message);
 }
 
-bool Client::isChatting() {
+const bool Client::isChatting() const {
     return (this->_isChatting);
 }
 
-bool Client::isInCall() {
+const bool Client::isInCall() const {
     return (this->_isInCall);
 }
 
-bool Client::isChatWindow() {
+const bool Client::isChatWindow() const {
     return (this->_isChatWindow);
 }
 
-void Client::setChatting(bool isChatting) {
+const void Client::setChatting(bool isChatting) {
     this->_isChatting = isChatting;
 }
 
-void Client::setInCall(bool isInCall) {
+const void Client::setInCall(bool isInCall) {
     this->_isInCall = isInCall;
 }
 
-void Client::setChatWindow(bool isChatWindow) {
+const void Client::setChatWindow(bool isChatWindow) {
     this->_isChatWindow = isChatWindow;
 }
 
-Icon *Client::_generateIcon(int size) {
+Icon *Client::_generateIcon(int size) const {
     return (new Icon(this->_username, nullptr, size));
 }

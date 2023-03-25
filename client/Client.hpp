@@ -14,18 +14,18 @@ namespace babel {
         public:
             Client(std::string username);
 
-            std::string getUsername();
-            Icon *getIcon(int size = 64);
-            std::vector<std::shared_ptr<Message>> getMessages();
-            bool isChatting();
-            bool isInCall();
-            bool isChatWindow();
+            const std::string getUsername() const;
+            Icon *getIcon(int size = 64) const;
+            const std::vector<std::shared_ptr<Message>> getMessages() const;
+            const bool isChatting() const;
+            const bool isInCall() const;
+            const bool isChatWindow() const;
 
-            void addMessage(std::shared_ptr<Message> message);
+            const void addMessage(std::shared_ptr<Message> message);
 
-            void setChatting(bool isChatting);
-            void setInCall(bool isInCall);
-            void setChatWindow(bool isChatWindow);
+            const void setChatting(bool isChatting);
+            const void setInCall(bool isInCall);
+            const void setChatWindow(bool isChatWindow);
 
         private:
             std::string _username = "Koshizo"; // Easter egg since, not able to have capitals
@@ -33,9 +33,8 @@ namespace babel {
             bool _isInCall = false;
             bool _isChatWindow = false;
             std::vector<std::shared_ptr<Message>> _messages = {};
-            std::mutex _mutex;
 
-            Icon *_generateIcon(int size);
+            Icon *_generateIcon(int size) const;
     };
 
 } // namespace babel

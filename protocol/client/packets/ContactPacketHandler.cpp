@@ -8,7 +8,7 @@
 
 using namespace babel;
 
-void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) {
+const void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) const {
     try {
         ContactPacket &contactPacket = dynamic_cast<ContactPacket&>(packet);
         if (contactPacket.getUsername() == "")

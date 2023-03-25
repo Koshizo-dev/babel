@@ -13,7 +13,7 @@
 
 using namespace babel;
 
-std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::vector<std::unique_ptr<PacketField>> packetFields) {
+std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::vector<std::unique_ptr<PacketField>> packetFields) const {
     switch (packetType) {
         case PacketType::LOGIN:
             return (LoginPacket().deserialize(std::move(packetFields)));
@@ -30,7 +30,7 @@ std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::ve
     return (nullptr);
 }
 
-std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) {
+std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) const {
     FieldType type = static_cast<FieldType>(CharacterField::deserialize(&data[0]).getValue());
 
     switch (type) {
@@ -58,7 +58,7 @@ std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) {
     return (nullptr);
 }
 
-std::unique_ptr<PacketField> Deserializer::nextField(const char *data, int *index) {
+std::unique_ptr<PacketField> Deserializer::nextField(const char *data, int *index) const {
     if (data[0] == 0)
         return (nullptr);
     std::unique_ptr<PacketField> field = nullptr;

@@ -12,9 +12,9 @@ namespace babel {
         public:
             ServerPacketManager(std::shared_ptr<ServerManager> serverManager);
 
-            void handlePacket(Packet &packet) override;
-            void handleServerPacket(Packet &packet, IoClient *origin);
-            void registerHandler(PacketType packetType, std::shared_ptr<ServerPacketHandler> packetHandler);
+            const void handlePacket(Packet &packet) const override;
+            const void handleServerPacket(Packet &packet, IoClient *origin) const;
+            const void registerHandler(PacketType packetType, std::shared_ptr<ServerPacketHandler> packetHandler);
 
         private:
             std::shared_ptr<ServerManager> _serverManager = nullptr;

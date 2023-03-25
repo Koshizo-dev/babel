@@ -7,7 +7,7 @@
 
 using namespace babel;
 
-void LoginErrorPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) {
+const void LoginErrorPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) const {
     try {
         LoginErrorPacket &loginPacket = dynamic_cast<LoginErrorPacket&>(packet);
 

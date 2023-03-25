@@ -9,7 +9,7 @@ namespace babel {
         public:
             EventManager(std::shared_ptr<ServerPacketManager> packetManager);
 
-            void handlePacket(IoClient *origin, std::string serialized);
+            void handlePacket(IoClient *origin, std::string serialized) const;
 
         private:
             std::shared_ptr<ServerPacketManager> _packetManager;

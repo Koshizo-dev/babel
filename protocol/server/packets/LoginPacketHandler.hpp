@@ -7,7 +7,11 @@ namespace babel {
 
     class LoginPacketHandler: public ServerPacketHandler {
         public:
-            void handle(Packet &packet, std::shared_ptr<ServerManager> serverManager, IoClient *origin) override;
+            const void handle(Packet &packet, std::shared_ptr<ServerManager> serverManager, IoClient *origin) const override;
+
+        private:
+            const std::string _trim(const std::string &s) const;
+            const bool _containsChar(const std::string &str, char ch) const;
     };
     
 }

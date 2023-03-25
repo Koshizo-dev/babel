@@ -9,10 +9,10 @@ namespace babel {
 
     class PacketManager {
         public:
-            virtual void handlePacket(Packet &packet) = 0;
+            virtual const void handlePacket(Packet &packet) const = 0;
 
-            std::unique_ptr<Packet> deserialize(std::string &packet);
-            std::string serialize(Packet &packet);
+            std::unique_ptr<Packet> deserialize(std::string &packet) const;
+            const std::string serialize(Packet &packet) const;
     };
     
 }

@@ -18,11 +18,11 @@ ServerPacketManager::ServerPacketManager(std::shared_ptr<ServerManager> serverMa
     this->registerHandler(PacketType::MESSAGE, std::shared_ptr<ServerPacketHandler>(new MessagePacketHandler()));
 }
 
-void ServerPacketManager::handlePacket(Packet &packet) {
+const void ServerPacketManager::handlePacket(Packet &packet) const {
     this->handleServerPacket(packet, nullptr);
 }
 
-void ServerPacketManager::handleServerPacket(Packet &packet, IoClient *origin) {
+const void ServerPacketManager::handleServerPacket(Packet &packet, IoClient *origin) const {
     auto iter = this->_packetHandlers.find(packet.getType());
     if (iter != this->_packetHandlers.end()) {
         auto packetHandler = iter->second;
@@ -30,6 +30,6 @@ void ServerPacketManager::handleServerPacket(Packet &packet, IoClient *origin) {
     }
 }
 
-void ServerPacketManager::registerHandler(PacketType packetType, std::shared_ptr<ServerPacketHandler> packetHandler) {
+const void ServerPacketManager::registerHandler(PacketType packetType, std::shared_ptr<ServerPacketHandler> packetHandler) {
     this->_packetHandlers[packetType] = packetHandler;
 }

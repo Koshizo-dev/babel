@@ -8,10 +8,10 @@ namespace babel {
 
     class Transporter {
         public:
-            virtual void sendMessage(std::string message) = 0;
-            virtual void readMessage(std::function<void(std::string)> callback) = 0;
-            virtual void close() = 0;
-            virtual bool isClosed() = 0;
+            virtual const void sendMessage(std::string message) = 0;
+            virtual const void readMessage(std::function<void(std::string)> callback) = 0;
+            virtual const void close() = 0;
+            virtual const bool isClosed() const = 0;
     };
 
 }

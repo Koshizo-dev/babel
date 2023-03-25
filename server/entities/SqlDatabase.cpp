@@ -21,11 +21,11 @@ void SqlDatabase::connect() {
         throw DatabaseError(sqlite3_errmsg(this->_db));
 }
 
-void SqlDatabase::disconnect() {
+void SqlDatabase::disconnect() const {
     sqlite3_close(this->_db);
 }
 
-void SqlDatabase::init() {
+void SqlDatabase::init() const {
     std::string create_clients = "CREATE TABLE IF NOT EXISTS clients ("
                                  "  username text primary key not null"
                                  ");";
@@ -44,19 +44,19 @@ void SqlDatabase::init() {
                                  "  foreign key(sender) references clients(username),"
                                  "  foreign key(receiver) references clients(username)"
                                  ");";
-    this->process(create_clients);
-    this->process(create_messages);
-    this->process(create_contacts);
+    this->_process(create_clients);
+    this->_process(create_messages);
+    this->_process(create_contacts);
 }
 
-void SqlDatabase::addClient(std::string username) {
+void SqlDatabase::addClient(std::string username) const {
     std::string insertClient = "INSERT OR IGNORE INTO clients (username) VALUES (?)";
     SqliteStatement stmt(this->_db, insertClient);
     stmt.bind(1, username);
     stmt.step();
 }
 
-void SqlDatabase::addContact(std::string username, std::string contact) {
+void SqlDatabase::addContact(std::string username, std::string contact) const {
     // check if sender is in recipient's contact list
     std::string selectContact = "SELECT contact FROM contacts WHERE username = ? AND contact = ?";
     SqliteStatement stmtContact(this->_db, selectContact);
@@ -74,7 +74,7 @@ void SqlDatabase::addContact(std::string username, std::string contact) {
     stmtInsertContact.step();
 }
 
-void SqlDatabase::addMessage(Message &message) {
+void SqlDatabase::addMessage(Message &message) const {
     this->addContact(message.getSender(), message.getRecipient());
     this->addContact(message.getRecipient(), message.getSender());
 
@@ -88,7 +88,7 @@ void SqlDatabase::addMessage(Message &message) {
     stmt.step();
 }
 
-std::vector<Message> SqlDatabase::getMessages(std::string username) {
+std::vector<Message> SqlDatabase::getMessages(std::string username) const {
     std::vector<Message> messages;
 
     // Query messages where username is the sender or the recipient
@@ -110,7 +110,7 @@ std::vector<Message> SqlDatabase::getMessages(std::string username) {
     return messages;
 }
 
-std::vector<std::string> SqlDatabase::getContacts(std::string username) {
+std::vector<std::string> SqlDatabase::getContacts(std::string username) const {
     std::vector<std::string> contacts = {};
 
     std::string selectContacts = "SELECT contact FROM contacts WHERE username = ?";
@@ -125,7 +125,7 @@ std::vector<std::string> SqlDatabase::getContacts(std::string username) {
     return contacts;
 }
 
-void SqlDatabase::process(std::string request) {
+void SqlDatabase::_process(std::string request) const {
     int rc = sqlite3_exec(this->_db, request.c_str(), nullptr, nullptr, nullptr);
 
     if (rc != SQLITE_OK)

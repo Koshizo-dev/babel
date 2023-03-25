@@ -6,7 +6,7 @@
 
 using namespace babel;
 
-void LogoutPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) {
+const void LogoutPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) const {
     try {
         LogoutPacket &logoutPacket = dynamic_cast<LogoutPacket&>(packet);
         clientManager->disconnect();

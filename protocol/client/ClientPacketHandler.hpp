@@ -9,7 +9,7 @@ namespace babel {
 
     class ClientPacketHandler : public PacketHandler {
         public:
-            virtual void handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) = 0;
+            virtual const void handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) const = 0;
     };
     
 }

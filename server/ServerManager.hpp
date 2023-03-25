@@ -12,14 +12,14 @@ namespace babel {
     class ServerManager {
         public:
             void close();
-            std::uint64_t getTimestamp();
+            const std::uint64_t getTimestamp() const;
 
-            void addClient(std::shared_ptr<IoClient> client);
-            bool usernameExists(const std::string &target);
-            std::shared_ptr<IoClient> retrieveClient(const std::string &target);
-            void login(IoClient *origin);
-            void logout(IoClient *origin);
-            void sendMessage(IoClient *origin, std::string recipientName, std::string content);
+            const void addClient(std::shared_ptr<IoClient> client);
+            const bool usernameExists(const std::string &target);
+            const std::shared_ptr<IoClient> retrieveClient(const std::string &target);
+            const void login(IoClient *origin);
+            const void logout(IoClient *origin);
+            const void sendMessage(IoClient *origin, std::string recipientName, std::string content);
 
             std::shared_ptr<Database> database = nullptr;
             std::shared_ptr<ServerPacketManager> packetManager = nullptr;

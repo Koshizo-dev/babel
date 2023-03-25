@@ -12,7 +12,7 @@ namespace babel {
         public:
             Serializer(PacketType type);
 
-            std::string serialize();
+            const std::string serialize();
             Serializer &operator<<(PacketField *field);
 
         private:

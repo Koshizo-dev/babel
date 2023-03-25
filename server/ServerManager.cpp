@@ -20,19 +20,19 @@ void ServerManager::close() {
     this->logout(current.get());
 }
 
-std::uint64_t ServerManager::getTimestamp() {
+const std::uint64_t ServerManager::getTimestamp() const {
     auto now = std::chrono::system_clock::now();
     auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
     return (static_cast<std::int64_t>(now_ms.time_since_epoch().count()));
 }
 
-void ServerManager::addClient(std::shared_ptr<IoClient> client) {
+const void ServerManager::addClient(std::shared_ptr<IoClient> client) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
     this->_clients.push_back(client);
 }
 
-bool ServerManager::usernameExists(const std::string &target) {
+const bool ServerManager::usernameExists(const std::string &target) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
     return std::any_of(this->_clients.begin(), this->_clients.end(), [&](const std::shared_ptr<IoClient> &client) {
@@ -40,7 +40,7 @@ bool ServerManager::usernameExists(const std::string &target) {
     });
 }
 
-std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string &target) {
+const std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string &target) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
     for (auto client: this->_clients)
@@ -50,7 +50,7 @@ std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string &targe
     return (nullptr);
 }
 
-void ServerManager::login(IoClient *origin) {
+const void ServerManager::login(IoClient *origin) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
     std::cout << "[+] " << origin->username << std::endl;
@@ -66,14 +66,12 @@ void ServerManager::login(IoClient *origin) {
     }
 
     for (Message message: messages) {
-        std::cout << "{" << message.getTimestamp() << "}: sender = [" << message.getSender() << "] | recipient = [" << message.getRecipient() << "]" << std::endl;
-        std::cout << "[" << message.getContent() << "]" << std::endl;
         MessagePacket packet(message.getSender(), message.getRecipient(), message.getContent(), message.getTimestamp());
         origin->getTransporter()->sendMessage(packet.serialize());
     }
 }
 
-void ServerManager::logout(IoClient *origin) {
+const void ServerManager::logout(IoClient *origin) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
     if (origin->username == "")
@@ -85,7 +83,7 @@ void ServerManager::logout(IoClient *origin) {
     }
 }
 
-void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
+const void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
     if (!origin->isContactWith(recipientName)) {
         ContactPacket packet(recipientName);
         origin->getTransporter()->sendMessage(packet.serialize());
@@ -111,5 +109,4 @@ void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std
     origin->getTransporter()->sendMessage(serializedMessage);
     Message dbMessage(origin->username, recipientName, content, timestamp);
     this->database->addMessage(dbMessage);
-    // TODO ADD ENTRY TO DATABASE
 }

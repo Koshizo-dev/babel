@@ -4,12 +4,11 @@
 #include "../../../client/Message.hpp"
 #include "../../packets/MessagePacket.hpp"
 
-#include <iostream>
 #include <typeinfo>
 
 using namespace babel;
 
-void MessagePacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) {
+const void MessagePacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) const {
     try {
         MessagePacket &messagePacket = dynamic_cast<MessagePacket&>(packet);
 

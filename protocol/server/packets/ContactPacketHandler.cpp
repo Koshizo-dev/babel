@@ -7,7 +7,7 @@
 
 using namespace babel;
 
-void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ServerManager> serverManager, IoClient *origin) {
+const void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ServerManager> serverManager, IoClient *origin) const {
     try {
         ContactPacket &contactPacket = dynamic_cast<ContactPacket&>(packet);
         std::string username = this->_trim(contactPacket.getUsername());
@@ -20,7 +20,7 @@ void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ServerManager>
     } catch (std::bad_cast) {}
 }
 
-std::string ContactPacketHandler::_trim(const std::string& s) {
+const std::string ContactPacketHandler::_trim(const std::string& s) const {
     std::string result = s;
     result.erase(std::remove_if(result.begin(), result.end(), [](char c) { return c == ' '; }), result.end());
     return result;

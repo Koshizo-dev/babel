@@ -12,8 +12,8 @@ namespace babel {
         public:
             ClientPacketManager(std::shared_ptr<ClientManager> clientManager);
     
-            void handlePacket(Packet &packet) override;
-            void registerHandler(PacketType packetType, std::shared_ptr<ClientPacketHandler> packetHandler);
+            const void handlePacket(Packet &packet) const override;
+            const void registerHandler(PacketType packetType, std::shared_ptr<ClientPacketHandler> packetHandler);
 
         private:
             std::shared_ptr<ClientManager> _clientManager = nullptr;

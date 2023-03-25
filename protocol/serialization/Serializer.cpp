@@ -7,7 +7,7 @@ using namespace babel;
 
 Serializer::Serializer(PacketType type): _type(type) {}
 
-std::string Serializer::serialize() {
+const std::string Serializer::serialize() {
     std::stringstream ss;
     int size = 0;
     char magic = 0x32;

@@ -11,7 +11,7 @@ asio::ip::tcp::socket &AsioTransporter::socket() {
     return (this->_socket);
 }
 
-void AsioTransporter::sendMessage(std::string message) {
+const void AsioTransporter::sendMessage(std::string message) {
     this->_newWrite();
     message += "\r\n";
     asio::async_write(this->_socket, asio::buffer(message),
@@ -20,7 +20,7 @@ void AsioTransporter::sendMessage(std::string message) {
     });
 }
 
-void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
+const void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
     asio::async_read_until(this->_socket, this->_buf, "\r\n",
         [this, callback](std::error_code ec, std::size_t length) {
             if (ec) {
@@ -35,7 +35,7 @@ void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
     });
 }
 
-void AsioTransporter::close() {
+const void AsioTransporter::close() {
 
     try {
         std::unique_lock<std::mutex> lock(this->_mutex);
@@ -45,16 +45,16 @@ void AsioTransporter::close() {
 
 }
 
-bool AsioTransporter::isClosed() {
+const bool AsioTransporter::isClosed() const {
     return (this->_isClosed);
 }
 
-void AsioTransporter::_newWrite() {
+const void AsioTransporter::_newWrite() {
     std::unique_lock<std::mutex> lock(this->_mutex);
     this->_writesProcessing++;
 }
 
-void AsioTransporter::_endWrite() {
+const void AsioTransporter::_endWrite() {
     {
         std::unique_lock<std::mutex> lock(this->_mutex);
         _writesProcessing--;

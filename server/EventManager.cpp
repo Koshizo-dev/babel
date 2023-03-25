@@ -6,7 +6,7 @@ using namespace babel;
 EventManager::EventManager(std::shared_ptr<ServerPacketManager> packetManager): _packetManager(packetManager) {
 }
 
-void EventManager::handlePacket(IoClient *origin, std::string serialized) {
+void EventManager::handlePacket(IoClient *origin, std::string serialized) const {
     std::unique_ptr<Packet> packet = this->_packetManager->deserialize(serialized);
     if (packet == nullptr) {
         std::string username = origin->username;
