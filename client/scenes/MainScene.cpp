@@ -55,9 +55,6 @@ void MainScene::clear() {
     this->_parent->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void MainScene::refresh() {
     this->_user->refresh();
     this->_contacts->refresh();
@@ -68,6 +65,15 @@ void MainScene::refresh() {
     this->_chatBox->refresh();
     
     this->_parent->repaint();
+}
+
+void MainScene::handleEvent(Event &event) {
+    this->_user->handleEvent(event);
+    this->_contacts->handleEvent(event);
+    this->_search->handleEvent(event);
+    this->_chatInfo->handleEvent(event);
+    this->_messages->handleEvent(event);
+    this->_chatBox->handleEvent(event);
 }
 
 std::shared_ptr<SceneManager> MainScene::getSceneManager() {

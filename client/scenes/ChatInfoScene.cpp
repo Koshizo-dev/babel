@@ -9,6 +9,7 @@ ChatInfoScene::ChatInfoScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing ContactScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
+    this->_chattingWith = clientManager->getChatting();
     this->_initWidgets();
     this->_initLayouts();
     this->_placeWidgets();
@@ -34,10 +35,24 @@ void ChatInfoScene::clear() {
 // Mainly used when window size changed by example
 // Or any variable that might have been shown on screen was updated.
 void ChatInfoScene::refresh() {
+    this->_parent->repaint();
+    // TODO refresh clients
+}
+
+void ChatInfoScene::handleEvent(Event &event) {
+    if (event.type != Event::CALL_STATE_UPDATE && event.type != Event::NEW_CHATTING)
+        return;
+
+    if (event.type == Event::NEW_CHATTING) {
+        this->_chattingWith = event.data.newChatting.newClient;
+        this->_userLabel->setText(this->_chattingWith->getUsername().c_str());
+    } else
+        this->_clientManager->self->setInCall(!this->_clientManager->self->isInCall());
+
     if (this->_clientManager->self->isInCall()) {
         this->_callUpButton->hide();
         this->_callUpAbsentButton->hide();
-        if (this->_clientManager->getChatting()->isInCall()) {
+        if (this->_chattingWith->isInCall()) {
             this->_hangUpAbsentButton->hide();
             this->_hangUpButton->show();
         }
@@ -48,7 +63,7 @@ void ChatInfoScene::refresh() {
     } else {
         this->_hangUpButton->hide();
         this->_hangUpAbsentButton->hide();
-        if (this->_clientManager->getChatting()->isInCall()) {
+        if (this->_chattingWith->isInCall()) {
             this->_callUpAbsentButton->hide();
             this->_callUpButton->show();
         }
@@ -57,11 +72,6 @@ void ChatInfoScene::refresh() {
             this->_callUpAbsentButton->show();
         }
     }
-
-    this->_userLabel->setText(this->_clientManager->getChatting()->getUsername().c_str());
-
-    this->_parent->repaint();
-    // TODO refresh clients
 }
 
 std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() {
@@ -133,13 +143,11 @@ void ChatInfoScene::_placeWidgets() {
 void ChatInfoScene::_callUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(true);
-    this->refresh();
     printf("Joined call!\n");
 }
 
 void ChatInfoScene::_hangUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(false);
-    this->refresh();
     printf("Left call!\n");
 }

@@ -17,6 +17,7 @@ namespace babel {
             void display() override;
             void clear() override;
             void refresh() override;
+            void handleEvent(Event &event) override;
             std::shared_ptr<SceneManager> getSceneManager() override;
             QWidget *getWidget();
             

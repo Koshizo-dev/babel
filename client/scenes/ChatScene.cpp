@@ -11,6 +11,7 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing ChatScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
+    this->_chattingWith = this->_clientManager->getChatting();
     this->_initWidgets();
     this->_initLayouts();
     this->_placeWidgets();
@@ -39,23 +40,40 @@ void ChatScene::clear() {
 // Or any variable that might have been shown on screen was updated.
 void ChatScene::refresh() {
     this->_parent->repaint();
-    for (auto *message: this->_messages)
-        this->_messagesLayout->removeItem(message->getLayout());
-    this->_messages.clear();
-    auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->getChatting());
-
-    for (auto messages: groupedMessages) {
-        std::shared_ptr<Client> client = messages[0]->getAuthor();
-        MessageBox *message = new MessageBox(client, messages);
-        this->_messages.push_back(message);
-    }
-    for (auto *message: this->_messages)
-        this->_messagesLayout->addLayout(message->getLayout());
-    QTimer::singleShot(0, [this]() {
-        QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
-        vScrollBar->setValue(vScrollBar->maximum());
-    });
     // TODO refresh clients
+}
+
+void ChatScene::handleEvent(Event &event) {
+    switch (event.type) {
+        case Event::NEW_CHATTING:
+            {
+                this->_chattingWith = event.data.newChatting.newClient;
+                for (auto *message: this->_messages)
+                    this->_messagesLayout->removeItem(message->getLayout());
+                    this->_messages.clear();
+            }
+            break;
+        case Event::NEW_MESSAGE:
+            {
+                auto newMessage = event.data.newMessage.message;
+                if (newMessage->getAuthor()->getUsername() != this->_chattingWith->getUsername() && newMessage->getAuthor()->getUsername() != this->_clientManager->self->getUsername())
+                    return;
+                MessageBox *message = new MessageBox(newMessage->getAuthor(), {newMessage});
+
+                this->_messages.push_back(message);
+                this->_messagesLayout->addLayout(message->getLayout());
+                // TODO group message and append it to the vector
+            }
+            break;
+        case Event::NEW_BULK_MESSAGE:
+            {
+                auto newMessage = event.data.newBulkMessage.messages;
+                // TODO only add messages created by self and chatting user
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 std::shared_ptr<SceneManager> ChatScene::getSceneManager() {

@@ -38,10 +38,15 @@ void LoggingScene::clear() {
     this->_widget->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void LoggingScene::refresh() {
+}
+
+void LoggingScene::handleEvent(Event &event) {
+    if (event.type == Event::LOGIN_FAILED) {
+        std::cerr << "login failed: [" << event.data.loginFailed.errorMessage << "]" << std::endl;
+        this->_loggingAction = false;
+        // TODO
+    }
 }
 
 std::shared_ptr<SceneManager> LoggingScene::getSceneManager() {
@@ -54,6 +59,7 @@ void LoggingScene::_loggingButtonClicked() {
     }
 
     this->_loggingAction = true;
+    // TODO Not close the transporter if same hostname + port
     std::string hostname = this->_serverField->getValue();
     unsigned int port = std::stoi(this->_portField->getValue());
 

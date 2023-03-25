@@ -27,11 +27,15 @@ void SearchScene::display() {
 void SearchScene::clear() {
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void SearchScene::refresh() {
-    this->_searchInput->setText(this->getSceneManager()->getContactFilter().c_str());
+}
+
+void SearchScene::handleEvent(Event &event) {
+    if (event.type != Event::CONTACT_FILTER_UPDATE)
+        return;
+    auto newFilter = event.data.contactFilter.filter;
+
+    this->_searchInput->setText(newFilter.c_str());
 }
 
 std::shared_ptr<SceneManager> SearchScene::getSceneManager() {
@@ -51,9 +55,9 @@ void SearchScene::_initWidgets() {
     this->_searchInput->setPlaceholderText("Find an user.");
 
     QObject::connect(this->_searchInput, &QLineEdit::textChanged, [=]() {
-        // TODO If user does exist, switch up to his conversation, otherwise add a new contact at the top of the list but don't switch to it
-        this->getSceneManager()->setContactFilter(this->_searchInput->text().toStdString());
-        this->getSceneManager()->getScene()->refresh();
+        Event filterEvent(Event::CONTACT_FILTER_UPDATE);
+        new (&filterEvent.data.contactFilter) Event::ContactFilterUpdate({this->_searchInput->text().toStdString()});
+        this->getSceneManager()->getScene()->handleEvent(filterEvent);
     });
 
     QObject::connect(this->_searchInput, &QLineEdit::returnPressed, [=]() {

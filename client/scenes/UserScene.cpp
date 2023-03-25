@@ -30,12 +30,11 @@ void UserScene::clear() {
     this->_parent->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void UserScene::refresh() {
     this->_parent->repaint();
-    // TODO refresh clients
+}
+
+void UserScene::handleEvent(Event &event) {
 }
 
 std::shared_ptr<SceneManager> UserScene::getSceneManager() {

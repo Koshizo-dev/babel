@@ -32,20 +32,28 @@ void ContactScene::clear() {
     this->_parent->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void ContactScene::refresh() {
-    std::string contactFilter = this->getSceneManager()->getContactFilter();
-    for (auto *contact: this->_contacts) {
-        contact->updateChatting();
-        if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
-            contact->getButton()->hide();
-        else
-            contact->getButton()->show();
-    }
     this->_parent->repaint();
-    // TODO refresh clients
+}
+
+void ContactScene::handleEvent(Event &event) {
+    if (event.type == Event::NEW_CHATTING) {
+        for (auto *contact: this->_contacts) {
+            if (contact->getClient() == event.data.newChatting.previousClient || contact->getClient() == event.data.newChatting.newClient)
+                contact->updateChatting();
+        }
+    }
+    if (event.type == Event::CONTACT_FILTER_UPDATE) {
+        std::string contactFilter = event.data.contactFilter.filter;
+
+        for (auto *contact: this->_contacts) {
+            contact->updateChatting();
+            if (contact->getClient()->getUsername().substr(0, contactFilter.size()) != contactFilter)
+                contact->getButton()->hide();
+            else
+                contact->getButton()->show();
+        }
+    }
 }
 
 std::shared_ptr<SceneManager> ContactScene::getSceneManager() {
@@ -108,12 +116,19 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
     QObject::connect(contact->getButton(), &QPushButton::clicked, [=]() {
         if (contact->getClient()->isChatting())
             return;
-        // TODO change the ChatScene
         std::cout << "Interacted with client " << contact->getClient()->getUsername() << "!" << std::endl;
-        this->_clientManager->getChatting()->setChatting(false);
+        auto previousChatting = this->_clientManager->getChatting();
+        previousChatting->setChatting(false);
         contact->getClient()->setChatting(true);
-        this->getSceneManager()->setContactFilter("");
-        this->getSceneManager()->getScene()->refresh();
+
+        Event filterEvent(Event::CONTACT_FILTER_UPDATE);
+        new (&filterEvent.data.contactFilter) Event::ContactFilterUpdate({""});
+        this->getSceneManager()->getScene()->handleEvent(filterEvent);
+
+        Event event(Event::NEW_CHATTING);
+        new (&filterEvent.data.newChatting) Event::NewChatting({previousChatting, contact->getClient()});
+        this->getSceneManager()->getScene()->handleEvent(event);
+
     });
     return (contact);
 }

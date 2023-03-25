@@ -11,7 +11,8 @@ void LoginErrorPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManag
     try {
         LoginErrorPacket &loginPacket = dynamic_cast<LoginErrorPacket&>(packet);
 
-        std::cerr << "Error = " << loginPacket.getError() << std::endl;
-        // clientManager->eventManager->
+        Event event(Event::LOGIN_FAILED);
+        new (&event.data.loginFailed) Event::LoginFailed({loginPacket.getError()});
+        clientManager->sceneManager->getScene()->handleEvent(event);
     } catch (std::bad_cast) {}
 }

@@ -20,11 +20,3 @@ void SceneManager::setScene(Scene *scene) {
 std::shared_ptr<Scene> SceneManager::getScene(void) {
     return (this->_scene);
 }
-
-std::string SceneManager::getContactFilter() {
-    return (this->_contactFilter);
-}
-
-void SceneManager::setContactFilter(std::string contactFilter) {
-    this->_contactFilter = contactFilter;
-}

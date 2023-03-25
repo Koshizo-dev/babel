@@ -18,6 +18,7 @@ namespace babel {
             void display() override;
             void clear() override;
             void refresh() override;
+            void handleEvent(Event &event) override;
             std::shared_ptr<SceneManager> getSceneManager() override;
             QWidget *getWidget();
 
@@ -32,5 +33,6 @@ namespace babel {
             QScrollArea* _scrollArea = nullptr;
             QWidget* _parent = nullptr;
             std::shared_ptr<ClientManager> _clientManager = nullptr;
+            std::shared_ptr<Client> _chattingWith = nullptr;
     };
 }
