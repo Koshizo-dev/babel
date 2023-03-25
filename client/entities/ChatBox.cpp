@@ -15,7 +15,7 @@ ChatBox::ChatBox(std::string placeHolder, std::shared_ptr<ClientManager> clientM
     this->_chatInput->installEventFilter(this);
 }
 
-void ChatBox::setPlaceholderText(std::string placeHolder) {
+const void ChatBox::setPlaceholderText(std::string placeHolder) const {
     this->_chatInput->setPlaceholderText(placeHolder.c_str());
 }
 
@@ -42,17 +42,15 @@ bool ChatBox::eventFilter(QObject *object, QEvent *event) {
     return (QWidget::eventFilter(object, event));
 }
 
-void ChatBox::handleShiftReturn() {
+const void ChatBox::handleShiftReturn() {
     QFontMetrics fontMetrics(this->_chatInput->font());
     int lineHeight = fontMetrics.lineSpacing();
 
     this->_chatInput->ensureCursorVisible();
-    //else
-       // this->_chatInput->verticalScrollBar()->setValue(scrollbarPrevValue - lineHeight);
     this->_chatInput->insertPlainText("\n"); // Append a new line
 }
 
-void ChatBox::handleReturn() {
+const void ChatBox::handleReturn() {
     MessagePacket packet(this->_clientManager->getChatting()->getUsername(), this->_chatInput->toPlainText().toStdString());
     this->_clientManager->transporter->sendMessage(packet.serialize());
     this->_chatInput->clear();

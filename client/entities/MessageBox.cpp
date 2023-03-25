@@ -10,15 +10,15 @@ MessageBox::MessageBox(std::shared_ptr<Client> client, std::vector<std::shared_p
     this->_joinElements();
 }
 
-std::shared_ptr<Client> MessageBox::getClient() {
+const std::shared_ptr<Client> MessageBox::getClient() const {
     return (this->_client);
 }
 
-QLayout *MessageBox::getLayout() {
+QLayout *MessageBox::getLayout() const {
     return (this->_layout);
 }
 
-void MessageBox::_initElements() {
+const void MessageBox::_initElements() {
     std::string name = this->_client->getUsername();
     this->_userLayout = new QHBoxLayout();
     this->_messageLayout = new QVBoxLayout();
@@ -30,7 +30,7 @@ void MessageBox::_initElements() {
         this->_messageLabels.push_back(this->_generateMessage(message));
 }
 
-void MessageBox::_joinElements() {
+const void MessageBox::_joinElements() {
     this->_userLayout->addWidget(this->_userIcon);
     this->_userLayout->addWidget(this->_userLabel, 0, Qt::AlignTop);
     this->_messageLayout->addLayout(this->_userLayout);
@@ -47,7 +47,7 @@ void MessageBox::_joinElements() {
     this->_layout->setContentsMargins(0, 0, 0, 0);
 }
 
-QLabel *MessageBox::_generateMessage(std::shared_ptr<Message> message) {
+QLabel *MessageBox::_generateMessage(std::shared_ptr<Message> message) const {
     auto messageLabel = new QLabel(message->getContent().c_str());
     messageLabel->setStyleSheet("font-size: 16px;");
 

@@ -23,14 +23,14 @@ NamedTextField::NamedTextField(std::string name, QWidget *parent, double modifie
 NamedTextField::~NamedTextField() {
 }
 
-QHBoxLayout *NamedTextField::getLayout() {
+QHBoxLayout *NamedTextField::getLayout() const {
     return (this->_layout);
 }
 
-void NamedTextField::setValue(std::string value) {
+const void NamedTextField::setValue(std::string value) {
     this->_input->setText(value.c_str());
 }
 
-std::string NamedTextField::getValue() {
+const std::string NamedTextField::getValue() const {
     return (this->_input->text().toStdString());
 }

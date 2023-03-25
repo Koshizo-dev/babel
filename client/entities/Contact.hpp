@@ -13,15 +13,15 @@ namespace babel {
             Contact(std::shared_ptr<Client> client);
             ~Contact();
     
-            std::shared_ptr<Client> getClient() const;
-            QPushButton *getButton();
-            QLabel *getButtonLabel();
-            QHBoxLayout *getButtonLayout();
-            void updateChatting();
+            const std::shared_ptr<Client> getClient() const;
+            QPushButton *getButton() const;
+            QLabel *getButtonLabel() const;
+            QHBoxLayout *getButtonLayout() const;
+            const void updateChatting() const;
 
         private:
-            void _joinElements();
-            void _initElements();
+            const void _joinElements();
+            const void _initElements();
 
             QPushButton *_button = nullptr;
             QLabel *_buttonLabel = nullptr;

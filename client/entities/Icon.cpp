@@ -41,8 +41,7 @@ void Icon::paintEvent(QPaintEvent *event) {
     }
 }
 
-std::string Icon::_generateSeed(const std::string &input)
-{
+const std::string Icon::_generateSeed(const std::string &input) const {
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(input.c_str(), input.size());
     QByteArray result = hash.result();

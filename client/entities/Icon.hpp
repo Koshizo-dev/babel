@@ -13,6 +13,6 @@ namespace babel {
         private:
             std::string _seed;
             int _size;
-            std::string _generateSeed(const std::string &input);
+            const std::string _generateSeed(const std::string &input) const;
     };
 }

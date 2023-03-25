@@ -12,9 +12,9 @@ namespace babel {
             NamedTextField(std::string name, QWidget* parent, double modifier);
             ~NamedTextField();
 
-            QHBoxLayout *getLayout();
-            void setValue(std::string value);
-            std::string getValue();
+            QHBoxLayout *getLayout() const;
+            const void setValue(std::string value);
+            const std::string getValue() const;
 
         private:
             QWidget *_parent = nullptr;

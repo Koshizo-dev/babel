@@ -11,23 +11,23 @@ Contact::Contact(std::shared_ptr<Client> client) {
 Contact::~Contact() {
 }
 
-std::shared_ptr<Client> Contact::getClient() const {
+const std::shared_ptr<Client> Contact::getClient() const {
     return (this->_client);
 }
 
-QPushButton *Contact::getButton() {
+QPushButton *Contact::getButton() const {
     return (this->_button);
 }
 
-QLabel *Contact::getButtonLabel() {
+QLabel *Contact::getButtonLabel() const {
     return (this->_buttonLabel);
 }
 
-QHBoxLayout *Contact::getButtonLayout() {
+QHBoxLayout *Contact::getButtonLayout() const {
     return (this->_buttonLayout);
 }
 
-void Contact::updateChatting() {
+const void Contact::updateChatting() const {
     if (this->_client->isChatting()) {
         this->_button->setStyleSheet("background-color: lightgray");
         this->_buttonLabel->setStyleSheet("background-color: lightgray");
@@ -37,14 +37,14 @@ void Contact::updateChatting() {
     }
 }
 
-void Contact::_initElements() {
+const void Contact::_initElements() {
     std::string name = this->_client->getUsername();
     this->_button = new QPushButton();
     this->_buttonLayout = new QHBoxLayout();
     this->_buttonLabel = new QLabel(name.c_str());
 }
 
-void Contact::_joinElements() {
+const void Contact::_joinElements() {
     this->_buttonLayout->addWidget(this->_client->getIcon());
     this->_buttonLayout->addWidget(this->_buttonLabel);
 

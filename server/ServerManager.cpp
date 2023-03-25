@@ -94,7 +94,7 @@ const void ServerManager::sendMessage(IoClient *origin, std::string recipientNam
     if (recipient != nullptr) {
         if (!recipient->isContactWith(origin->username)) {
             ContactPacket packet(origin->username);
-            origin->getTransporter()->sendMessage(packet.serialize());
+            recipient->getTransporter()->sendMessage(packet.serialize());
             recipient->addContact(origin->username);
         }
     }

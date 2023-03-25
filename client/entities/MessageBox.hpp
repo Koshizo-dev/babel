@@ -15,13 +15,13 @@ namespace babel {
         public:
             MessageBox(std::shared_ptr<Client> client, std::vector<std::shared_ptr<Message>> messages);
 
-            std::shared_ptr<Client> getClient();
-            QLayout *getLayout();
+            const std::shared_ptr<Client> getClient() const;
+            QLayout *getLayout() const;
 
         private:
-            void _joinElements();
-            void _initElements();
-            QLabel *_generateMessage(std::shared_ptr<Message> message);
+            const void _joinElements();
+            const void _initElements();
+            QLabel *_generateMessage(std::shared_ptr<Message> message) const;
 
             std::vector<QLabel*> _messageLabels = {};
             QLabel *_userLabel = nullptr;

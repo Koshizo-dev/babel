@@ -11,10 +11,10 @@ namespace babel {
         public:
             ChatBox(std::string placeHolder, std::shared_ptr<ClientManager> clientManager);
 
-            void handleShiftReturn();
-            void handleReturn();
-
-            void setPlaceholderText(std::string placeHolder);
+            const void setPlaceholderText(std::string placeHolder) const;
+    
+            const void handleShiftReturn();
+            const void handleReturn();
 
         protected:
             bool eventFilter(QObject* obj, QEvent* event) override;
