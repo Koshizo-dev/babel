@@ -18,18 +18,17 @@ const size_t IntegerField::getSize() const {
 
 const std::string IntegerField::serialize(bool showHeader) const {
     std::stringstream ss;
-    char byte1 = (this->_value & 0x000000ff);
-    char byte2 = ((this->_value & 0x0000ff00) >> 8);
-    char byte3 = ((this->_value & 0x00ff0000) >> 16);
-    char byte4 = ((this->_value & 0xff000000) >> 24);
+
+    char bytes[4];
+    for (int i = 0; i < 4; i++)
+        bytes[i] = static_cast<unsigned char>((this->_value >> (i * 8)) & 0xff);
 
     if (showHeader)
         ss << CharacterField(this->getType()).serialize(false);
 
-    ss.write(&byte1, 1);
-    ss.write(&byte2, 1);
-    ss.write(&byte3, 1);
-    ss.write(&byte4, 1);
+    for (int i = 0; i < 4; i++)
+        ss.write(&bytes[i], 1);
+
     return (ss.str());
 }
 

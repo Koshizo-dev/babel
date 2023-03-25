@@ -14,9 +14,13 @@ namespace babel {
             const int getValue() const;
 
             static IntegerField deserialize(char const *data) {
-                int value;
-
-                value = (data[0] & 0xff) | ((data[1] & 0xff) << 8) | ((data[2] & 0xff) << 16) | ((data[3] & 0xff) << 24);
+                int value = 0;
+                if (PacketField::isBigEndian())
+                    for (int i = 3; i >= 0; i--)
+                        value |= static_cast<int>(static_cast<unsigned char>(data[i])) << ((3 - i) * 8);
+                else
+                    for (int i = 0; i < 4; i++)
+                        value |= static_cast<int>(static_cast<unsigned char>(data[i])) << (i * 8);
 
                 return (IntegerField(value));
             }

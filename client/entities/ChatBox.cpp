@@ -1,9 +1,12 @@
 #include "ChatBox.hpp"
+#include "../../protocol/packets/MessagePacket.hpp"
+
 #include <QScrollBar>
 
 using namespace babel;
 
-ChatBox::ChatBox(std::string placeHolder) {
+ChatBox::ChatBox(std::string placeHolder, std::shared_ptr<ClientManager> clientManager) {
+    this->_clientManager = clientManager;
     this->_chatInput = new QTextEdit(this);
     
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -51,5 +54,7 @@ void ChatBox::handleShiftReturn() {
 }
 
 void ChatBox::handleReturn() {
-    printf("Return key press detected.\n");
+    MessagePacket packet(this->_clientManager->getChatting()->getUsername(), this->_chatInput->toPlainText().toStdString());
+    this->_clientManager->transporter->sendMessage(packet.serialize());
+    this->_chatInput->clear();
 }

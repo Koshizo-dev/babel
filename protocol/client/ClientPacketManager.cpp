@@ -4,6 +4,7 @@
 #include "packets/LoginPacketHandler.hpp"
 #include "packets/LoginErrorPacketHandler.hpp"
 #include "packets/LogoutPacketHandler.hpp"
+#include "packets/MessagePacketHandler.hpp"
 
 using namespace babel;
 
@@ -13,6 +14,7 @@ ClientPacketManager::ClientPacketManager(std::shared_ptr<ClientManager> clientMa
     this->registerHandler(PacketType::LOGIN, std::shared_ptr<ClientPacketHandler>(new LoginPacketHandler()));
     this->registerHandler(PacketType::LOGIN_ERROR, std::shared_ptr<ClientPacketHandler>(new LoginErrorPacketHandler()));
     this->registerHandler(PacketType::LOGOUT, std::shared_ptr<ClientPacketHandler>(new LogoutPacketHandler()));
+    this->registerHandler(PacketType::MESSAGE, std::shared_ptr<ClientPacketHandler>(new MessagePacketHandler()));
 }
 
 void ClientPacketManager::handlePacket(Packet &packet) {

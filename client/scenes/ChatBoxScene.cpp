@@ -58,7 +58,7 @@ void ChatBoxScene::_initLayouts() {
 }
 
 void ChatBoxScene::_initWidgets() {
-    this->_chatBoxInput = new ChatBox((std::string("Message @") + this->_clientManager->getChatting()->getUsername()));
+    this->_chatBoxInput = new ChatBox((std::string("Message @") + this->_clientManager->getChatting()->getUsername()), this->_clientManager);
 }
 
 void ChatBoxScene::_placeWidgets() {
