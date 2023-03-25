@@ -1,5 +1,6 @@
 #include "AsioServer.hpp"
 #include "AsioTransporter.hpp"
+#include "../TransporterError.hpp"
 
 #include <iostream>
 
@@ -20,10 +21,10 @@ void AsioServer::_accept() {
     auto new_transporter = std::make_shared<AsioTransporter>(this->_io_service);
 
     this->_acceptor.async_accept(new_transporter->socket(),
-        [this, new_transporter](std::error_code ec) {
-            if (!ec) {
-                this->_serverManager->clients.push_back(std::make_shared<IoClient>(this->_serverManager->eventManager, new_transporter));
-            }
-            this->_accept();
-        });
+    [this, new_transporter](std::error_code ec) {
+        if (!ec) {
+            this->_serverManager->clients.push_back(std::make_shared<IoClient>(this->_serverManager->eventManager, new_transporter));
+        }
+        this->_accept();
+    });
 }

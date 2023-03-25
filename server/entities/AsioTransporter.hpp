@@ -14,12 +14,15 @@ namespace babel {
 
             void sendMessage(std::string message) override;
             void readMessage(std::function<void(std::string)> callback) override;
+            void close() override;
+            bool isClosed() override;
 
             asio::ip::tcp::socket &socket();
 
         private:
             asio::ip::tcp::socket _socket;
             asio::streambuf _buf;
+            bool _isClosed = false;
     };
     
 }

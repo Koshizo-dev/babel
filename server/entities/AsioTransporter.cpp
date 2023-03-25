@@ -1,6 +1,5 @@
 #include "AsioTransporter.hpp"
-
-#include <iostream>
+#include "../TransporterError.hpp"
 
 using namespace babel;
 
@@ -14,7 +13,7 @@ void AsioTransporter::sendMessage(std::string message) {
     message += "\r\n";
     asio::async_write(this->_socket, asio::buffer(message),
         [this](std::error_code ec, std::size_t /*length*/) {
-    });
+});
 }
 
 void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
@@ -30,4 +29,16 @@ void AsioTransporter::readMessage(std::function<void(std::string)> callback) {
             this->_buf.consume(length);
             callback(message);
     });
+}
+
+void AsioTransporter::close() {
+    try {
+        this->_socket.close();
+        this->_isClosed = true;
+    }
+    catch (asio::system_error &error) {}
+}
+
+bool AsioTransporter::isClosed() {
+    return (this->_isClosed);
 }

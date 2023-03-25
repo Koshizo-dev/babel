@@ -18,7 +18,6 @@ namespace babel {
 
         private:
             void _handle();
-    
             std::shared_ptr<EventManager> _eventManager;
             std::shared_ptr<Transporter> _transporter;
     };

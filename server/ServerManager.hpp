@@ -10,6 +10,8 @@ namespace babel {
     class ServerManager {
         public:
             bool usernameExists(const std::string &target);
+            void login(IoClient *origin);
+            void logout(IoClient *origin);
     
             std::vector<std::shared_ptr<IoClient>> clients = {};
             std::shared_ptr<Database> database = nullptr;

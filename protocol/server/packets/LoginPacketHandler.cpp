@@ -33,5 +33,6 @@ void LoginPacketHandler::handle(Packet &packet, std::shared_ptr<ServerManager> s
 
         origin->username = username;
         origin->getTransporter()->sendMessage(LoginPacket(username).serialize());
+        serverManager->login(origin);
     } catch (std::bad_cast) {}
 }

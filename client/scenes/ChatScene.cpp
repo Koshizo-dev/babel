@@ -14,7 +14,6 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
     this->_chattingWith = this->_clientManager->getChatting();
     this->_scrollArea = new QScrollArea();
     this->_parent = new QWidget();
-    // this->clear();
 }
 
 ChatScene::~ChatScene() {
@@ -26,9 +25,8 @@ std::string ChatScene::getName() {
 
 void ChatScene::display() {
     this->_scrollArea->show();
-    if (this->_chattingWith != nullptr) {
+    if (this->_chattingWith != nullptr)
         this->_parent->show();
-    }
 }
 
 void ChatScene::clear() {

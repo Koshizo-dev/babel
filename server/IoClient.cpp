@@ -1,5 +1,6 @@
 #include "IoClient.hpp"
 #include "EventManager.hpp"
+#include "TransporterError.hpp"
 
 #include <iostream>
 
@@ -17,8 +18,11 @@ std::shared_ptr<Transporter> IoClient::getTransporter() {
 }
 
 void IoClient::_handle() {
+    if (this->_transporter->isClosed())
+        return;
     this->_transporter->readMessage([this](std::string message) {
-        this->_eventManager->handlePacket(this, message);
-        this->_handle();
+        if (message != "")
+            this->_eventManager->handlePacket(this, message);
+        return this->_handle();
     });
 }

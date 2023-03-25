@@ -10,6 +10,8 @@ namespace babel {
         public:
             virtual void sendMessage(std::string message) = 0;
             virtual void readMessage(std::function<void(std::string)> callback) = 0;
+            virtual void close() = 0;
+            virtual bool isClosed() = 0;
     };
 
 }

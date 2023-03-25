@@ -1,4 +1,5 @@
 #include "Transporter.hpp"
+#include "../../protocol/packets/LogoutPacket.hpp"
 
 using namespace babel;
 
@@ -7,7 +8,8 @@ Transporter::Transporter(std::shared_ptr<EventManager> eventManager, std::unique
 }
 
 Transporter::~Transporter() {
-    this->sendMessage("DISCONNECT");
+    LogoutPacket packet;
+    this->sendMessage(packet.serialize());
     this->_socket->closeConnection();
 }
 
