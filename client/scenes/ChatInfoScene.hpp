@@ -12,7 +12,7 @@ namespace babel {
         public:
             ChatInfoScene(std::shared_ptr<ClientManager>);
             ~ChatInfoScene() override;
-    
+
             std::string getName() override;
             void display() override;
             void clear() override;
@@ -25,6 +25,8 @@ namespace babel {
             void _initLayouts();
             void _initWidgets();
             void _placeWidgets();
+
+            void _updateCallLayout();
 
             void _callUp();
             void _hangUp();

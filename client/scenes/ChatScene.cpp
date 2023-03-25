@@ -12,10 +12,9 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
         throw ClientError("Whilst initializing ChatScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
     this->_chattingWith = this->_clientManager->getChatting();
-    this->_initWidgets();
-    this->_initLayouts();
-    this->_placeWidgets();
-    this->clear();
+    this->_scrollArea = new QScrollArea();
+    this->_parent = new QWidget();
+    // this->clear();
 }
 
 ChatScene::~ChatScene() {
@@ -26,8 +25,10 @@ std::string ChatScene::getName() {
 }
 
 void ChatScene::display() {
-    this->_parent->show();
     this->_scrollArea->show();
+    if (this->_chattingWith != nullptr) {
+        this->_parent->show();
+    }
 }
 
 void ChatScene::clear() {
@@ -35,9 +36,6 @@ void ChatScene::clear() {
     this->_scrollArea->hide();
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
 void ChatScene::refresh() {
     this->_parent->repaint();
     // TODO refresh clients
@@ -47,10 +45,17 @@ void ChatScene::handleEvent(Event &event) {
     switch (event.type) {
         case Event::NEW_CHATTING:
             {
-                this->_chattingWith = event.data.newChatting.newClient;
-                for (auto *message: this->_messages)
-                    this->_messagesLayout->removeItem(message->getLayout());
-                    this->_messages.clear();
+                if (event.data.newChatting.previousClient == nullptr) {
+                    this->_initWidgets();
+                    this->_initLayouts();
+                    this->_placeWidgets();
+                    this->display();
+                } else {
+                    this->_chattingWith = event.data.newChatting.newClient;
+                    for (auto *message: this->_messages)
+                        this->_messagesLayout->removeItem(message->getLayout());
+                        this->_messages.clear();
+                }
             }
             break;
         case Event::NEW_MESSAGE:
@@ -89,9 +94,6 @@ void ChatScene::_initLayouts() {
 }
 
 void ChatScene::_initWidgets() {
-    this->_scrollArea = new QScrollArea();
-    this->_parent = new QWidget();
-
     auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->getChatting());
 
     for (auto messages: groupedMessages) {

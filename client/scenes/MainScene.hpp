@@ -16,7 +16,7 @@ namespace babel {
         public:
             MainScene(std::shared_ptr<ClientManager> clientManager);
             ~MainScene() override;
-    
+
             std::string getName() override;
             void display() override;
             void clear() override;

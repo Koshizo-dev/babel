@@ -20,8 +20,6 @@ int main(int argc, char **argv) {
 
     std::shared_ptr<Client> hyside(new Client("hyside"));
     std::shared_ptr<Client> rimost(new Client("rimost"));
-    hyside->setChatting(true);
-    hyside->setInCall(false);
     std::vector<std::shared_ptr<Message>> hysideMessages = {};
     std::vector<std::shared_ptr<Message>> rimostMessages = {};
     hysideMessages.push_back(std::shared_ptr<Message>(new Message(hyside, "SomeMessage", 1)));

@@ -24,7 +24,8 @@ std::string ChatInfoScene::getName() {
 }
 
 void ChatInfoScene::display() {
-    this->_parent->show();
+    if (this->_chattingWith != nullptr)
+        this->_parent->show();
 }
 
 void ChatInfoScene::clear() {
@@ -42,32 +43,11 @@ void ChatInfoScene::handleEvent(Event &event) {
     if (event.type == Event::NEW_CHATTING) {
         this->_chattingWith = event.data.newChatting.newClient;
         this->_userLabel->setText(this->_chattingWith->getUsername().c_str());
-    } else
-        this->_clientManager->self->setInCall(!this->_clientManager->self->isInCall());
-
-    if (this->_clientManager->self->isInCall()) {
-        this->_callUpButton->hide();
-        this->_callUpAbsentButton->hide();
-        if (this->_chattingWith->isInCall()) {
-            this->_hangUpAbsentButton->hide();
-            this->_hangUpButton->show();
-        }
-        else {
-            this->_hangUpButton->hide();
-            this->_hangUpAbsentButton->show();
-        }
-    } else {
-        this->_hangUpButton->hide();
-        this->_hangUpAbsentButton->hide();
-        if (this->_chattingWith->isInCall()) {
-            this->_callUpAbsentButton->hide();
-            this->_callUpButton->show();
-        }
-        else {
-            this->_callUpButton->hide();
-            this->_callUpAbsentButton->show();
-        }
+        if (event.newChatting.previousClient == nullptr)
+            this->display();
     }
+
+    this->_updateCallLayout();
 }
 
 std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() {
@@ -83,8 +63,8 @@ void ChatInfoScene::_initLayouts() {
 }
 
 void ChatInfoScene::_initWidgets() {
+    this->_userLabel = new QLabel();
     this->_parent = new QWidget();
-    this->_userLabel = new QLabel(this->_clientManager->getChatting()->getUsername().c_str());
 
     this->_callUpButton = new QToolButton();
     this->_callUpButton->setIcon(QIcon("assets/call-up.png"));
@@ -117,7 +97,7 @@ void ChatInfoScene::_placeWidgets() {
     this->_userLayout->addWidget(this->_callUpAbsentButton);
     this->_userLayout->addWidget(this->_hangUpButton);
     this->_userLayout->addWidget(this->_hangUpAbsentButton);
-    this->refresh();
+    this->_parent->setLayout(this->_userLayout);
 
     QObject::connect(this->_callUpButton, &QToolButton::clicked, [=]() {
         this->_callUp();
@@ -136,14 +116,42 @@ void ChatInfoScene::_placeWidgets() {
     });
 }
 
+void ChatInfoScene::_updateCallLayout() {
+    if (this->_clientManager->self->isInCall()) {
+        this->_callUpButton->hide();
+        this->_callUpAbsentButton->hide();
+        if (this->_chattingWith->isInCall()) {
+            this->_hangUpAbsentButton->hide();
+            this->_hangUpButton->show();
+        }
+        else {
+            this->_hangUpButton->hide();
+            this->_hangUpAbsentButton->show();
+        }
+    } else {
+        this->_hangUpButton->hide();
+        this->_hangUpAbsentButton->hide();
+        if (this->_chattingWith->isInCall()) {
+            this->_callUpAbsentButton->hide();
+            this->_callUpButton->show();
+        }
+        else {
+            this->_callUpButton->hide();
+            this->_callUpAbsentButton->show();
+        }
+    }
+}
+
 void ChatInfoScene::_callUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(true);
-    printf("Joined call!\n");
+    Event event(Event::CALL_STATE_UPDATE);
+    this->getSceneManager()->getScene()->handleEvent(event);
 }
 
 void ChatInfoScene::_hangUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(false);
-    printf("Left call!\n");
+    Event event(Event::CALL_STATE_UPDATE);
+    this->getSceneManager()->getScene()->handleEvent(event);
 }

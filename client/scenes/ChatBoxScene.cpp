@@ -9,10 +9,7 @@ ChatBoxScene::ChatBoxScene(std::shared_ptr<ClientManager> clientManager) {
     if (clientManager == nullptr)
         throw ClientError("Whilst initializing SearchScene: ClientManager cannot be null !");
     this->_clientManager = clientManager;
-    this->_initWidgets();
     this->_initLayouts();
-    this->_placeWidgets();
-    this->clear();
 }
 
 ChatBoxScene::~ChatBoxScene() {
@@ -23,6 +20,8 @@ std::string ChatBoxScene::getName() {
 }
 
 void ChatBoxScene::display() {
+    if (this->_clientManager->getChatting() != nullptr)
+        this->_chatBoxInput->show();
 }
 
 void ChatBoxScene::clear() {
@@ -37,8 +36,13 @@ void ChatBoxScene::refresh() {
 void ChatBoxScene::handleEvent(Event &event) {
     if (event.type != Event::NEW_CHATTING)
         return;
-    auto newChatting = event.data.newChatting.newClient;
-    this->_chatBoxInput->setPlaceholderText((std::string("Message @") + newChatting->getUsername()));
+    if (event.data.newChatting.previousClient == nullptr) {
+        this->_initWidgets();
+        this->_placeWidgets();
+    } else {
+        auto newChatting = event.data.newChatting.newClient;
+        this->_chatBoxInput->setPlaceholderText((std::string("Message @") + newChatting->getUsername()));
+    }
 }
 
 std::shared_ptr<SceneManager> ChatBoxScene::getSceneManager() {

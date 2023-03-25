@@ -21,7 +21,7 @@ namespace babel {
             void handleEvent(Event &event) override;
             std::shared_ptr<SceneManager> getSceneManager() override;
             QLayout *getLayout();
-            
+    
         private:
             void _initLayouts();
             void _initWidgets();

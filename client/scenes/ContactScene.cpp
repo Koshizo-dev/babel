@@ -116,8 +116,10 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
         if (contact->getClient()->isChatting())
             return;
         auto previousChatting = this->_clientManager->getChatting();
-        previousChatting->setChatting(false);
+        if (previousChatting != nullptr)
+            previousChatting->setChatting(false);
         contact->getClient()->setChatting(true);
+        contact->getClient()->setInCall(false);
 
         Event filterEvent(Event::CONTACT_FILTER_UPDATE);
         new (&filterEvent.data.contactFilter) Event::ContactFilterUpdate({""});
@@ -125,7 +127,7 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
 
         Event event(Event::NEW_CHATTING);
         auto data = new (&event.data.newChatting) Event::NewChatting({previousChatting, contact->getClient()});
-        
+
         this->getSceneManager()->getScene()->handleEvent(event);
 
     });

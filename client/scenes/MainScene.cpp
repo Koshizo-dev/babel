@@ -34,12 +34,10 @@ void MainScene::display() {
     this->_contacts->display();
     this->_search->display();
 
-    if (this->_clientManager->getChatting() != nullptr) {
-        this->_chatInfo->display();
-        this->_messages->display();
-        this->_chatBox->display();
-    }
-    
+    this->_chatInfo->display();
+    this->_messages->display();
+    this->_chatBox->display();
+
     this->_parent->show();
 }
 
@@ -47,11 +45,9 @@ void MainScene::clear() {
     this->_user->clear();
     this->_contacts->clear();
     this->_search->clear();
-    if (this->_clientManager->getChatting() != nullptr) {
-        this->_chatInfo->clear();
-        this->_messages->clear();
-        this->_chatBox->clear();
-    }
+    this->_chatInfo->clear();
+    this->_messages->clear();
+    this->_chatBox->clear();
     this->_parent->hide();
 }
 
@@ -99,8 +95,6 @@ void MainScene::_initLeftLayout() {
 void MainScene::_initRightLayout() {
     this->_rightSideLayout = new QVBoxLayout();
 
-    if (this->_clientManager->getChatting() == nullptr)
-        return;
     this->_chatInfo = std::unique_ptr<ChatInfoScene>(new ChatInfoScene(this->_clientManager));
     this->_messages = std::unique_ptr<ChatScene>(new ChatScene(this->_clientManager));
     this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
@@ -115,8 +109,7 @@ void MainScene::_placeLayouts() {
     this->_parentLayout->addLayout(this->_rightSideLayout, 5);
 
     this->_placeLeftLayout();
-    if (this->_clientManager->getChatting() != nullptr)
-        this->_placeRightLayout();
+    this->_placeRightLayout();
 }
 
 void MainScene::_placeLeftLayout() {
@@ -129,5 +122,5 @@ void MainScene::_placeLeftLayout() {
 void MainScene::_placeRightLayout() {
     this->_rightSideLayout->addWidget(this->_chatInfo->getWidget(), 1);
     this->_rightSideLayout->addWidget(this->_messages->getWidget(), 10);
-    this->_rightSideLayout->addLayout(this->_chatBox->getLayout(), 3);
+    this->_rightSideLayout->addLayout(this->_chatBox->getLayout(), 2);
 }
