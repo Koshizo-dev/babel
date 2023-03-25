@@ -19,7 +19,7 @@ std::vector<std::shared_ptr<Message>> Client::getMessages() {
 }
 
 void Client::addMessage(std::shared_ptr<Message> message) {
-    std::lock_guard<std::mutex> lock(this->_mutex);
+    // std::lock_guard<std::mutex> lock(this->_mutex);
     this->_messages.push_back(message);
 }
 

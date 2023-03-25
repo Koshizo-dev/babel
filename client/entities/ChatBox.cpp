@@ -48,9 +48,8 @@ void ChatBox::handleShiftReturn() {
 
     this->_chatInput->ensureCursorVisible();
     //else
-    //    this->_chatInput->verticalScrollBar()->setValue(scrollbarPrevValue - lineHeight);
+       // this->_chatInput->verticalScrollBar()->setValue(scrollbarPrevValue - lineHeight);
     this->_chatInput->insertPlainText("\n"); // Append a new line
-    printf("Shift + Return key press detected.\n");
 }
 
 void ChatBox::handleReturn() {

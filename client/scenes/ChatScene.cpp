@@ -15,6 +15,7 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
     this->_scrollArea = new QScrollArea();
     this->_parent = new QWidget();
     this->_messagesLayout = new QVBoxLayout(this->_parent);
+    this->_messagesLayout->addStretch();
 }
 
 ChatScene::~ChatScene() {
@@ -37,6 +38,7 @@ void ChatScene::clear() {
 
 void ChatScene::refresh() {
     this->_parent->repaint();
+    this->_scrollArea->repaint();
     // TODO refresh clients
 }
 
@@ -44,13 +46,20 @@ void ChatScene::handleEvent(Event &event) {
     switch (event.type) {
         case Event::NEW_CHATTING:
             {
+                QWidget temp;
                 this->_chattingWith = event.data.newChatting.newClient;
-                for (auto *message: this->_messages)
+                for (auto *message: this->_messages) {
                     this->_messagesLayout->removeItem(message->getLayout());
-                    this->_messages.clear();
+                    QWidget().setLayout(message->getLayout());
+                }
+                this->_messages.clear();
                 this->_initWidgets();
                 this->_placeWidgets();
                 this->display();
+                QTimer::singleShot(100, [this]() {
+                    QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
+                    vScrollBar->setValue(vScrollBar->maximum());
+                });
             }
             break;
         case Event::NEW_MESSAGE:
@@ -64,6 +73,10 @@ void ChatScene::handleEvent(Event &event) {
 
                 this->_messages.push_back(message);
                 this->_messagesLayout->addLayout(message->getLayout());
+                QTimer::singleShot(5, [this]() {
+                    QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
+                    vScrollBar->setValue(vScrollBar->maximum());
+                });
                 // TODO group message and append it to the vector
             }
             break;
@@ -84,7 +97,7 @@ void ChatScene::_initLayouts() {
 }
 
 void ChatScene::_initWidgets() {
-    auto groupedMessages = this->_groupMessagesByTime(this->_clientManager->getChatting());
+    auto groupedMessages = this->_groupMessagesByTime(this->_chattingWith);
 
     for (auto messages: groupedMessages) {
         std::shared_ptr<Client> client = messages[0]->getAuthor();
@@ -104,11 +117,6 @@ void ChatScene::_placeWidgets() {
 
     for (auto *message: this->_messages)
         this->_messagesLayout->addLayout(message->getLayout());
-    this->_messagesLayout->addStretch();
-    QTimer::singleShot(0, [this]() {
-        QScrollBar *vScrollBar = _scrollArea->verticalScrollBar();
-        vScrollBar->setValue(vScrollBar->maximum());
-    });
 }
 
 std::vector<std::vector<std::shared_ptr<Message>>> ChatScene::_groupMessagesByTime(std::shared_ptr<Client> client) {
@@ -125,9 +133,11 @@ std::vector<std::vector<std::shared_ptr<Message>>> ChatScene::_groupMessagesByTi
     // group the messages by time
     std::vector<std::vector<std::shared_ptr<Message>>> messages = {};
     std::shared_ptr<Message> lastMessage = nullptr;
+    std::shared_ptr<Message> firstMessage = nullptr;
     for (const auto &message : allMessages) {
-        if (messages.empty() || message->getAuthor() != lastMessage->getAuthor() || message->getTimestamp() - lastMessage->getTimestamp() > 3) {
+        if (messages.empty() || message->getAuthor() != lastMessage->getAuthor() || firstMessage->getTimestamp() - message->getTimestamp() + 5*1000*60 <= 0) {
             // create a new vector if this is the first message or if there's a time gap
+            firstMessage = message;
             messages.emplace_back();
         }
         lastMessage = message;
