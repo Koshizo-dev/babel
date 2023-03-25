@@ -11,7 +11,7 @@ using namespace babel;
 void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> clientManager) {
     try {
         ContactPacket &contactPacket = dynamic_cast<ContactPacket&>(packet);
-        std::shared_ptr<Client> newContact = std::make_shared<Client>(contactPacket.getUsername());
+        std::shared_ptr<Client> newContact = std::shared_ptr<Client>(new Client(contactPacket.getUsername()));
 
         clientManager->clients.push_back(newContact);
 

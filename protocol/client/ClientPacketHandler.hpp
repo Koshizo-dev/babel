@@ -3,8 +3,6 @@
 #include "../PacketHandler.hpp"
 #include "../packets/Packet.hpp"
 
-#include <iostream>
-
 namespace babel {
 
     class ClientManager;

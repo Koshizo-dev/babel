@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <thread>
 
 using namespace babel;
 
@@ -59,8 +60,7 @@ void ServerManager::login(IoClient *origin) {
     std::vector<Message> messages = this->database->getMessages(origin->username);
 
     for (std::string contact: contacts) {
-        std::cout << "contact = [" << contact << "]" << std::endl;
-        ContactPacket packet;
+        ContactPacket packet(contact);
         origin->getTransporter()->sendMessage(packet.serialize());
         origin->addContact(contact);
     }

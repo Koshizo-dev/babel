@@ -4,8 +4,11 @@
 #include "entities/Icon.hpp"
 
 #include <string>
+#include <mutex>
 
 namespace babel {
+
+    class ClientManager;
 
     class Client {
         public:
@@ -30,8 +33,9 @@ namespace babel {
             bool _isInCall = false;
             bool _isChatWindow = false;
             std::vector<std::shared_ptr<Message>> _messages = {};
+            std::mutex _mutex;
 
-            Icon *_generateIcon(int size); // Must be called in constructor
+            Icon *_generateIcon(int size);
     };
 
 } // namespace babel

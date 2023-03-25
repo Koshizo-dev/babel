@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QAbstractSocket>
 #include <qabstractsocket.h>
+#include <sstream>
 
 using namespace babel;
 
@@ -31,9 +32,23 @@ void QtSocket::write(std::string message) {
 
 void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
     this->_eventManager = eventManager;
+
     QAbstractSocket::connect(this->_socket.get(), &QTcpSocket::readyRead, [=]() {
-        QByteArray data = this->_socket->readAll();
-        std::string packet = std::string(data.constData(), data.length()-2);
-        this->_eventManager->handlePacket(packet);
+
+    QByteArray data = this->_socket->readAll();
+        std::string packetData = std::string(data.constData(), data.length());
+
+        while (true) {
+            size_t delimiterIndex = packetData.find("\r\n");
+            if (delimiterIndex == std::string::npos) {
+                break; // Incomplete packet, wait for more data
+            }
+
+            std::string packet = packetData.substr(0, delimiterIndex);
+            this->_eventManager->handlePacket(packet);
+
+            packetData = packetData.substr(delimiterIndex + 2);
+        }
+        
     });
 }

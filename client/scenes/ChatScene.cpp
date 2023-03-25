@@ -55,6 +55,8 @@ void ChatScene::handleEvent(Event &event) {
             break;
         case Event::NEW_MESSAGE:
             {
+                if (this->_chattingWith == nullptr)
+                    return;
                 auto newMessage = event.data.newMessage.message;
                 if (newMessage->getAuthor()->getUsername() != this->_chattingWith->getUsername() && newMessage->getAuthor()->getUsername() != this->_clientManager->self->getUsername())
                     return;

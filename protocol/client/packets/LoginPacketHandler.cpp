@@ -11,6 +11,7 @@ void LoginPacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager> c
     try {
         LoginPacket &loginPacket = dynamic_cast<LoginPacket&>(packet);
 
+        std::cout << "connected!" << std::endl;
         clientManager->self = std::shared_ptr<Client>(new Client(loginPacket.getUsername()));
         clientManager->sceneManager->setScene(new MainScene(clientManager));
     } catch (std::bad_cast) {}

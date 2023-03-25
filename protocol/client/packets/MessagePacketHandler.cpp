@@ -13,6 +13,8 @@ void MessagePacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager>
     try {
         MessagePacket &messagePacket = dynamic_cast<MessagePacket&>(packet);
 
+        std::cout << "{" << messagePacket.getTimestamp() << "}: sender = [" << messagePacket.getSender() << "] | recipient = [" << messagePacket.getRecipient() << "]" << std::endl;
+        std::cout << "[" << messagePacket.getContent() << "]" << std::endl;
         std::shared_ptr<Client> discussion = nullptr;
         std::shared_ptr<Client> author = nullptr;
         if (clientManager->self->getUsername() == messagePacket.getSender()) {
@@ -20,10 +22,12 @@ void MessagePacketHandler::handle(Packet &packet, std::shared_ptr<ClientManager>
             author = clientManager->self;
         }
         else {
-            std::shared_ptr<Client> tmp = clientManager->getClient(messagePacket.getSender());
-            discussion = author;
-            author = tmp;
+            discussion = clientManager->getClient(messagePacket.getSender());
+            author = discussion;
         }
+
+        if (discussion == nullptr)
+            return;
 
         std::shared_ptr<Message> message = std::make_shared<Message>(author, messagePacket.getContent(), messagePacket.getTimestamp(), true);
         author->addMessage(message);
