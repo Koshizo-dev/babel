@@ -19,20 +19,20 @@ SearchScene::SearchScene(std::shared_ptr<ClientManager> clientManager) {
 SearchScene::~SearchScene() {
 }
 
-std::string SearchScene::getName() {
+const std::string SearchScene::getName() const {
     return "Search menu";
 }
 
-void SearchScene::display() {
+const void SearchScene::display() {
 }
 
-void SearchScene::clear() {
+const void SearchScene::clear() {
 }
 
-void SearchScene::refresh() {
+const void SearchScene::refresh() {
 }
 
-void SearchScene::handleEvent(Event &event) {
+const void SearchScene::handleEvent(Event &event) {
     if (event.type != Event::CONTACT_FILTER_UPDATE)
         return;
     auto newFilter = event.data.contactFilter.filter;
@@ -40,7 +40,7 @@ void SearchScene::handleEvent(Event &event) {
     this->_searchInput->setText(newFilter.c_str());
 }
 
-std::shared_ptr<SceneManager> SearchScene::getSceneManager() {
+const std::shared_ptr<SceneManager> SearchScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
@@ -48,11 +48,11 @@ QLayout *SearchScene::getLayout() {
     return (this->_searchLayout);
 }
 
-void SearchScene::_initLayouts() {
+const void SearchScene::_initLayouts() {
     this->_searchLayout = new QHBoxLayout();
 }
 
-void SearchScene::_initWidgets() {
+const void SearchScene::_initWidgets() {
     this->_searchInput = new QLineEdit();
     this->_searchInput->setPlaceholderText("Find an user.");
 
@@ -86,6 +86,6 @@ void SearchScene::_initWidgets() {
     });
 }
 
-void SearchScene::_placeWidgets() {
+const void SearchScene::_placeWidgets() {
     this->_searchLayout->addWidget(this->_searchInput);
 }

@@ -11,12 +11,12 @@ namespace babel {
         public:
             Message(std::shared_ptr<Client> author, std::string content, long timestamp, bool isDelivered = false);
 
-            std::shared_ptr<Client> getAuthor();
-            std::string getContent();
-            long getTimestamp() const;
+            const std::shared_ptr<Client> getAuthor() const;
+            const std::string getContent() const;
+            const long getTimestamp() const;
+            const bool isDelivered() const;
 
-            void setDelivered(bool isDelivered);
-            bool isDelivered();
+            const void setDelivered(bool isDelivered);
 
         private:
             std::shared_ptr<Client> _author = nullptr;

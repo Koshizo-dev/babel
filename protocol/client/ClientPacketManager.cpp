@@ -19,7 +19,7 @@ ClientPacketManager::ClientPacketManager(std::shared_ptr<ClientManager> clientMa
     this->registerHandler(PacketType::MESSAGE, std::shared_ptr<ClientPacketHandler>(new MessagePacketHandler()));
 }
 
-void ClientPacketManager::handlePacket(Packet &packet) {
+const void ClientPacketManager::handlePacket(Packet &packet) const {
     auto iter = this->_packetHandlers.find(packet.getType());
     if (iter != this->_packetHandlers.end()) {
         auto packetHandler = iter->second;
@@ -27,6 +27,6 @@ void ClientPacketManager::handlePacket(Packet &packet) {
     }
 }
 
-void ClientPacketManager::registerHandler(PacketType packetType, std::shared_ptr<ClientPacketHandler> packetHandler) {
+const void ClientPacketManager::registerHandler(PacketType packetType, std::shared_ptr<ClientPacketHandler> packetHandler) {
     this->_packetHandlers[packetType] = packetHandler;
 }

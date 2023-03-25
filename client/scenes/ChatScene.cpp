@@ -21,28 +21,28 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
 ChatScene::~ChatScene() {
 }
 
-std::string ChatScene::getName() {
+const std::string ChatScene::getName() const {
     return "Chat menu";
 }
 
-void ChatScene::display() {
+const void ChatScene::display() {
     this->_scrollArea->show();
     if (this->_chattingWith != nullptr)
         this->_parent->show();
 }
 
-void ChatScene::clear() {
+const void ChatScene::clear() {
     this->_parent->hide();
     this->_scrollArea->hide();
 }
 
-void ChatScene::refresh() {
+const void ChatScene::refresh() {
     this->_parent->repaint();
     this->_scrollArea->repaint();
     // TODO refresh clients
 }
 
-void ChatScene::handleEvent(Event &event) {
+const void ChatScene::handleEvent(Event &event) {
     switch (event.type) {
         case Event::NEW_CHATTING:
             {
@@ -85,7 +85,7 @@ void ChatScene::handleEvent(Event &event) {
     }
 }
 
-std::shared_ptr<SceneManager> ChatScene::getSceneManager() {
+const std::shared_ptr<SceneManager> ChatScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
@@ -93,10 +93,10 @@ QWidget *ChatScene::getWidget() {
     return (this->_scrollArea);
 }
 
-void ChatScene::_initLayouts() {
+const void ChatScene::_initLayouts() {
 }
 
-void ChatScene::_initWidgets() {
+const void ChatScene::_initWidgets() {
     auto groupedMessages = this->_groupMessagesByTime(this->_chattingWith);
 
     for (auto messages: groupedMessages) {
@@ -106,7 +106,7 @@ void ChatScene::_initWidgets() {
     }
 }
 
-void ChatScene::_placeWidgets() {
+const void ChatScene::_placeWidgets() {
     this->_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->_scrollArea->setWidget(this->_parent);

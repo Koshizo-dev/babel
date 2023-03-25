@@ -30,7 +30,6 @@ const std::string UnsignedInteger64Field::serialize(bool showHeader) const {
     for (int i = 0; i < 8; i++)
         ss.write(&bytes[i], 1);
 
-    std::cerr << std::endl;
     return (ss.str());
 }
 

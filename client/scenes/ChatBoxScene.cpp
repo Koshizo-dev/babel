@@ -15,25 +15,22 @@ ChatBoxScene::ChatBoxScene(std::shared_ptr<ClientManager> clientManager) {
 ChatBoxScene::~ChatBoxScene() {
 }
 
-std::string ChatBoxScene::getName() {
+const std::string ChatBoxScene::getName() const {
     return "ChatBox menu";
 }
 
-void ChatBoxScene::display() {
+const void ChatBoxScene::display() {
     if (this->_clientManager->getChatting() != nullptr)
         this->_chatBoxInput->show();
 }
 
-void ChatBoxScene::clear() {
+const void ChatBoxScene::clear() {
 }
 
-// Refresh the MainScene
-// Mainly used when window size changed by example
-// Or any variable that might have been shown on screen was updated.
-void ChatBoxScene::refresh() {
+const void ChatBoxScene::refresh() {
 }
 
-void ChatBoxScene::handleEvent(Event &event) {
+const void ChatBoxScene::handleEvent(Event &event) {
     if (event.type != Event::NEW_CHATTING)
         return;
     if (event.data.newChatting.previousClient == nullptr) {
@@ -45,7 +42,7 @@ void ChatBoxScene::handleEvent(Event &event) {
     }
 }
 
-std::shared_ptr<SceneManager> ChatBoxScene::getSceneManager() {
+const std::shared_ptr<SceneManager> ChatBoxScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 

@@ -18,26 +18,26 @@ UserScene::UserScene(std::shared_ptr<ClientManager> clientManager) {
 UserScene::~UserScene() {
 }
 
-std::string UserScene::getName() {
+const std::string UserScene::getName() const {
     return "User menu";
 }
 
-void UserScene::display() {
+const void UserScene::display() {
     this->_parent->show();
 }
 
-void UserScene::clear() {
+const void UserScene::clear() {
     this->_parent->hide();
 }
 
-void UserScene::refresh() {
+const void UserScene::refresh() {
     this->_parent->repaint();
 }
 
-void UserScene::handleEvent(Event &event) {
+const void UserScene::handleEvent(Event &event) {
 }
 
-std::shared_ptr<SceneManager> UserScene::getSceneManager() {
+const std::shared_ptr<SceneManager> UserScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
@@ -45,11 +45,11 @@ QWidget *UserScene::getWidget() {
     return (this->_parent);
 }
 
-void UserScene::_initLayouts() {
+const void UserScene::_initLayouts() {
     this->_userLayout = new QHBoxLayout(this->_parent);
 }
 
-void UserScene::_initWidgets() {
+const void UserScene::_initWidgets() {
     this->_parent = new QWidget();
     this->_userLabel = new QLabel(this->_clientManager->self->getUsername().c_str());
 
@@ -63,7 +63,7 @@ void UserScene::_initWidgets() {
     
 }
 
-void UserScene::_placeWidgets() {
+const void UserScene::_placeWidgets() {
     this->_userLayout->addWidget(this->_clientManager->self->getIcon());
     this->_userLayout->addWidget(this->_userLabel);
 

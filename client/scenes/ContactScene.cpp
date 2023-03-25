@@ -19,24 +19,24 @@ ContactScene::ContactScene(std::shared_ptr<ClientManager> clientManager) {
 ContactScene::~ContactScene() {
 }
 
-std::string ContactScene::getName() {
+const std::string ContactScene::getName() const {
     return "Contact menu";
 }
 
-void ContactScene::display() {
+const void ContactScene::display() {
     this->_parent->show();
     this->_scrollArea->show();
 }
 
-void ContactScene::clear() {
+const void ContactScene::clear() {
     this->_parent->hide();
 }
 
-void ContactScene::refresh() {
+const void ContactScene::refresh() {
     this->_parent->repaint();
 }
 
-void ContactScene::handleEvent(Event &event) {
+const void ContactScene::handleEvent(Event &event) {
     switch (event.type) {
         case Event::NEW_CONTACT:
         {
@@ -67,7 +67,7 @@ void ContactScene::handleEvent(Event &event) {
     }
 }
 
-std::shared_ptr<SceneManager> ContactScene::getSceneManager() {
+const std::shared_ptr<SceneManager> ContactScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
@@ -75,11 +75,11 @@ QWidget *ContactScene::getWidget() {
     return (this->_scrollArea);
 }
 
-void ContactScene::_initLayouts() {
+const void ContactScene::_initLayouts() {
     this->_contactsLayout = new QVBoxLayout(this->_parent);
 }
 
-void ContactScene::_initWidgets() {
+const void ContactScene::_initWidgets() {
     this->_scrollArea = new QScrollArea();
     this->_parent = new QWidget();
 
@@ -101,7 +101,7 @@ void ContactScene::_initWidgets() {
         });
 }
 
-void ContactScene::_placeWidgets() {
+const void ContactScene::_placeWidgets() {
     this->_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     this->_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->_scrollArea->setWidget(this->_parent);

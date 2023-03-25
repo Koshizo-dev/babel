@@ -10,22 +10,22 @@ Message::Message(std::shared_ptr<Client> author, std::string content, long times
     this->_isDelivered = isDelivered;
 }
 
-std::shared_ptr<Client> Message::getAuthor() {
+const std::shared_ptr<Client> Message::getAuthor() const {
     return (this->_author);
 }
 
-std::string Message::getContent() {
+const std::string Message::getContent() const {
     return (this->_content);
 }
 
-long Message::getTimestamp() const {
+const long Message::getTimestamp() const {
     return (this->_timestamp);
 }
 
-bool Message::isDelivered() {
+const bool Message::isDelivered() const {
     return (this->_isDelivered);
 }
 
-void Message::setDelivered(bool isDelivered) {
+const void Message::setDelivered(bool isDelivered) {
     this->_isDelivered = isDelivered;
 }

@@ -9,11 +9,11 @@ namespace babel {
         public:
             QtSocket(std::string hostname, unsigned int port);
 
-            bool awaitingConnection() override;
-            void closeConnection() override;
-            bool flush() override;
-            void write(std::string message) override;
-            void setEventManager(std::shared_ptr<EventManager> eventManager) override;
+            const bool awaitingConnection() override;
+            const void closeConnection() override;
+            const bool flush() override;
+            const void write(std::string message) override;
+            const void setEventManager(std::shared_ptr<EventManager> eventManager) override;
 
         private:
             std::shared_ptr<EventManager> _eventManager = nullptr;

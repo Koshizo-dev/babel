@@ -14,28 +14,28 @@ QtSocket::QtSocket(std::string hostname, unsigned int port) {
     this->_socket->connectToHost(QHostAddress(hostname.c_str()), port);
 }
 
-bool QtSocket::awaitingConnection() {
+const bool QtSocket::awaitingConnection() {
     return (this->_socket->waitForConnected());
 }
 
-void QtSocket::closeConnection() {
+const void QtSocket::closeConnection() {
     this->_socket->close();
 }
 
-bool QtSocket::flush() {
+const bool QtSocket::flush() {
     return (this->_socket->flush());
 }
 
-void QtSocket::write(std::string message) {
+const void QtSocket::write(std::string message) {
     this->_socket->write(message.data(), message.length());
 }
 
-void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
+const void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
     this->_eventManager = eventManager;
 
     QAbstractSocket::connect(this->_socket.get(), &QTcpSocket::readyRead, [=]() {
 
-    QByteArray data = this->_socket->readAll();
+        QByteArray data = this->_socket->readAll();
         std::string packetData = std::string(data.constData(), data.length());
 
         while (true) {
@@ -49,6 +49,6 @@ void QtSocket::setEventManager(std::shared_ptr<EventManager> eventManager) {
 
             packetData = packetData.substr(delimiterIndex + 2);
         }
-        
+
     });
 }

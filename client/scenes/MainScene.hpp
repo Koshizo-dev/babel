@@ -17,21 +17,21 @@ namespace babel {
             MainScene(std::shared_ptr<ClientManager> clientManager);
             ~MainScene() override;
 
-            std::string getName() override;
-            void display() override;
-            void clear() override;
-            void refresh() override;
-            void handleEvent(Event &event) override;
-            std::shared_ptr<SceneManager> getSceneManager() override;
+            const std::string getName() const override;
+            const void display() override;
+            const void clear() override;
+            const void refresh() override;
+            const void handleEvent(Event &event) override;
+            const std::shared_ptr<SceneManager> getSceneManager() const override;
 
         private:
-            void _initLayouts();
-            void _initLeftLayout();
-            void _initRightLayout();
+            const void _initLayouts();
+            const void _initLeftLayout();
+            const void _initRightLayout();
 
-            void _placeLayouts();
-            void _placeLeftLayout();
-            void _placeRightLayout();
+            const void _placeLayouts();
+            const void _placeLeftLayout();
+            const void _placeRightLayout();
 
             std::unique_ptr<UserScene> _user = nullptr;
             std::unique_ptr<ContactScene> _contacts = nullptr;

@@ -10,7 +10,7 @@ const std::shared_ptr<Client> ClientManager::getClient(std::string username) con
     return (nullptr);
 }
 
-const std::shared_ptr<Client> ClientManager::getChatting() {
+const std::shared_ptr<Client> ClientManager::getChatting() const {
     for (std::shared_ptr<Client> client: this->clients)
         if (client->isChatting())
             return (client);

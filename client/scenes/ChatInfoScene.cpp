@@ -19,24 +19,24 @@ ChatInfoScene::ChatInfoScene(std::shared_ptr<ClientManager> clientManager) {
 ChatInfoScene::~ChatInfoScene() {
 }
 
-std::string ChatInfoScene::getName() {
-    return "User menu";
+const std::string ChatInfoScene::getName() const {
+    return "ChatInfo menu";
 }
 
-void ChatInfoScene::display() {
+const void ChatInfoScene::display() {
     if (this->_chattingWith != nullptr)
         this->_parent->show();
 }
 
-void ChatInfoScene::clear() {
+const void ChatInfoScene::clear() {
     this->_parent->hide();
 }
 
-void ChatInfoScene::refresh() {
+const void ChatInfoScene::refresh() {
     this->_parent->repaint();
 }
 
-void ChatInfoScene::handleEvent(Event &event) {
+const void ChatInfoScene::handleEvent(Event &event) {
     if (event.type != Event::CALL_STATE_UPDATE && event.type != Event::NEW_CHATTING)
         return;
 
@@ -50,7 +50,7 @@ void ChatInfoScene::handleEvent(Event &event) {
     this->_updateCallLayout();
 }
 
-std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() {
+const std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
@@ -58,11 +58,11 @@ QWidget *ChatInfoScene::getWidget() {
     return (this->_parent);
 }
 
-void ChatInfoScene::_initLayouts() {
+const void ChatInfoScene::_initLayouts() {
     this->_userLayout = new QHBoxLayout(this->_parent);
 }
 
-void ChatInfoScene::_initWidgets() {
+const void ChatInfoScene::_initWidgets() {
     this->_userLabel = new QLabel();
     this->_parent = new QWidget();
 
@@ -76,7 +76,7 @@ void ChatInfoScene::_initWidgets() {
     this->_hangUpAbsentButton->setIcon(QIcon("assets/hang-up_absent.png"));
 }
 
-void ChatInfoScene::_placeWidgets() {
+const void ChatInfoScene::_placeWidgets() {
     this->_userLabel->setStyleSheet("font-style: italic; font-weight: 900; text-decoration: underline;");
     this->_userLayout->addWidget(this->_userLabel);
 
@@ -116,7 +116,7 @@ void ChatInfoScene::_placeWidgets() {
     });
 }
 
-void ChatInfoScene::_updateCallLayout() {
+const void ChatInfoScene::_updateCallLayout() {
     if (this->_clientManager->self->isInCall()) {
         this->_callUpButton->hide();
         this->_callUpAbsentButton->hide();
@@ -142,14 +142,14 @@ void ChatInfoScene::_updateCallLayout() {
     }
 }
 
-void ChatInfoScene::_callUp() {
+const void ChatInfoScene::_callUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(true);
     Event event(Event::CALL_STATE_UPDATE);
     this->getSceneManager()->getScene()->handleEvent(event);
 }
 
-void ChatInfoScene::_hangUp() {
+const void ChatInfoScene::_hangUp() {
     // TODO leave all server side
     this->_clientManager->self->setInCall(false);
     Event event(Event::CALL_STATE_UPDATE);

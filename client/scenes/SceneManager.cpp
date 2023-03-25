@@ -11,12 +11,12 @@ QWidget *SceneManager::getWidget(void) {
     return (this->_widget);
 }
 
-void SceneManager::setScene(Scene *scene) {
+const void SceneManager::setScene(Scene *scene) {
     this->_scene.reset();
     this->_scene = std::shared_ptr<Scene>(scene);
     this->_scene->display();
 }
 
-std::shared_ptr<Scene> SceneManager::getScene(void) {
+const std::shared_ptr<Scene> SceneManager::getScene(void) const {
     return (this->_scene);
 }

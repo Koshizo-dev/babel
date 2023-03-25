@@ -12,10 +12,9 @@ namespace babel {
             Transporter(std::shared_ptr<EventManager>, std::unique_ptr<Socket> socket);
             ~Transporter();
 
-            bool awaitingConnection();
-            void closeConnection();
-            void sendMessage(std::string message);
-            std::string readMessage();
+            const bool awaitingConnection();
+            const void closeConnection();
+            const void sendMessage(std::string message);
 
         private:
             const std::unique_ptr<Socket> _socket;

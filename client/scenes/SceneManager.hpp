@@ -13,9 +13,9 @@ namespace babel {
             QWidget *getWidget(void);
 
             // will clear up the previous scene first.
-            void setScene(Scene *scene);
+            const void setScene(Scene *scene);
 
-            std::shared_ptr<Scene> getScene(void);
+            const std::shared_ptr<Scene> getScene(void) const;
 
         private:
             QWidget *_widget = nullptr;

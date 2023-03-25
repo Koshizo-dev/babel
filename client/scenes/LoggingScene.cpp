@@ -26,22 +26,22 @@ LoggingScene::~LoggingScene() {
     this->_widget->deleteLater();
 }
 
-std::string LoggingScene::getName() {
+const std::string LoggingScene::getName() const {
     return "Logging menu";
 }
 
-void LoggingScene::display() {
+const void LoggingScene::display() {
     this->_widget->show();
 }
 
-void LoggingScene::clear() {
+const void LoggingScene::clear() {
     this->_widget->hide();
 }
 
-void LoggingScene::refresh() {
+const void LoggingScene::refresh() {
 }
 
-void LoggingScene::handleEvent(Event &event) {
+const void LoggingScene::handleEvent(Event &event) {
     if (event.type == Event::LOGIN_FAILED) {
         std::cerr << "login failed: [" << event.data.loginFailed.errorMessage << "]" << std::endl;
         this->_loggingAction = false;
@@ -55,11 +55,11 @@ void LoggingScene::handleEvent(Event &event) {
     }
 }
 
-std::shared_ptr<SceneManager> LoggingScene::getSceneManager() {
+const std::shared_ptr<SceneManager> LoggingScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
-void LoggingScene::_loggingButtonClicked() {
+const void LoggingScene::_loggingButtonClicked() {
     if (this->_loggingAction) {
         return;
     }
@@ -81,12 +81,12 @@ void LoggingScene::_loggingButtonClicked() {
     }
 }
 
-void LoggingScene::_initLayouts() {
+const void LoggingScene::_initLayouts() {
     this->_layout = new QVBoxLayout();
     this->_topLayout = new QHBoxLayout();
 }
 
-void LoggingScene::_initWidgets() {
+const void LoggingScene::_initWidgets() {
     this->_widget = new QWidget(this->getSceneManager()->getWidget());
 
     this->_loggingButton = new QPushButton("Login");
@@ -99,7 +99,7 @@ void LoggingScene::_initWidgets() {
     this->_portField->setValue("8080");
 }
 
-void LoggingScene::_placeWidgets() {
+const void LoggingScene::_placeWidgets() {
     this->_topLayout->addLayout(this->_usernameField->getLayout());
     this->_topLayout->addLayout(this->_serverField->getLayout());
     this->_topLayout->addLayout(this->_portField->getLayout());

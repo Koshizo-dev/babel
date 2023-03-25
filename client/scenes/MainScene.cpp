@@ -25,11 +25,11 @@ MainScene::~MainScene() {
     this->_parent->deleteLater();
 }
 
-std::string MainScene::getName() {
+const std::string MainScene::getName() const {
     return "Main menu";
 }
 
-void MainScene::display() {
+const void MainScene::display() {
     this->_user->display();
     this->_contacts->display();
     this->_search->display();
@@ -41,7 +41,7 @@ void MainScene::display() {
     this->_parent->show();
 }
 
-void MainScene::clear() {
+const void MainScene::clear() {
     this->_user->clear();
     this->_contacts->clear();
     this->_search->clear();
@@ -51,7 +51,7 @@ void MainScene::clear() {
     this->_parent->hide();
 }
 
-void MainScene::refresh() {
+const void MainScene::refresh() {
     this->_user->refresh();
     this->_contacts->refresh();
     this->_search->refresh();
@@ -63,7 +63,7 @@ void MainScene::refresh() {
     this->_parent->repaint();
 }
 
-void MainScene::handleEvent(Event &event) {
+const void MainScene::handleEvent(Event &event) {
     if (event.type == Event::LOGOUT) {
         this->getSceneManager()->setScene(new LoggingScene(this->_clientManager));
         Event event(Event::LOGOUT);
@@ -78,11 +78,11 @@ void MainScene::handleEvent(Event &event) {
     this->_chatBox->handleEvent(event);
 }
 
-std::shared_ptr<SceneManager> MainScene::getSceneManager() {
+const std::shared_ptr<SceneManager> MainScene::getSceneManager() const {
     return (this->_clientManager->sceneManager);
 }
 
-void MainScene::_initLayouts() {
+const void MainScene::_initLayouts() {
     this->_parentLayout = new QHBoxLayout(this->_parent);
 
     this->_initLeftLayout();
@@ -90,7 +90,7 @@ void MainScene::_initLayouts() {
 }
 
 
-void MainScene::_initLeftLayout() {
+const void MainScene::_initLeftLayout() {
     this->_leftSideLayout = new QVBoxLayout();
 
     this->_user = std::unique_ptr<UserScene>(new UserScene(this->_clientManager));
@@ -98,7 +98,7 @@ void MainScene::_initLeftLayout() {
     this->_search = std::unique_ptr<SearchScene>(new SearchScene(this->_clientManager));
 }
 
-void MainScene::_initRightLayout() {
+const void MainScene::_initRightLayout() {
     this->_rightSideLayout = new QVBoxLayout();
 
     this->_chatInfo = std::unique_ptr<ChatInfoScene>(new ChatInfoScene(this->_clientManager));
@@ -106,7 +106,7 @@ void MainScene::_initRightLayout() {
     this->_chatBox = std::unique_ptr<ChatBoxScene>(new ChatBoxScene(this->_clientManager));
 }
 
-void MainScene::_placeLayouts() {
+const void MainScene::_placeLayouts() {
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::VLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -118,14 +118,14 @@ void MainScene::_placeLayouts() {
     this->_placeRightLayout();
 }
 
-void MainScene::_placeLeftLayout() {
+const void MainScene::_placeLeftLayout() {
     this->_user->getWidget()->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     this->_leftSideLayout->addWidget(this->_user->getWidget());
     this->_leftSideLayout->addLayout(this->_search->getLayout());
     this->_leftSideLayout->addWidget(this->_contacts->getWidget());
 }
 
-void MainScene::_placeRightLayout() {
+const void MainScene::_placeRightLayout() {
     this->_rightSideLayout->addWidget(this->_chatInfo->getWidget(), 1);
     this->_rightSideLayout->addWidget(this->_messages->getWidget(), 10);
     this->_rightSideLayout->addLayout(this->_chatBox->getLayout(), 2);
