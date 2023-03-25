@@ -14,6 +14,7 @@ ChatScene::ChatScene(std::shared_ptr<ClientManager> clientManager) {
     this->_chattingWith = this->_clientManager->getChatting();
     this->_scrollArea = new QScrollArea();
     this->_parent = new QWidget();
+    this->_messagesLayout = new QVBoxLayout(this->_parent);
 }
 
 ChatScene::~ChatScene() {
@@ -43,17 +44,13 @@ void ChatScene::handleEvent(Event &event) {
     switch (event.type) {
         case Event::NEW_CHATTING:
             {
-                if (event.data.newChatting.previousClient == nullptr) {
-                    this->_initWidgets();
-                    this->_initLayouts();
-                    this->_placeWidgets();
-                    this->display();
-                } else {
-                    this->_chattingWith = event.data.newChatting.newClient;
-                    for (auto *message: this->_messages)
-                        this->_messagesLayout->removeItem(message->getLayout());
-                        this->_messages.clear();
-                }
+                this->_chattingWith = event.data.newChatting.newClient;
+                for (auto *message: this->_messages)
+                    this->_messagesLayout->removeItem(message->getLayout());
+                    this->_messages.clear();
+                this->_initWidgets();
+                this->_placeWidgets();
+                this->display();
             }
             break;
         case Event::NEW_MESSAGE:
@@ -66,12 +63,6 @@ void ChatScene::handleEvent(Event &event) {
                 this->_messages.push_back(message);
                 this->_messagesLayout->addLayout(message->getLayout());
                 // TODO group message and append it to the vector
-            }
-            break;
-        case Event::NEW_BULK_MESSAGE:
-            {
-                auto newMessage = event.data.newBulkMessage.messages;
-                // TODO only add messages created by self and chatting user
             }
             break;
         default:
@@ -88,7 +79,6 @@ QWidget *ChatScene::getWidget() {
 }
 
 void ChatScene::_initLayouts() {
-    this->_messagesLayout = new QVBoxLayout(this->_parent);
 }
 
 void ChatScene::_initWidgets() {

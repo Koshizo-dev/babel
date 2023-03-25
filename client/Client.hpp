@@ -18,10 +18,11 @@ namespace babel {
             bool isInCall();
             bool isChatWindow();
 
+            void addMessage(std::shared_ptr<Message> message);
+
             void setChatting(bool isChatting);
             void setInCall(bool isInCall);
             void setChatWindow(bool isChatWindow);
-            void setMessages(std::vector<std::shared_ptr<Message>> messages);
 
         private:
             std::string _username = "Koshizo"; // Easter egg since, not able to have capitals

@@ -83,17 +83,16 @@ void ServerManager::logout(IoClient *origin) {
 }
 
 void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
-    std::unique_lock<std::mutex> lock(this->_mutex);
-
     if (!origin->isContactWith(recipientName)) {
-        ContactPacket packet;
+        ContactPacket packet(recipientName);
         origin->getTransporter()->sendMessage(packet.serialize());
         origin->addContact(recipientName);
     }
     std::shared_ptr<IoClient> recipient = this->retrieveClient(recipientName);
+    std::unique_lock<std::mutex> lock(this->_mutex);
     if (recipient != nullptr) {
         if (!recipient->isContactWith(origin->username)) {
-            ContactPacket packet;
+            ContactPacket packet(origin->username);
             origin->getTransporter()->sendMessage(packet.serialize());
             recipient->addContact(origin->username);
         }

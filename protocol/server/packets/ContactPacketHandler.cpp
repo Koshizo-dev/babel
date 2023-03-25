@@ -16,6 +16,7 @@ void ContactPacketHandler::handle(Packet &packet, std::shared_ptr<ServerManager>
             return;
         ContactPacket newContact(username);
         origin->getTransporter()->sendMessage(newContact.serialize());
+        origin->addContact(username);
     } catch (std::bad_cast) {}
 }
 
@@ -24,4 +25,3 @@ std::string ContactPacketHandler::_trim(const std::string& s) {
     result.erase(std::remove_if(result.begin(), result.end(), [](char c) { return c == ' '; }), result.end());
     return result;
 }
-

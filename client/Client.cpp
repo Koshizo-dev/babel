@@ -18,8 +18,8 @@ std::vector<std::shared_ptr<Message>> Client::getMessages() {
     return (this->_messages);
 }
 
-void Client::setMessages(std::vector<std::shared_ptr<Message>> messages) {
-    this->_messages = messages;
+void Client::addMessage(std::shared_ptr<Message> message) {
+    this->_messages.push_back(message);
 }
 
 bool Client::isChatting() {
