@@ -52,11 +52,8 @@ RFC 4444             Babel Network Protocol                      March 2023
 1. Introduction
 
    The Babel protocol provides information about the communication
-   between clients and the server. R-Type game protocol is a UDP protocol.
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119.
+   between clients and the server. Babel voice protocol is a UDP protocol
+   only peer to peer.
 
 
 
@@ -180,7 +177,44 @@ RFC 4444             Babel Network Protocol                      March 2023
      | sender   | uint64  | timestamp         |
      +----------+---------+-------------------+
 
-     Table 5: MessagePacket body definition.
+     Table 6: MessagePacket body definition.
+
+
+  3.6 CallUp packet
+
+     The CallUp packet can be sent by the client and the server.
+     Once the clients sends a CallUp, the server will acknowledge
+     it by sending it back.
+     If sent by the client, username will be the person called, if sent
+     by the server, the username field will be the caller username.
+
+     +----------+--------------+---------------------+
+     | Name     | type         | Description         |
+     +----------+--------------+---------------------+
+     | username | string       | username (depends)  |
+     | hostname | string       | ip address          |
+     | content  | unsigned int | Its content         |
+     | sender   | uint64       | timestamp           |
+     +----------+---------+--------------------------+
+
+     Table 7: CallUp body definition.
+
+
+  3.7 HangUp packet
+
+     The HangUp packet can be sent by the client and the server.
+     Once the clients sends a HangUp packet, the server will
+     acknowledge it by sending it back.
+     If sent by the client, username will be the person called, if sent
+     by the server, the username field will be the caller username.
+
+     +----------+--------------+---------------------+
+     | Name     | type         | Description         |
+     +----------+--------------+---------------------+
+     | username | string       | username (depends)  |
+     +----------+---------+--------------------------+
+
+     Table 8: HangUp body definition.
 
 
 Paul COMTE.                Experimental                            [Page 5]
