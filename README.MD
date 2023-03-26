@@ -14,4 +14,4 @@
 
 # Wiki
 
-### Check our wiki for different guides: https://github.com/EpitechPromo2025/B-SYN-500-MPL-5-1-cpp-paul.comte/wiki
+## [Check our wiki for different guides](https://github.com/EpitechPromo2025/B-SYN-500-MPL-5-1-cpp-paul.comte/wiki)
