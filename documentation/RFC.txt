@@ -1,0 +1,164 @@
+Request for Comments                                            Paul COMTE
+Internet-Draft                                                     EPITECH
+Category: Technical                                             March 2023
+
+
+                        Babel Network Protocol
+
+Abstract
+
+   This memo presents the Network Protocol used in the Babel software.
+
+Status of This Memo
+
+   This memo defines an Experimental Protocol for the internet
+   community. This memo does not specify an Internet standard of any
+   kind. Discussions and suggestions for improvement are requested.
+   Distribution of this memo is unlimited.
+
+Copyright Notice
+
+   Copyright (c) EPITECH 2023.  All rights reserved.
+
+
+Paul COMTE.                Experimental                            [Page 1]
+
+RFC 4444             Babel Network Protocol                      March 2023
+
+
+Table of Contents
+
+   1. Introduction ....................................................2
+   2. Protocol packets definition .....................................3
+     2.1. Header definition ...........................................3
+     2.1. Body definition .............................................3
+   3. Packet types ....................................................4
+     3.1. Login packet ................................................4
+     3.2. LoginError packet ...........................................4
+     3.3. Logout packet ...............................................4
+     3.4. Contact packet ..............................................4
+     3.5. Message packet ..............................................4
+     3.6. CallUp packet ...............................................4
+     3.7. HangUp packet ...............................................4
+   4. Creating a packet .................................................5
+
+
+
+Paul COMTE.                Experimental                            [Page 2]
+
+RFC 4444             Babel Network Protocol                      March 2023
+
+
+1. Introduction
+
+   The Babel protocol provides information about the communication
+   between clients and the server. R-Type game protocol is a UDP protocol.
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119.
+
+
+
+Paul COMTE.                Experimental                            [Page 3]
+
+RFC 4444             Babel Network Protocol                      March 2023
+
+
+2. Protocol packets definition
+
+   All packets are being formatted the same way. Including a header and a
+   body. This is a binary protocol.
+
+2.1. Header definition
+
+   Header includes a magic header that recognizes a babel packet.
+   Then the Packet type is passed encoded on 1 byte.
+
+   +--------+-----------+---------------+
+   | Name   | type      | Description   |
+   +--------+-----------+---------------+
+   | magic  | char      | Magic code    |
+   | type   | char      | Packet type   |
+   +--------+-----------+---------------+
+
+      Table 1: Header format
+
+2.2. Body definition
+
+   The body of the packet is passed after the header, depending
+   on the packet type.
+   Variables are serialized using the custom fields, these fields
+   have two methods, one to serialize it to binary, and another to
+   deserialize it from a binary value.
+
+
+
+Paul COMTE.                Experimental                            [Page 4]
+
+RFC 4444             Babel Network Protocol                      March 2023
+
+
+3. Packet types
+
+  3.1. Login packet
+
+     The Login packet is used by a client to login to the server with
+     an username of its choice.
+     The server will return the LoginPacket on success.
+
+     +----------+---------+------------------+
+     | Name     | type    | Description      |
+     +----------+---------+------------------+
+     | username | string  | desired username |
+     +----------+---------+------------------+
+
+     Table 2: LoginPacket definition
+
+  3.2. LoginError packet
+
+     The LoginError packet is used by the server to notify the client
+     a reason why he got rejected.
+
+     +----------+---------+------------------+
+     | Name     | type    | Description      |
+     +----------+---------+------------------+
+     | message  | string  | error message    |
+     +----------+---------+------------------+
+
+     Table 3: LoginErrorPacket definition
+     
+
+  3.3 Logout packet
+
+     The Logout packet, if used by the client, will notify the server that
+     the client logged out from the server.
+     If used by the server, will notify the client that the server closed
+     its connection, this is usually when the server closes.
+
+     +----------+---------+------------------+
+     | Name     | type    | Description      |
+     +----------+---------+------------------+
+     |          |         |                  |
+     +----------+---------+------------------+
+     The packet has no body.
+
+     Table 4: LogoutPacket definition
+
+
+
+Paul COMTE.                Experimental                            [Page 5]
+
+RFC 4444             Babel Network Protocol                      March 2023
+
+
+4. Creating a packet
+
+   To create a packet, you first have to add its type to the
+   enum PacketType. Then in the Deserializer.cpp you need to add
+   an entry to the switch, with your PacketType so it knows what class
+   to call to deserialize the packet.
+
+   You then need to register a PacketHandler, you can inherit from
+   ClientPacketHandler, or ServerPacketHandler, following where you want
+   your packet to be handled.
