@@ -12,7 +12,6 @@ const void HangUpPacketHandler::handle(Packet &packet, std::shared_ptr<ClientMan
         HangUpPacket &hangUpPacket = dynamic_cast<HangUpPacket&>(packet);
 
         std::shared_ptr<Client> target = nullptr;
-        std::cout << "received close !" << std::endl;
 
         if (hangUpPacket.getUsername() == clientManager->self->getUsername()) {
             target = clientManager->self;

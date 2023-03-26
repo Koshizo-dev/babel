@@ -53,8 +53,6 @@ const std::shared_ptr<IoClient> ServerManager::retrieveClient(const std::string 
 }
 
 const void ServerManager::login(IoClient *origin) {
-    std::unique_lock<std::mutex> lock(this->_mutex);
-
     std::cout << "[+] " << origin->username << std::endl;
     this->database->addClient(origin->username);
 
@@ -65,6 +63,11 @@ const void ServerManager::login(IoClient *origin) {
         ContactPacket packet(contact);
         origin->getTransporter()->sendMessage(packet.serialize());
         origin->addContact(contact);
+        std::shared_ptr<IoClient> foreign = this->retrieveClient(contact);
+        if (foreign != nullptr && foreign->port != 0 && foreign->callTarget == origin->username) {
+            CallUpPacket callUpPacket(foreign->username, foreign->getTransporter()->getHostname(), foreign->port);
+            origin->getTransporter()->sendMessage(callUpPacket.serialize());
+        }
     }
 
     for (Message message: messages) {
@@ -76,13 +79,18 @@ const void ServerManager::login(IoClient *origin) {
 const void ServerManager::logout(IoClient *origin) {
     std::unique_lock<std::mutex> lock(this->_mutex);
 
-    if (origin->username == "")
+    if (origin->username == "") {
         std::cout << "[-] Unknown user" << std::endl;
-    else {
-        origin->getTransporter()->close();
-        this->_clients.erase(std::remove_if(this->_clients.begin(), this->_clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->_clients.end());
-        std::cout << "[-] " << origin->username << std::endl;
+        return;
     }
+    origin->getTransporter()->close();
+    this->_clients.erase(std::remove_if(this->_clients.begin(), this->_clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->_clients.end());
+    std::cout << "[-] " << origin->username << std::endl;
+    for (std::shared_ptr<IoClient> client: this->_clients)
+        if (origin->callTarget == client->username) {
+            HangUpPacket packet(origin->username);
+            client->getTransporter()->sendMessage(packet.serialize());
+        }
 }
 
 const void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
@@ -113,9 +121,10 @@ const void ServerManager::sendMessage(IoClient *origin, std::string recipientNam
 const void ServerManager::callUp(IoClient *origin, std::string username, unsigned int port) {
     if (!origin->isContactWith(username))
         origin->addContact(username);
-    std::cout << "call up on port: " << port << std::endl;
     std::shared_ptr<IoClient> target = this->retrieveClient(username);
     std::unique_lock<std::mutex> lock(this->_mutex);
+    origin->port = port;
+    origin->callTarget = username;
     if (target != nullptr) {
         if (!target->isContactWith(origin->username)) {
             ContactPacket packet(origin->username);
@@ -135,6 +144,8 @@ const void ServerManager::callUp(IoClient *origin, std::string username, unsigne
 const void ServerManager::hangUp(IoClient *origin, std::string username) {
     std::shared_ptr<IoClient> target = this->retrieveClient(username);
     std::unique_lock<std::mutex> lock(this->_mutex);
+    origin->port = 0;
+    origin->callTarget = "";
 
     HangUpPacket packet(origin->username);
     std::string serialized = packet.serialize();

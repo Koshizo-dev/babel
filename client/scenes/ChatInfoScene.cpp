@@ -48,7 +48,8 @@ const void ChatInfoScene::handleEvent(Event &event) {
             this->display();
     }
 
-    this->_updateCallLayout();
+    if (this->_chattingWith != nullptr)
+        this->_updateCallLayout();
 }
 
 const std::shared_ptr<SceneManager> ChatInfoScene::getSceneManager() const {

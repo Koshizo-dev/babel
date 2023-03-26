@@ -20,6 +20,7 @@ namespace babel {
 
             std::string username = "";
             unsigned int port = 0;
+            std::string callTarget = "";
 
         private:
             const void _handle();
