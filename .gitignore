@@ -4,3 +4,4 @@ build
 babel_*
 .clang_format
 .vs
+.vscode

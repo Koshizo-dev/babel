@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QFontDatabase>
 
+#include <cstdlib>
+#include <ctime>
 #include <QtPlugin>
 
 #include "../protocol/packets/LoginPacket.hpp"
@@ -26,6 +28,9 @@ int main(int argc, char **argv) {
     clientManager->eventManager = std::make_shared<EventManager>(clientManager, clientManager->packetManager);
 
     clientManager->audioSettings = std::make_shared<AudioSettings>();
+
+    std::srand(std::time(nullptr));
+
     clientManager->audioSocket = std::make_shared<QtAudioSocket>(0);
     std::shared_ptr<AudioCodec> audioCodec = std::make_shared<OpusCodec>();
     clientManager->audioDevice = std::make_shared<PortAudio>(audioCodec);

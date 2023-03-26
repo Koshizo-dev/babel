@@ -11,7 +11,7 @@ namespace babel {
             QtAudioSocket(unsigned int port);
     
             const void sendAudio(std::string audio, std::string hostname, unsigned int port) override;
-            const void receiveAudio(Audio &audio) override;
+            const void receiveAudio(AudioSettings &settings, Audio &audio) override;
             const unsigned int getPort() const override;
 
         private:

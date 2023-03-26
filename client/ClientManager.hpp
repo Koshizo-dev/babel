@@ -37,11 +37,10 @@ namespace babel {
             std::shared_ptr<AudioSocket> audioSocket = nullptr;
 
         private:
-            std::mutex _audioMutex;
-            bool _isAudioSocketRunning = false;
+            std::thread *_sendAudioThread = nullptr;
+            std::thread *_receiveAudioThread = nullptr;
 
-            std::thread *_audioThread = nullptr;
-
-            const void _initAudioSocket();
+            const void _sendAudio();
+            const void _receiveAudio();
     };
 }

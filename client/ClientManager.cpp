@@ -36,35 +36,35 @@ const void ClientManager::disconnect() {
 
 const void ClientManager::startAudioSocket() {
     this->stopAudioSocket();
-    this->_audioThread = new std::thread(&ClientManager::_initAudioSocket, this);
+    this->audioSettings->setRunning(true);
+    this->_sendAudioThread = new std::thread(&ClientManager::_sendAudio, this);
+    this->_receiveAudioThread = new std::thread(&ClientManager::_receiveAudio, this);
 }
 
-const void ClientManager::_initAudioSocket() {
-    this->_audioMutex.lock();
-    this->_isAudioSocketRunning = true;
-    this->_audioMutex.unlock();
+const void ClientManager::_receiveAudio() {
+    while (this->audioSettings->isRunning()) {
+        if (this->audioSocket == nullptr)
+            return;
+        this->audioSocket->receiveAudio(*this->audioSettings, *this->audioDevice);
+    }
+}
 
-    while (true) {
-        this->_audioMutex.lock();
-        if (!this->_isAudioSocketRunning) {
-            this->_audioMutex.unlock();
-            break;
-        }
-        this->_audioMutex.unlock();
-        if (this->audioSocket != nullptr) {
-            AudioReceiver receiver = this->audioSettings->getReceiver();
-            this->audioSocket->sendAudio(this->audioDevice->capture(), receiver.hostname, receiver.port);
-            this->audioSocket->receiveAudio(*this->audioDevice);
-        }
+const void ClientManager::_sendAudio() {
+    while (this->audioSettings->isRunning()) {
+        if (this->audioSocket == nullptr)
+            return;
+        AudioReceiver receiver = this->audioSettings->getReceiver();
+        this->audioSocket->sendAudio(this->audioDevice->capture(), receiver.hostname, receiver.port);
     }
 }
 
 const void ClientManager::stopAudioSocket() {
-    if (this->_audioThread == nullptr || !this->_isAudioSocketRunning)
+    if (!this->audioSettings->isRunning())
         return;
+    this->audioSettings->setRunning(false);
 
-    this->_audioMutex.lock();
-    this->_isAudioSocketRunning = false;
-    this->_audioMutex.unlock();
-    this->_audioThread->join();
+    if (this->_sendAudioThread)
+        this->_sendAudioThread->join();
+    if (this->_receiveAudioThread)
+        this->_receiveAudioThread->join();
 }

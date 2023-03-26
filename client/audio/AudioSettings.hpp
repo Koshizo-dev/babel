@@ -22,10 +22,13 @@ namespace babel {
     
             const void setReceiver(AudioReceiver receiver);
             const AudioReceiver getReceiver();
+            const void setRunning(bool isRunning);
+            const bool isRunning();
 
         private:
             std::mutex _mutex;
             AudioReceiver _receiver;
+            bool _isRunning = false;
     };
 
 }

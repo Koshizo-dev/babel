@@ -14,12 +14,10 @@ const void QtAudioSocket::sendAudio(std::string audio, std::string hostname, uns
     this->_socket.writeDatagram(audio.data(), audio.length(), QHostAddress(hostname.c_str()), port);
 }
 
-const void QtAudioSocket::receiveAudio(Audio &audio) {
-    int packetsToReceive = 256;
-    while (packetsToReceive > 0 && this->_socket.hasPendingDatagrams()) {
+const void QtAudioSocket::receiveAudio(AudioSettings &settings, Audio &audio) {
+    while (settings.isRunning() && this->_socket.hasPendingDatagrams()) {
         QByteArray datagram;
         datagram.resize(this->_socket.pendingDatagramSize());
-
         // Read the audio data from the socket
         QHostAddress senderAddress;
         quint16 senderPort;
@@ -29,7 +27,6 @@ const void QtAudioSocket::receiveAudio(Audio &audio) {
 
         DecodedAudio decoded = audio.getAudioCodec()->decode(std::string(reinterpret_cast<char *>(encodedBuffer), encodedSize));
         audio.write(decoded);
-        packetsToReceive--;
     }
 }
 
