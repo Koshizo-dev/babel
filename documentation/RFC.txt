@@ -113,7 +113,7 @@ RFC 4444             Babel Network Protocol                      March 2023
      | username | string  | desired username |
      +----------+---------+------------------+
 
-     Table 2: LoginPacket definition
+     Table 2: LoginPacket body definition.
 
   3.2. LoginError packet
 
@@ -126,7 +126,7 @@ RFC 4444             Babel Network Protocol                      March 2023
      | message  | string  | error message    |
      +----------+---------+------------------+
 
-     Table 3: LoginErrorPacket definition
+     Table 3: LoginErrorPacket body definition.
      
 
   3.3 Logout packet
@@ -143,8 +143,44 @@ RFC 4444             Babel Network Protocol                      March 2023
      +----------+---------+------------------+
      The packet has no body.
 
-     Table 4: LogoutPacket definition
+     Table 4: LogoutPacket body definition.
 
+
+  3.4 Contact packet
+
+     The Contact packet is used by the server and sent to the client to add
+     a new contact.
+     Contact packets are sent once the user logs in, or receive a message,
+     someone tries to call him.
+
+     +----------+---------+------------------+
+     | Name     | type    | Description      |
+     +----------+---------+------------------+
+     | username | string  | Its username     |
+     +----------+---------+------------------+
+
+     Table 5: ContactPacket body definition.
+
+
+  3.5 Message packet
+
+     The Message packet can be sent by the client and the server.
+     Once the clients sends a MessagePacket, the server will return it
+     formatted with a timestamp, the server will also send the message to
+     the recipient username if connected.
+     Also, when a client logs in, the server will send every messages he has
+     sent, and received.
+
+     +----------+---------+-------------------+
+     | Name     | type    | Description       |
+     +----------+---------+-------------------+
+     | sender   | string  | Sender username   |
+     | recipient| string  | Recipient username|
+     | content  | string  | Its content       |
+     | sender   | uint64  | timestamp         |
+     +----------+---------+-------------------+
+
+     Table 5: MessagePacket body definition.
 
 
 Paul COMTE.                Experimental                            [Page 5]
