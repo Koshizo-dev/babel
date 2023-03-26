@@ -10,9 +10,18 @@ PortAudio::PortAudio(std::shared_ptr<AudioCodec> audioCodec): _audioCodec(audioC
     this->_inputParameters.sampleFormat = paFloat32;
     this->_inputParameters.suggestedLatency = Pa_GetDeviceInfo(this->_inputParameters.device)->defaultHighInputLatency;
     this->_inputParameters.hostApiSpecificStreamInfo = NULL;
+    this->_outputParameters.device = Pa_GetDefaultOutputDevice();
+    this->_outputParameters.channelCount = CHANNELS;
+    this->_outputParameters.sampleFormat = paFloat32;
+    this->_outputParameters.suggestedLatency = Pa_GetDeviceInfo(this->_outputParameters.device)->defaultHighOutputLatency;
+    this->_outputParameters.hostApiSpecificStreamInfo = NULL;
+    Pa_OpenStream(&this->_audioStream, &this->_inputParameters, &this->_outputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, NULL, NULL);
+    Pa_StartStream(this->_audioStream);
 }
 
 PortAudio::~PortAudio() {
+    Pa_StopStream(this->_audioStream);
+    Pa_CloseStream(this->_audioStream);
     Pa_Terminate();
 }
 
@@ -21,7 +30,6 @@ const std::shared_ptr<AudioCodec> PortAudio::getAudioCodec() const {
 }
 
 const std::string PortAudio::capture() {
-    Pa_OpenStream(&this->_audioStream, &this->_inputParameters, NULL, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, NULL, NULL);
     float inputBuffer[FRAMES_PER_BUFFER * CHANNELS];
     Pa_ReadStream(this->_audioStream, inputBuffer, FRAMES_PER_BUFFER);
 
@@ -29,12 +37,6 @@ const std::string PortAudio::capture() {
 }
 
 const void PortAudio::write(DecodedAudio &audio) {
-    Pa_OpenStream(&this->_audioStream, &this->_inputParameters, NULL, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, NULL, NULL);
-    Pa_StartStream(this->_audioStream);
-
     // Write the decoded audio data to the output stream
     Pa_WriteStream(this->_audioStream, audio.buffer, audio.bufferSize);
-
-    Pa_StopStream(this->_audioStream);
-    Pa_CloseStream(this->_audioStream);
 }

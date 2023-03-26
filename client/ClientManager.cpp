@@ -31,6 +31,7 @@ const void ClientManager::disconnect() {
     this->self.reset();
     this->clients.clear();
     this->transporter.reset();
+    this->stopAudioSocket();
 }
 
 const void ClientManager::startAudioSocket() {
@@ -50,9 +51,11 @@ const void ClientManager::_initAudioSocket() {
             break;
         }
         this->_audioMutex.unlock();
-        // AudioReceiver receiver = this->audioSettings->getReceiver();
-        // socket->sendAudio(this->audioDevice->capture(), receiver.hostname, receiver.port);
-        // socket->receiveAudio(*this->audioDevice);
+        if (this->audioSocket != nullptr) {
+            AudioReceiver receiver = this->audioSettings->getReceiver();
+            this->audioSocket->sendAudio(this->audioDevice->capture(), receiver.hostname, receiver.port);
+            this->audioSocket->receiveAudio(*this->audioDevice);
+        }
     }
 }
 

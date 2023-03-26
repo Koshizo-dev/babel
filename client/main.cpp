@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
 
     clientManager->audioSettings = std::make_shared<AudioSettings>();
     clientManager->audioSocket = std::make_shared<QtAudioSocket>(0);
-    // std::shared_ptr<AudioCodec> audioCodec = std::make_shared<OpusCodec>();
-    // clientManager->audioDevice = std::make_shared<PortAudio>(audioCodec);
+    std::shared_ptr<AudioCodec> audioCodec = std::make_shared<OpusCodec>();
+    clientManager->audioDevice = std::make_shared<PortAudio>(audioCodec);
 
     DisplaySettings settings(argc, argv, "Babel | New Gen", 1280, 720);
     Display *display = new QDisplay(settings, clientManager);

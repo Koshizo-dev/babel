@@ -19,6 +19,7 @@ namespace babel {
             const std::shared_ptr<AudioCodec> _audioCodec;
             PaStream *_audioStream;
             PaStreamParameters _inputParameters;
+            PaStreamParameters _outputParameters;
     };
     
 }

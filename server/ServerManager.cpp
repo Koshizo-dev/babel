@@ -84,13 +84,16 @@ const void ServerManager::logout(IoClient *origin) {
         return;
     }
     origin->getTransporter()->close();
-    this->_clients.erase(std::remove_if(this->_clients.begin(), this->_clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->_clients.end());
     std::cout << "[-] " << origin->username << std::endl;
-    for (std::shared_ptr<IoClient> client: this->_clients)
+    for (std::shared_ptr<IoClient> client: this->_clients) {
+        if (client->username == origin->username)
+            continue;
         if (origin->callTarget == client->username) {
             HangUpPacket packet(origin->username);
             client->getTransporter()->sendMessage(packet.serialize());
         }
+    }
+    this->_clients.erase(std::remove_if(this->_clients.begin(), this->_clients.end(), [origin](std::shared_ptr<IoClient> client){return client.get() == origin;}), this->_clients.end());
 }
 
 const void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {

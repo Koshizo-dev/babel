@@ -17,10 +17,12 @@ const void CallUpPacketHandler::handle(Packet &packet, std::shared_ptr<ClientMan
             target = clientManager->self;
             clientManager->startAudioSocket();
         }
-        else
+        else {
             target = clientManager->getClient(callUpPacket.getUsername());
-        if (target == nullptr)
-            return;
+            if (target == nullptr)
+                return;
+            clientManager->audioSettings->setReceiver(AudioReceiver(callUpPacket.getHostname(), callUpPacket.getPort()));
+        }
 
         target->callUp(callUpPacket.getHostname(), callUpPacket.getPort());
 
