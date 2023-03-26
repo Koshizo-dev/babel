@@ -5,6 +5,7 @@
 #include "../protocol/PacketManager.hpp"
 #include "EventManager.hpp"
 #include "network/Transporter.hpp"
+#include "audio/Audio.hpp"
 
 #include <mutex>
 #include <vector>
@@ -21,6 +22,7 @@ namespace babel {
             const void disconnect();
 
             std::shared_ptr<SceneManager> sceneManager = nullptr;
+            std::shared_ptr<Audio> audioDevice = nullptr;
             std::vector<std::shared_ptr<Client>> clients = {};
             std::shared_ptr<EventManager> eventManager = nullptr;
             std::shared_ptr<PacketManager> packetManager = nullptr;
