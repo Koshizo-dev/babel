@@ -4,7 +4,6 @@
 #include "Client.hpp"
 
 #include <string>
-#include <variant>
 #include <iostream>
 
 namespace babel {

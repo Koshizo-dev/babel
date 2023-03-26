@@ -3,3 +3,4 @@ build
 .envrc
 babel_*
 .clang_format
+.vs

@@ -1,8 +1,6 @@
 #include "ContactScene.hpp"
 #include "../ClientError.hpp"
 #include <iostream>
-#include <qnamespace.h>
-#include <qsizepolicy.h>
 
 using namespace babel;
 

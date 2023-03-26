@@ -6,7 +6,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <qlayout.h>
 #include <vector>
 
 namespace babel {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PacketField.hpp"
-#include <endian.h>
 
 namespace babel {
 

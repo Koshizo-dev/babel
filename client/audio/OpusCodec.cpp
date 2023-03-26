@@ -18,7 +18,7 @@ OpusCodec::~OpusCodec() {
 }
 
 const std::string OpusCodec::encode(float *buffer) const {
-    int bufferSize = OPUS_FRAME_SIZE * CHANNELS * sizeof(float); 
+    const int bufferSize = OPUS_FRAME_SIZE * CHANNELS * sizeof(float); 
     unsigned char outputBuffer[bufferSize];
     int encodedSize = opus_encode_float(this->_encoder, buffer, FRAMES_PER_BUFFER, outputBuffer, bufferSize);
 

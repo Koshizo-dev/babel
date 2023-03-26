@@ -3,7 +3,6 @@
 #include <QHostAddress>
 #include <QWidget>
 #include <QAbstractSocket>
-#include <qabstractsocket.h>
 #include <sstream>
 
 using namespace babel;

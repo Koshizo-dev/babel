@@ -1,6 +1,6 @@
 #pragma once
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace babel {
     int centerX(QWidget *parent, int widgetWidth);
