@@ -6,7 +6,12 @@
 
 # Linux build steps:
 
-- `mkdir build && cd build`
-- `conan install .. --build missing`
-- `cmake ..`
-- `make`
+- `bash install.sh`
+
+# Windows build steps:
+
+- `.\install.ps1`
+
+# Wiki
+
+### Check our wiki for different guides: https://github.com/EpitechPromo2025/B-SYN-500-MPL-5-1-cpp-paul.comte/wiki
