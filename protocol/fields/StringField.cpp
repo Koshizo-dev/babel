@@ -9,7 +9,7 @@ const FieldType StringField::getType() const {
 }
 
 const size_t StringField::getSize() const {
-    return (sizeof(int) + this->_value.length());
+    return (sizeof(unsigned int) + this->_value.length());
 }
 
 const std::string StringField::serialize(bool showHeader) const {
@@ -17,7 +17,7 @@ const std::string StringField::serialize(bool showHeader) const {
 
     if (showHeader) {
         ss << CharacterField(this->getType()).serialize(false);
-        ss << IntegerField(this->_value.length()).serialize(false);
+        ss << UnsignedIntegerField(this->_value.length()).serialize(false);
     }
 
     for (char c: this->_value)

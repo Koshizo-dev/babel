@@ -35,6 +35,10 @@ const void AsioTransporter::readMessage(std::function<void(std::string)> callbac
     });
 }
 
+const std::string AsioTransporter::getHostname() const {
+    return (this->_socket.remote_endpoint().address().to_string());
+}
+
 const void AsioTransporter::close() {
 
     try {

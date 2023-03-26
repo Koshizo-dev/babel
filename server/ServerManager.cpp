@@ -2,6 +2,8 @@
 #include "../protocol/packets/LogoutPacket.hpp"
 #include "../protocol/packets/ContactPacket.hpp"
 #include "../protocol/packets/MessagePacket.hpp"
+#include "../protocol/packets/CallUpPacket.hpp"
+#include "../protocol/packets/HangUpPacket.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -84,11 +86,8 @@ const void ServerManager::logout(IoClient *origin) {
 }
 
 const void ServerManager::sendMessage(IoClient *origin, std::string recipientName, std::string content) {
-    if (!origin->isContactWith(recipientName)) {
-        ContactPacket packet(recipientName);
-        origin->getTransporter()->sendMessage(packet.serialize());
+    if (!origin->isContactWith(recipientName))
         origin->addContact(recipientName);
-    }
     std::shared_ptr<IoClient> recipient = this->retrieveClient(recipientName);
     std::unique_lock<std::mutex> lock(this->_mutex);
     if (recipient != nullptr) {
@@ -109,4 +108,38 @@ const void ServerManager::sendMessage(IoClient *origin, std::string recipientNam
     origin->getTransporter()->sendMessage(serializedMessage);
     Message dbMessage(origin->username, recipientName, content, timestamp);
     this->database->addMessage(dbMessage);
+}
+
+const void ServerManager::callUp(IoClient *origin, std::string username, unsigned int port) {
+    if (!origin->isContactWith(username))
+        origin->addContact(username);
+    std::cout << "call up on port: " << port << std::endl;
+    std::shared_ptr<IoClient> target = this->retrieveClient(username);
+    std::unique_lock<std::mutex> lock(this->_mutex);
+    if (target != nullptr) {
+        if (!target->isContactWith(origin->username)) {
+            ContactPacket packet(origin->username);
+            target->getTransporter()->sendMessage(packet.serialize());
+            target->addContact(origin->username);
+        }
+    }
+
+    CallUpPacket packet(origin->username, origin->getTransporter()->getHostname(), port);
+    std::string serialized = packet.serialize();
+
+    if (target != nullptr)
+        target->getTransporter()->sendMessage(packet.serialize());
+    origin->getTransporter()->sendMessage(serialized);
+}
+
+const void ServerManager::hangUp(IoClient *origin, std::string username) {
+    std::shared_ptr<IoClient> target = this->retrieveClient(username);
+    std::unique_lock<std::mutex> lock(this->_mutex);
+
+    HangUpPacket packet(origin->username);
+    std::string serialized = packet.serialize();
+
+    if (target != nullptr)
+        target->getTransporter()->sendMessage(packet.serialize());
+    origin->getTransporter()->sendMessage(serialized);
 }

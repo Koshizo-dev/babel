@@ -8,14 +8,14 @@ namespace babel {
         public:
             LoginErrorPacket(std::string error = "");
 
-            std::string getError();
+            const std::string getError() const;
 
-            PacketType getType() override;
-            std::string serialize() override;
-            std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) override;
+            const PacketType getType() const override;
+            const std::string serialize() const override;
+            std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const override;
 
         private:
-            std::string _error = "";
+            const std::string _error;
     };
 
 }

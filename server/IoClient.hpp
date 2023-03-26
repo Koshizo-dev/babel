@@ -19,6 +19,7 @@ namespace babel {
             const std::shared_ptr<Transporter> getTransporter() const;
 
             std::string username = "";
+            unsigned int port = 0;
 
         private:
             const void _handle();

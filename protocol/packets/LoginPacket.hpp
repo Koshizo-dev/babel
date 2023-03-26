@@ -6,17 +6,16 @@ namespace babel {
 
     class LoginPacket: public Packet {
         public:
-            LoginPacket() {}
-            LoginPacket(std::string username);
+            LoginPacket(std::string username = "");
 
-            std::string getUsername();
+            const std::string getUsername() const;
 
-            PacketType getType() override;
-            std::string serialize() override;
-            std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) override;
+            const PacketType getType() const override;
+            const std::string serialize() const override;
+            std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const override;
 
         private:
-            std::string _username = "";
+            const std::string _username;
     };
 
 }

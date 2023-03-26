@@ -1,28 +1,28 @@
-#include "LoginPacket.hpp"
+#include "HangUpPacket.hpp"
 #include "../fields/StringField.hpp"
 #include "../serialization/Serializer.hpp"
 
 using namespace babel;
 
-LoginPacket::LoginPacket(std::string username): _username(username) {
+HangUpPacket::HangUpPacket(std::string username): _username(username) {
 }
 
-const std::string LoginPacket::getUsername() const {
+const std::string HangUpPacket::getUsername() const {
     return (this->_username);
 }
 
-const PacketType LoginPacket::getType() const {
-    return (PacketType::LOGIN);
+const PacketType HangUpPacket::getType() const {
+    return (PacketType::HANG_UP);
 }
 
-const std::string LoginPacket::serialize() const {
+const std::string HangUpPacket::serialize() const {
     Serializer serializer(this->getType());
 
     serializer << new StringField(this->_username);
     return (serializer.serialize());
 }
 
-std::unique_ptr<Packet> LoginPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const {
+std::unique_ptr<Packet> HangUpPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const {
     if (packetFields.size() != 1)
         return (nullptr);
 
@@ -32,5 +32,5 @@ std::unique_ptr<Packet> LoginPacket::deserialize(std::vector<std::unique_ptr<Pac
 
     StringField *name = static_cast<StringField*>(field.get());
 
-    return (std::unique_ptr<Packet>(new LoginPacket(name->getValue())));
+    return (std::unique_ptr<Packet>(new HangUpPacket(name->getValue())));
 }

@@ -12,14 +12,14 @@ namespace babel {
             SqlDatabase(std::string path);
             ~SqlDatabase();
 
-            void connect() override;
-            void disconnect() const override;
-            void init() const override;
-            void addClient(std::string username) const override;
-            void addContact(std::string username, std::string contact) const override;
-            void addMessage(Message &message) const override;
-            std::vector<Message> getMessages(std::string username) const override;
-            std::vector<std::string> getContacts(std::string username) const override;
+            const void connect() override;
+            const void disconnect() const override;
+            const void init() const override;
+            const void addClient(std::string username) const override;
+            const void addContact(std::string username, std::string contact) const override;
+            const void addMessage(Message &message) const override;
+            const std::vector<Message> getMessages(std::string username) const override;
+            const std::vector<std::string> getContacts(std::string username) const override;
 
         private:
             void _process(std::string request) const;

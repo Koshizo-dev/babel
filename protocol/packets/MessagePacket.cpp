@@ -9,34 +9,30 @@ using namespace babel;
 
 MessagePacket::MessagePacket(std::string recipient, std::string content): MessagePacket("", recipient, content, 0) {}
 
-MessagePacket::MessagePacket(std::string sender, std::string recipient, std::string content, std::uint64_t timestamp) {
-    this->_sender = sender;
-    this->_recipient = recipient;
-    this->_content = content;
-    this->_timestamp = timestamp;
+MessagePacket::MessagePacket(std::string sender, std::string recipient, std::string content, std::uint64_t timestamp): _sender(sender), _recipient(recipient), _content(content), _timestamp(timestamp) {
 }
 
-std::string MessagePacket::getSender() {
+const std::string MessagePacket::getSender() const {
     return (this->_sender);
 }
 
-std::string MessagePacket::getRecipient() {
+const std::string MessagePacket::getRecipient() const {
     return (this->_recipient);
 }
 
-std::string MessagePacket::getContent() {
+const std::string MessagePacket::getContent() const {
     return (this->_content);
 }
 
-std::uint64_t MessagePacket::getTimestamp() {
+const std::uint64_t MessagePacket::getTimestamp() const {
     return (this->_timestamp);
 }
 
-PacketType MessagePacket::getType() {
+const PacketType MessagePacket::getType() const {
     return (PacketType::MESSAGE);
 }
 
-std::string MessagePacket::serialize() {
+const std::string MessagePacket::serialize() const {
     Serializer serializer(this->getType());
 
     serializer << new StringField(this->_sender);
@@ -46,7 +42,7 @@ std::string MessagePacket::serialize() {
     return (serializer.serialize());
 }
 
-std::unique_ptr<Packet> MessagePacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
+std::unique_ptr<Packet> MessagePacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const {
     if (packetFields.size() != 4)
         return (nullptr);
 

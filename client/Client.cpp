@@ -38,12 +38,28 @@ const void Client::setChatting(bool isChatting) {
     this->_isChatting = isChatting;
 }
 
-const void Client::setInCall(bool isInCall) {
-    this->_isInCall = isInCall;
-}
-
 const void Client::setChatWindow(bool isChatWindow) {
     this->_isChatWindow = isChatWindow;
+}
+
+const void Client::callUp(std::string hostname, unsigned int port) {
+    this->_isInCall = true;
+    this->_hostname = hostname;
+    this->_port = port;    
+}
+
+const std::string Client::getHostname() const {
+    return (this->_hostname);
+}
+
+const unsigned int Client::getPort() const {
+    return (this->_port);
+}
+
+const void Client::hangUp() {
+    this->_isInCall = false;
+    this->_hostname = "";
+    this->_port = 0;
 }
 
 Icon *Client::_generateIcon(int size) const {

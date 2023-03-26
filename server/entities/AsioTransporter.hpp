@@ -15,6 +15,7 @@ namespace babel {
 
             const void sendMessage(std::string message) override;
             const void readMessage(std::function<void(std::string)> callback) override;
+            const std::string getHostname() const override;
             const void close() override;
             const bool isClosed() const override;
 

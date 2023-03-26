@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PacketField.hpp"
-#include "IntegerField.hpp"
+#include "UnsignedIntegerField.hpp"
 #include "CharacterField.hpp"
 
 #include <sstream>
@@ -19,7 +19,7 @@ namespace babel {
 
             static StringField deserialize(char const *data) {
                 std::stringstream ss;
-                IntegerField size = IntegerField::deserialize(data);
+                UnsignedIntegerField size = UnsignedIntegerField::deserialize(data);
 
                 for (int i = 0; i < size.getValue(); i++)
                     ss << CharacterField::deserialize(&data[i+size.getSize()]).getValue();

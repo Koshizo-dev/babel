@@ -4,9 +4,9 @@
 
 namespace babel {
 
-    class ContactPacket: public Packet {
+    class HangUpPacket: public Packet {
         public:
-            ContactPacket(std::string username = "");
+            HangUpPacket(std::string username = "");
 
             const std::string getUsername() const;
 

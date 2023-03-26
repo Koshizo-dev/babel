@@ -2,12 +2,15 @@
 #include "../fields/CharacterField.hpp"
 #include "../fields/StringField.hpp"
 #include "../fields/IntegerField.hpp"
+#include "../fields/UnsignedIntegerField.hpp"
 #include "../fields/UnsignedInteger64Field.hpp"
 #include "../packets/LoginPacket.hpp"
 #include "../packets/LoginErrorPacket.hpp"
 #include "../packets/LogoutPacket.hpp"
 #include "../packets/ContactPacket.hpp"
 #include "../packets/MessagePacket.hpp"
+#include "../packets/CallUpPacket.hpp"
+#include "../packets/HangUpPacket.hpp"
 
 #include <iostream>
 
@@ -25,6 +28,10 @@ std::unique_ptr<Packet> Deserializer::deserialize(PacketType packetType, std::ve
             return (ContactPacket().deserialize(std::move(packetFields)));
         case PacketType::MESSAGE:
             return (MessagePacket().deserialize(std::move(packetFields)));
+        case PacketType::CALL_UP:
+            return (CallUpPacket().deserialize(std::move(packetFields)));
+        case PacketType::HANG_UP:
+            return (HangUpPacket().deserialize(std::move(packetFields)));
     }
 
     return (nullptr);
@@ -43,6 +50,11 @@ std::unique_ptr<PacketField> Deserializer::deserializeField(const char *data) co
             {
                 IntegerField field = IntegerField::deserialize(&data[1]);
                 return (std::unique_ptr<PacketField>(new IntegerField(field.getValue())));
+            }
+        case FieldType::UNSIGNED_INTEGER:
+            {
+                UnsignedIntegerField field = UnsignedIntegerField::deserialize(&data[1]);
+                return (std::unique_ptr<PacketField>(new UnsignedIntegerField(field.getValue())));
             }
         case FieldType::UNSIGNED_INTEGER_64:
             {

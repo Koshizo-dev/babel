@@ -14,18 +14,18 @@ SqlDatabase::~SqlDatabase() {
         sqlite3_close(this->_db);
 }
 
-void SqlDatabase::connect() {
+const void SqlDatabase::connect() {
     int rc = sqlite3_open(this->_path.c_str(), &this->_db);
 
     if (rc != SQLITE_OK)
         throw DatabaseError(sqlite3_errmsg(this->_db));
 }
 
-void SqlDatabase::disconnect() const {
+const void SqlDatabase::disconnect() const {
     sqlite3_close(this->_db);
 }
 
-void SqlDatabase::init() const {
+const void SqlDatabase::init() const {
     std::string create_clients = "CREATE TABLE IF NOT EXISTS clients ("
                                  "  username text primary key not null"
                                  ");";
@@ -49,14 +49,14 @@ void SqlDatabase::init() const {
     this->_process(create_contacts);
 }
 
-void SqlDatabase::addClient(std::string username) const {
+const void SqlDatabase::addClient(std::string username) const {
     std::string insertClient = "INSERT OR IGNORE INTO clients (username) VALUES (?)";
     SqliteStatement stmt(this->_db, insertClient);
     stmt.bind(1, username);
     stmt.step();
 }
 
-void SqlDatabase::addContact(std::string username, std::string contact) const {
+const void SqlDatabase::addContact(std::string username, std::string contact) const {
     // check if sender is in recipient's contact list
     std::string selectContact = "SELECT contact FROM contacts WHERE username = ? AND contact = ?";
     SqliteStatement stmtContact(this->_db, selectContact);
@@ -74,7 +74,7 @@ void SqlDatabase::addContact(std::string username, std::string contact) const {
     stmtInsertContact.step();
 }
 
-void SqlDatabase::addMessage(Message &message) const {
+const void SqlDatabase::addMessage(Message &message) const {
     this->addContact(message.getSender(), message.getRecipient());
     this->addContact(message.getRecipient(), message.getSender());
 
@@ -88,7 +88,7 @@ void SqlDatabase::addMessage(Message &message) const {
     stmt.step();
 }
 
-std::vector<Message> SqlDatabase::getMessages(std::string username) const {
+const std::vector<Message> SqlDatabase::getMessages(std::string username) const {
     std::vector<Message> messages;
 
     // Query messages where username is the sender or the recipient
@@ -110,7 +110,7 @@ std::vector<Message> SqlDatabase::getMessages(std::string username) const {
     return messages;
 }
 
-std::vector<std::string> SqlDatabase::getContacts(std::string username) const {
+const std::vector<std::string> SqlDatabase::getContacts(std::string username) const {
     std::vector<std::string> contacts = {};
 
     std::string selectContacts = "SELECT contact FROM contacts WHERE username = ?";

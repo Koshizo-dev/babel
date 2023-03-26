@@ -7,6 +7,7 @@ namespace babel {
     enum FieldType {
         CHARACTER,
         INTEGER,
+        UNSIGNED_INTEGER,
         UNSIGNED_INTEGER_64,
         STRING,
     };

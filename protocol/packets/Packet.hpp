@@ -13,9 +13,9 @@ namespace babel {
         public:
             Packet() {}
     
-            virtual PacketType getType() = 0;
-            virtual std::string serialize() = 0;
-            virtual std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) = 0;
+            virtual const PacketType getType() const = 0;
+            virtual const std::string serialize() const = 0;
+            virtual std::unique_ptr<Packet> deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const = 0;
     };
     
 }

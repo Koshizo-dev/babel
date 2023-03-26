@@ -24,8 +24,12 @@ namespace babel {
             const void addMessage(std::shared_ptr<Message> message);
 
             const void setChatting(bool isChatting);
-            const void setInCall(bool isInCall);
             const void setChatWindow(bool isChatWindow);
+
+            const void callUp(std::string hostname, unsigned int port);
+            const std::string getHostname() const;
+            const unsigned int getPort() const;
+            const void hangUp();
 
         private:
             std::string _username = "Koshizo"; // Easter egg since, not able to have capitals
@@ -33,6 +37,9 @@ namespace babel {
             bool _isInCall = false;
             bool _isChatWindow = false;
             std::vector<std::shared_ptr<Message>> _messages = {};
+
+            std::string _hostname = "";
+            unsigned int _port = 0;
 
             Icon *_generateIcon(int size) const;
     };

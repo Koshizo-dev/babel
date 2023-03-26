@@ -5,26 +5,25 @@
 
 using namespace babel;
 
-LoginErrorPacket::LoginErrorPacket(std::string error) {
-    this->_error = error;
+LoginErrorPacket::LoginErrorPacket(std::string error): _error(error) {
 }
 
-std::string LoginErrorPacket::getError() {
+const std::string LoginErrorPacket::getError() const {
     return (this->_error);
 }
 
-PacketType LoginErrorPacket::getType() {
+const PacketType LoginErrorPacket::getType() const {
     return (PacketType::LOGIN_ERROR);
 }
 
-std::string LoginErrorPacket::serialize() {
+const std::string LoginErrorPacket::serialize() const {
     Serializer serializer(this->getType());
 
     serializer << new StringField(this->_error);
     return (serializer.serialize());
 }
 
-std::unique_ptr<Packet> LoginErrorPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
+std::unique_ptr<Packet> LoginErrorPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const {
     if (packetFields.size() != 1)
         return (nullptr);
 

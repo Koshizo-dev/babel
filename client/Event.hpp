@@ -57,6 +57,10 @@ namespace babel {
                 std::shared_ptr<Client> newClient;
             } newChatting;
 
+            struct CallStateUpdate {
+                std::shared_ptr<Client> update;
+            } callStateUpdate;
+
             union Data {
 
                 LoginFailed loginFailed;
@@ -67,6 +71,7 @@ namespace babel {
                 NewBulkMessage newBulkMessage;
                 NewClient newClient;
                 NewChatting newChatting;
+                CallStateUpdate callStateUpdate;
 
                 Data() {}
                 ~Data() {}

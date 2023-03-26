@@ -7,6 +7,8 @@ QtAudioSocket::QtAudioSocket(unsigned int port) {
 }
 
 const void QtAudioSocket::sendAudio(std::string audio, std::string hostname, unsigned int port) {
+    if (hostname == "" || port == 0)
+        return;
     this->_socket.writeDatagram(audio.data(), audio.length(), QHostAddress(hostname.c_str()), port);
 }
 
@@ -25,4 +27,8 @@ const void QtAudioSocket::receiveAudio(Audio &audio) {
         DecodedAudio decoded = audio.getAudioCodec()->decode(std::string(reinterpret_cast<char *>(encodedBuffer), encodedSize));
         audio.write(decoded);
     }
+}
+
+const unsigned int QtAudioSocket::getPort() const {
+    return (this->_socket.localPort());
 }

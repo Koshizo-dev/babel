@@ -6,6 +6,8 @@
 #include "packets/LogoutPacketHandler.hpp"
 #include "packets/ContactPacketHandler.hpp"
 #include "packets/MessagePacketHandler.hpp"
+#include "packets/CallUpPacketHandler.hpp"
+#include "packets/HangUpPacketHandler.hpp"
 
 using namespace babel;
 
@@ -17,6 +19,8 @@ ClientPacketManager::ClientPacketManager(std::shared_ptr<ClientManager> clientMa
     this->registerHandler(PacketType::LOGOUT, std::shared_ptr<ClientPacketHandler>(new LogoutPacketHandler()));
     this->registerHandler(PacketType::CONTACT, std::shared_ptr<ClientPacketHandler>(new ContactPacketHandler()));
     this->registerHandler(PacketType::MESSAGE, std::shared_ptr<ClientPacketHandler>(new MessagePacketHandler()));
+    this->registerHandler(PacketType::CALL_UP, std::shared_ptr<ClientPacketHandler>(new CallUpPacketHandler()));
+    this->registerHandler(PacketType::HANG_UP, std::shared_ptr<ClientPacketHandler>(new HangUpPacketHandler()));
 }
 
 const void ClientPacketManager::handlePacket(Packet &packet) const {

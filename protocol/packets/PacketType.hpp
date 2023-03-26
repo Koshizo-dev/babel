@@ -8,6 +8,8 @@ namespace babel {
         LOGOUT,
         CONTACT,
         MESSAGE,
+        CALL_UP,
+        HANG_UP,
     };
 
 }

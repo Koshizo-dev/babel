@@ -20,6 +20,8 @@ namespace babel {
             const void login(IoClient *origin);
             const void logout(IoClient *origin);
             const void sendMessage(IoClient *origin, std::string recipientName, std::string content);
+            const void callUp(IoClient *origin, std::string username, unsigned int port);
+            const void hangUp(IoClient *origin, std::string username);
 
             std::shared_ptr<Database> database = nullptr;
             std::shared_ptr<ServerPacketManager> packetManager = nullptr;

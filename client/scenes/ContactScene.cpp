@@ -131,7 +131,6 @@ Contact *ContactScene::_generateContact(std::shared_ptr<Client> client) {
         if (previousChatting != nullptr)
             previousChatting->setChatting(false);
         contact->getClient()->setChatting(true);
-        contact->getClient()->setInCall(false);
 
         Event filterEvent(Event::CONTACT_FILTER_UPDATE);
         new (&filterEvent.data.contactFilter) Event::ContactFilterUpdate({""});

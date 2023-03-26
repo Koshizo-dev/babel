@@ -1,7 +1,8 @@
 #include "ChatInfoScene.hpp"
 #include "../ClientError.hpp"
 #include "LoggingScene.hpp"
-#include <iostream>
+#include "../../protocol/packets/CallUpPacket.hpp"
+#include "../../protocol/packets/HangUpPacket.hpp"
 
 using namespace babel;
 
@@ -143,15 +144,11 @@ const void ChatInfoScene::_updateCallLayout() {
 }
 
 const void ChatInfoScene::_callUp() {
-    // TODO leave all server side
-    this->_clientManager->self->setInCall(true);
-    Event event(Event::CALL_STATE_UPDATE);
-    this->getSceneManager()->getScene()->handleEvent(event);
+    CallUpPacket callUp(this->_chattingWith->getUsername(), this->_clientManager->audioSocket->getPort());
+    this->_clientManager->transporter->sendMessage(callUp.serialize());
 }
 
 const void ChatInfoScene::_hangUp() {
-    // TODO leave all server side
-    this->_clientManager->self->setInCall(false);
-    Event event(Event::CALL_STATE_UPDATE);
-    this->getSceneManager()->getScene()->handleEvent(event);
+    HangUpPacket hangUp(this->_chattingWith->getUsername());
+    this->_clientManager->transporter->sendMessage(hangUp.serialize());
 }

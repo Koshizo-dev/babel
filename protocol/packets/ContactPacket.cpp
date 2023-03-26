@@ -4,26 +4,25 @@
 
 using namespace babel;
 
-ContactPacket::ContactPacket(std::string username) {
-    this->_username = username;
+ContactPacket::ContactPacket(std::string username): _username(username) {
 }
 
-std::string ContactPacket::getUsername() {
+const std::string ContactPacket::getUsername() const {
     return (this->_username);
 }
 
-PacketType ContactPacket::getType() {
+const PacketType ContactPacket::getType() const {
     return (PacketType::CONTACT);
 }
 
-std::string ContactPacket::serialize() {
+const std::string ContactPacket::serialize() const {
     Serializer serializer(this->getType());
 
     serializer << new StringField(this->_username);
     return (serializer.serialize());
 }
 
-std::unique_ptr<Packet> ContactPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) {
+std::unique_ptr<Packet> ContactPacket::deserialize(std::vector<std::unique_ptr<PacketField>> packetFields) const {
     if (packetFields.size() != 1)
         return (nullptr);
 
