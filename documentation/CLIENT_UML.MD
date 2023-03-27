@@ -35,10 +35,28 @@ classDiagram
     }
 
     class ClientManager {
-        +SceneManager sceneManager
+        mutex mutex
+
+        -getClient(string username) shared_ptr~Client~
+        -getChatting() shared_ptr~Client~
+        -reset() void
+        -disconnect() void
+        -startAudioSocket() void
+        -stopAudioSocket() void
+
+        +shared_ptr~SceneManager~ sceneManager
+        +shared_ptr~Audio> audioDevice
         +vector~shared_ptr~Client~~ clients
-        +getChatting() Client
-        +disconnect() void
+        +shared_ptr~EventManager~ eventManager
+        +shared_ptr~PacketManager~ packetManager
+        +shared_ptr~Client~ self
+        +shared_ptr~Transporter~ transporter
+        +shared_ptr~AudioSettings~ audioSettings
+        +shared_ptr~AudioSocket~ audioSocket
+        -thread *_sendAudioThread
+        -thread *_receiveAudioThread
+        -_sendAudio() void
+        -_receiveAudio() void
     }
 
     class Display {
