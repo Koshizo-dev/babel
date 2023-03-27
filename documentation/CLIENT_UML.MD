@@ -288,4 +288,58 @@ classDiagram
         -shared_ptr~QWidget~ _parent
         -shared_ptr~ClientManager~ _clientManager
     }
+    
+    class Audio {
+        +getAudioCodec() shared_ptr~AudioCodec~
+        +capture() string
+        +write(DecodedAudio &audio) void
+    }
+
+    PortAudio <|-- Audio
+
+    class PortAudio {
+        -shared_ptr~AudioCodec~ _audioCodec
+        -PaStream *_audioStream
+        -PaStreamParameters _inputParameters
+        -PaStreamParameters _outputParameters
+    }
+
+    class AudioCodec {
+        +encode(float *buffer) string
+        +decode(string buffer) DecodedAudio
+    }
+
+    OpusCodec <|-- AudioCodec
+
+    class OpusCodec {
+        -OpusEncoder *_encoder
+        -OpusDecoder *_decoder
+    }
+
+    class AudioSettings {
+        +setReceiver(AudioReceiver receiver) void
+        +getReceiver() AudioReceiver
+        +setRunning(bool isRunning) void
+        +isRunning() bool
+        -mutex _mutex
+        -AudioReceiver _receiver
+        -bool _isRunning
+    }
+
+    class DecodedAudio {
+        +float *buffer
+        +int bufferSize
+    }
+
+    class AudioSocket {
+        +sendAudio(string audio, string hostname, unsigned int port) void
+        +receiveAudio(AudioSettings &settings, Audio &audio) void
+        +getPort() unsigned int
+    }
+
+    QtAudioSocket <|-- AudioSocket
+
+    class QtAudioSocket {
+        -QUdpSocket _socket
+    }
 ```
