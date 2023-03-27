@@ -289,6 +289,30 @@ classDiagram
         -shared_ptr~ClientManager~ _clientManager
     }
     
+    class Socket {
+        +awaitingConnection() bool
+        +closeConnection() void
+        +flush() bool
+        +write(string message) void
+        +setEventManager(shared_ptr~EventManager~ eventManager) void
+    }
+
+    QtSocket <|-- Socket
+
+    class QtSocket {
+        -shared_ptr~EventManager~ _eventManager
+        -~unique_ptr<QTcpSocket>~ _socket
+        -void (EventManager::* _readHandler)(std::string message)
+    }
+
+    class Transporter {
+        +awaitingConnection() bool
+        +closeConnection() void
+        +sendMessage(string message) void
+        -unique_ptr~Socket~ _socket
+        -shared_ptr~EventManager~ _eventManager
+    }
+    
     class Audio {
         +getAudioCodec() shared_ptr~AudioCodec~
         +capture() string
